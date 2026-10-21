@@ -2,10 +2,10 @@
 
 AI agent skills for network automation — transport, parsing, Ansible, Terraform, testing, observability, operations.
 
-55 skills, each with runnable validators, vendor compatibility tables, and cross-refs.
+Each skill is a self-contained directory with a `SKILL.md` containing domain context, workflow, guardrails, production code, validation commands, vendor compatibility tables, and cross-refs to related skills.
 
 ```bash
-python3 scripts/validate_skills.py   # all pass
+python3 scripts/validate_skills.py
 ```
 
 ---
@@ -38,41 +38,102 @@ Validate with the skill's test suite.
 
 ## Skill Map
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         netdevops-agent-skills (55)                         │
-├──────────────┬──────────────┬──────────────┬──────────────┬────────────────┤
-│  TRANSPORT   │  PARSING     │  ANSIBLE     │  TERRAFORM   │  TESTING       │
-├──────────────┼──────────────┼──────────────┼──────────────┼────────────────┤
-│ netmiko-core │ ntc-textfsm  │ role-creation│ tf-vpc-found │ containerlab   │
-│ ncclient-    │ ttp-parsers  │ plugin-dev   │ tf-aws-net   │ batfish-val    │
-│   restconf   │ cli-regex    │ ee-build     │ tf-azure-gcp │ network-test   │
-│ paramiko-ssh │ pyang-xpath  │ vault-hygiene│ tf-firewall  │ config-diff    │
-│ async-net-   │ yang-model   │ dyn-inventory│ tf-state-surg│ config-sanitiz │
-│   automation │              │ resource-mod │ tf-module-hrd│ network-change │
-│ scrapli-     │              │ linux-net    │ tf-aci-sdwan │ network-config │
-│   threaded   │              │ netcli-play  │ tf-to-ansible│   drift-det    │
-│ gnmi-client  │              │ pre-post-chk │              │                │
-│ gnmi-snmp-   │              │              │              │                │
-│   telemetry  │              │              │              │                │
-├──────────────┼──────────────┼──────────────┼──────────────┼────────────────┤
-│  OBSERVABILITY          │  OPERATIONS            │  UTILITIES               │
-├─────────────────────────┼────────────────────────┼──────────────────────────┤
-│ network-observability   │ gitops-net-auto        │ ipam-subnetting          │
-│                         │ network-device-onboard │ jinja2-network-templates │
-│                         │ network-change-runbooks│ cli-tool-packaging       │
-│                         │                        │ network-data-pipelines     │
-│                         │                        │ network-rest-clients       │
-│                         │                        │ network-protocols-as-code  │
-│                         │                        │ netbox-nautobot-api        │
-│                         │                        │ nornir-napalm              │
-│                         │                        │ netconf-automation         │
-│                         │                        │ netconf-restconf-payloads  │
-│                         │                        │ pysnmp-automation          │
-│                         │                        │ pyats-genie                │
-│                         │                        │ tf-state-surgery           │
-│                         │                        │ ttp-parsers                │
-└─────────────────────────┴────────────────────────┴──────────────────────────┘
+```mermaid
+graph TD
+    subgraph TRANSPORT["Transport"]
+        T1[netmiko-core]
+        T2[ncclient-restconf]
+        T3[paramiko-ssh]
+        T4[async-network-automation]
+        T5[scrapli-netmiko-threaded]
+        T6[gnmi-client]
+        T7[gnmi-snmp-telemetry]
+        T8[netconf-automation]
+    end
+
+    subgraph PARSING["Parsing & Modeling"]
+        P1[ntc-textfsm]
+        P2[ttp-parsers]
+        P3[cli-regex]
+        P4[pyang-xpath]
+        P5[yang-model-dev]
+        P6[network-protocols-as-code]
+    end
+
+    subgraph ANSIBLE["Ansible"]
+        A1[ansible-role-creation]
+        A2[ansible-plugin-development]
+        A3[ansible-ee-build]
+        A4[ansible-vault-hygiene]
+        A5[ansible-dynamic-inventory]
+        A6[ansible-resource-modules]
+        A7[ansible-linux-networking]
+        A8[ansible-netcli-playbooks]
+        A9[ansible-pre-post-checks]
+    end
+
+    subgraph TERRAFORM["Terraform"]
+        TF1[tf-vpc-foundations]
+        TF2[tf-aws-networking]
+        TF3[tf-azure-gcp-networking]
+        TF4[tf-firewall-policies]
+        TF5[tf-module-hardening]
+        TF6[tf-state-surgery]
+        TF7[tf-aci-sdwan-meraki]
+        TF8[tf-to-ansible-inventory]
+    end
+
+    subgraph TESTING["Testing & Validation"]
+        V1[containerlab-topologies]
+        V2[batfish-validation]
+        V3[network-testing-framework]
+        V4[config-diff-audit]
+        V5[config-sanitizer]
+        V6[network-config-drift-detection]
+    end
+
+    subgraph OBSERVABILITY["Observability"]
+        O1[network-observability-stack]
+    end
+
+    subgraph OPERATIONS["Operations"]
+        OP1[gitops-network-automation]
+        OP2[network-device-onboarding]
+        OP3[network-change-runbooks]
+        OP4[nso-device-onboarding]
+    end
+
+    subgraph UTILITIES["Utilities"]
+        U1[ipam-subnetting]
+        U2[jinja2-network-templates]
+        U3[cli-tool-packaging]
+        U4[network-data-pipelines]
+        U5[network-rest-clients]
+        U6[network-protocols-as-code]
+        U7[netbox-nautobot-api]
+        U8[nornir-napalm]
+        U9[netconf-automation]
+        U10[netconf-restconf-payloads]
+        U11[pysnmp-automation]
+        U12[pyats-genie]
+        U13[ttp-parsers]
+        U14[tf-state-surgery]
+    end
+
+    %% Cross-category connections
+    T6 -.-> O1
+    T7 -.-> O1
+    V1 -.-> V3
+    V2 -.-> V3
+    V4 -.-> V6
+    V5 -.-> V6
+    OP1 -.-> V1
+    OP2 -.-> V1
+    OP3 -.-> V4
+    A9 -.-> OP3
+    U2 -.-> P6
+    A1 -.-> OP3
+    TF8 -.-> A5
 ```
 
 ---
@@ -80,94 +141,92 @@ Validate with the skill's test suite.
 ## Skills by Category
 
 ### Transport (8)
-| Skill | Purpose | Key Features |
-|-------|---------|--------------|
-| `netmiko-core` | Inventory-driven SSH with Netmiko | Per-device results, config_mode per platform, `--check`/ `--diff`, prompt derivation |
-| `ncclient-restconf` | NETCONF/RESTCONF with transactions | Candidate datastore, locks, confirmed commit, TLS, typed payloads |
-| `paramiko-ssh` | Raw SSH/SFTP transport | Strict host-key verify, timeouts, command allow-list, jump hosts |
-| `async-network-automation` | High-concurrency async SSH/HTTP | Semaphores, bounded queues, cancellation, per-device results |
-| `scrapli-netmiko-threaded` | Threaded fleet execution | ThreadPoolExecutor, exception isolation, JSON/CSV output |
-| `gnmi-client` | Programmatic gNMI Get/Set/Subscribe | Python + Go, TLS/mTLS, typed values, path helpers |
-| `gnmi-snmp-telemetry` | gNMI/SNMP collection config | gnmic, snmp_exporter, PromQL alerts, Grafana dashboards |
-| `netconf-automation` | NETCONF automation patterns | Capabilities, filters, edit-config, validated commits |
+| Skill | Purpose |
+|-------|---------|
+| `netmiko-core` | Inventory-driven SSH with Netmiko — per-device results, config_mode per platform, `--check`/`--diff` |
+| `ncclient-restconf` | NETCONF/RESTCONF with transactions — candidate datastore, locks, confirmed commit |
+| `paramiko-ssh` | Raw SSH/SFTP — strict host-key verify, timeouts, command allow-list |
+| `async-network-automation` | High-concurrency async SSH/HTTP — semaphores, bounded queues, cancellation |
+| `scrapli-netmiko-threaded` | Threaded fleet execution — ThreadPoolExecutor, exception isolation |
+| `gnmi-client` | Programmatic gNMI Get/Set/Subscribe — Python + Go, TLS/mTLS, typed values |
+| `gnmi-snmp-telemetry` | gNMI/SNMP collection config — gnmic, snmp_exporter, PromQL alerts |
+| `netconf-automation` | NETCONF patterns — capabilities, filters, edit-config, validated commits |
 
 ### Parsing & Modeling (6)
-| Skill | Purpose | Key Features |
-|-------|---------|--------------|
-| `ntc-textfsm` | TextFSM templates for CLI output | Version handling, Filldown leak tests, NTC index format |
-| `ttp-parsers` | Hierarchical TTP templates | Nested config, matchers (IP/MAC), dynamic paths |
-| `cli-regex` | Pure Python regex parsers | Named groups, ANSI strip, typed extraction, fixtures |
-| `pyang-xpath` | YANG schema inspection | Tree views, exact XPaths, NETCONF/RESTCONF paths |
-| `yang-model-dev` | Author YANG 1.1 modules | Constraints, leafrefs, augmentations, pyang lint |
-| `network-protocols-as-code` | Vendor-neutral intent → config | L2/L3/BGP/EVPN, multi-vendor render, unsupported feature handling |
+| Skill | Purpose |
+|-------|---------|
+| `ntc-textfsm` | TextFSM templates — version handling, Filldown leak tests, NTC index |
+| `ttp-parsers` | Hierarchical TTP — nested config, matchers, dynamic paths |
+| `cli-regex` | Pure Python regex — named groups, ANSI strip, typed extraction |
+| `pyang-xpath` | YANG schema inspection — tree views, exact XPaths |
+| `yang-model-dev` | Author YANG 1.1 modules — constraints, leafrefs, pyang lint |
+| `network-protocols-as-code` | Vendor-neutral intent → config — L2/L3/BGP/EVPN, multi-vendor |
 
 ### Ansible (9)
-| Skill | Purpose | Key Features |
-|-------|---------|--------------|
-| `ansible-role-creation` | Reusable multi-vendor roles | Molecule, argument_specs, platform task split, CI |
-| `ansible-plugin-development` | Custom modules/filters/connection | DOCUMENTATION/EXAMPLES/RETURN, check_mode, ansible-test |
-| `ansible-ee-build` | Pinned execution environments | requirements.yml/txt, bindep.txt, ansible-builder, scan |
-| `ansible-vault-hygiene` | Secret management | vault-id per env, no_log boundaries, trufflehog/gitleaks |
-| `ansible-dynamic-inventory` | NetBox/AWS/Azure/Terraform sources | keyed_groups, compose, caching, credential safety |
-| `ansible-resource-modules` | Declarative network resources | merged/replaced/overridden/deleted, idempotency |
-| `ansible-linux-networking` | Linux host networking | Netplan/NM, FRR, nftables, WireGuard, mgmt lockout prevention |
-| `ansible-netcli-playbooks` | Foundational network playbooks | FQCNs, network_cli, backup, check_mode |
-| `ansible-pre-post-checks` | Change safety wrapper | Baseline → change → verify → rollback, block/rescue/always |
+| Skill | Purpose |
+|-------|---------|
+| `ansible-role-creation` | Reusable multi-vendor roles — Molecule, argument_specs, platform task split |
+| `ansible-plugin-development` | Custom modules/filters/connection — check_mode, ansible-test |
+| `ansible-ee-build` | Pinned execution environments — requirements.yml/txt, bindep.txt |
+| `ansible-vault-hygiene` | Secret management — vault-id per env, no_log boundaries, trufflehog/gitleaks |
+| `ansible-dynamic-inventory` | NetBox/AWS/Azure/Terraform sources — keyed_groups, compose, caching |
+| `ansible-resource-modules` | Declarative network resources — merged/replaced/overridden/deleted |
+| `ansible-linux-networking` | Linux host networking — Netplan/NM, FRR, nftables, WireGuard |
+| `ansible-netcli-playbooks` | Foundational network playbooks — FQCNs, network_cli, backup |
+| `ansible-pre-post-checks` | Change safety wrapper — baseline → change → verify → rollback |
 
-### Terraform (9)
-| Skill | Purpose | Key Features |
-|-------|---------|--------------|
-| `tf-vpc-foundations` | Base VPC/VNet modules | CIDR validation, flow logs, remote state |
-| `tf-aws-networking` | AWS VPC, TGW, DX, FW | Multi-AZ, route associations, propagation |
-| `tf-azure-gcp-networking` | Azure/GCP hub-spoke, peering | VNet peering, Cloud Router/NAT, NCC |
-| `tf-firewall-policies` | Palo/Forti/Check Point/Cloudflare | Stable keys, shadow analysis, default-deny |
-| `tf-module-hardening` | Secure modules | tflint/Trivy/Checkov, pin providers, preconditions |
-| `tf-state-surgery` | Declarative state migration | moved/import/removed blocks, zero-destroy verify |
-| `tf-aci-sdwan-meraki` | Controller-based (ACI/SD-WAN/Meraki) | Hierarchy, stable for_each, async readiness |
-| `tf-to-ansible-inventory` | TF outputs → Ansible inventory | Structured outputs, readiness checks, sensitive handling |
-| `tf-state-surgery` | State migration patterns | moved/import/removed, zero-destroy |
+### Terraform (8)
+| Skill | Purpose |
+|-------|---------|
+| `tf-vpc-foundations` | Base VPC/VNet modules — CIDR validation, flow logs |
+| `tf-aws-networking` | AWS VPC, TGW, DX, firewall — multi-AZ, route associations |
+| `tf-azure-gcp-networking` | Azure/GCP hub-spoke, peering — VNet peering, Cloud Router/NAT |
+| `tf-firewall-policies` | Palo/Forti/Check Point/Cloudflare — stable keys, shadow analysis |
+| `tf-module-hardening` | Secure modules — tflint/Trivy/Checkov, pin providers |
+| `tf-state-surgery` | Declarative state migration — moved/import/removed blocks |
+| `tf-aci-sdwan-meraki` | Controller-based — hierarchy, stable for_each, async readiness |
+| `tf-to-ansible-inventory` | TF outputs → Ansible inventory — structured outputs, readiness checks |
 
 ### Testing & Validation (6)
-| Skill | Purpose | Key Features |
-|-------|---------|--------------|
-| `containerlab-topologies` | Lab topologies as code | Pinned images, startup config validation, CI pipeline |
-| `batfish-validation` | Mathematical network analysis | BGP/OSPF/ACL/reachability, differential snapshots |
-| `network-testing-framework` | pytest + Containerlab + Batfish | Unit/integration/contract, JUnit XML, markers |
-| `config-diff-audit` | Config drift detection | Normalization, volatile stripping, secret redaction |
-| `config-sanitizer` | Config/log redaction | Deterministic placeholders, topology preservation |
-| `network-config-drift-detection` | Scheduled drift detection | Collect → normalize → diff → alert → remediate |
+| Skill | Purpose |
+|-------|---------|
+| `containerlab-topologies` | Lab topologies as code — pinned images, startup config validation |
+| `batfish-validation` | Mathematical network analysis — BGP/OSPF/ACL/reachability |
+| `network-testing-framework` | pytest + Containerlab + Batfish — unit/integration/contract |
+| `config-diff-audit` | Config drift detection — normalization, volatile stripping |
+| `config-sanitizer` | Config/log redaction — deterministic placeholders, topology preservation |
+| `network-config-drift-detection` | Scheduled drift detection — collect → normalize → diff → alert → remediate |
 
 ### Observability (1)
-| Skill | Purpose | Key Features |
-|-------|---------|--------------|
-| `network-observability-stack` | Prometheus/Grafana/Loki/Tempo | snmp_exporter, gnmic, PromQL alerts, runbook URLs |
+| Skill | Purpose |
+|-------|---------|
+| `network-observability-stack` | Prometheus/Grafana/Loki/Tempo — snmp_exporter, gnmic, PromQL alerts |
 
 ### Operations (4)
-| Skill | Purpose | Key Features |
-|-------|---------|--------------|
-| `gitops-network-automation` | ArgoCD/Flux for network config | Kustomize overlays, pre/post sync hooks, drift alerts |
-| `network-device-onboarding` | Day-0: ZTP, creds, host-keys, verify | Idempotent, rollback per stage, inventory registration |
-| `network-change-runbooks` | Auditable change execution | Pre-checks, approval gates, post-checks, rollback, evidence |
-| `nso-device-onboarding` | NSO-specific onboarding | Authgroups, NED assignment, sync-from, compare-config |
+| Skill | Purpose |
+|-------|---------|
+| `gitops-network-automation` | ArgoCD/Flux for network config — Kustomize overlays, pre/post sync hooks |
+| `network-device-onboarding` | Day-0: ZTP, creds, host-keys, verify — idempotent, rollback per stage |
+| `network-change-runbooks` | Auditable change execution — pre-checks, approval gates, rollback, evidence |
+| `nso-device-onboarding` | NSO-specific onboarding — authgroups, NED assignment, sync-from |
 
-### Utilities (12)
-| Skill | Purpose | Key Features |
-|-------|---------|--------------|
-| `ipam-subnetting` | Hierarchical CIDR allocation | VLSM, overlap detection, NetBox/TF seed data |
-| `jinja2-network-templates` | Multi-vendor templates + filters | Capability registry, StrictUndefined, IP/MAC filters |
-| `cli-tool-packaging` | Packaged Python CLIs | Typer/Click, Rich, dry-run, JSON output, exit codes |
-| `network-data-pipelines` | Pandas/Polars + Pydantic | Normalization, cardinality control, quarantine |
-| `network-rest-clients` | Typed REST clients for controllers | Timeouts, retries, pagination, idempotency keys |
-| `network-protocols-as-code` | Intent → multi-vendor config | BGP/OSPF/EVPN, unsupported feature findings |
-| `netbox-nautobot-api` | NetBox/Nautobot client | GraphQL bulk, pagination, dry-run, rate limits |
-| `nornir-napalm` | Fleet automation with Nornir | Inventory layers, compare/commit/discard, per-host results |
-| `netconf-automation` | NETCONF patterns | Lock/validate/commit, capability check |
-| `netconf-restconf-payloads` | XML/JSON payload construction | Schema validation, Pydantic models |
-| `pysnmp-automation` | SNMP v1/v2c/v3 async | GET/BULK/SET, traps, MIB resolution |
-| `pyats-genie` | Cisco Genie parsers + AEtest | MetaParser, differential pre/post, testbed YAML |
-| `pysnmp-automation` | SNMP automation | Async GET/BULK/SET, MIB compilation |
-| `ttp-parsers` | Hierarchical text parsing | TTP templates, nested output, matchers |
-| `tf-state-surgery` | State migration | moved/import/removed, zero-destroy verify |
+### Utilities (14)
+| Skill | Purpose |
+|-------|---------|
+| `ipam-subnetting` | Hierarchical CIDR allocation — VLSM, overlap detection, NetBox/TF seed data |
+| `jinja2-network-templates` | Multi-vendor templates + filters — capability registry, StrictUndefined |
+| `cli-tool-packaging` | Packaged Python CLIs — Typer/Click, Rich, dry-run, JSON output |
+| `network-data-pipelines` | Pandas/Polars + Pydantic — normalization, cardinality control, quarantine |
+| `network-rest-clients` | Typed REST clients — timeouts, retries, pagination, idempotency keys |
+| `network-protocols-as-code` | Intent → multi-vendor config — BGP/OSPF/EVPN, unsupported feature findings |
+| `netbox-nautobot-api` | NetBox/Nautobot client — GraphQL bulk, pagination, dry-run |
+| `nornir-napalm` | Fleet automation with Nornir — inventory layers, compare/commit/discard |
+| `netconf-automation` | NETCONF patterns — lock/validate/commit, capability check |
+| `netconf-restconf-payloads` | XML/JSON payload construction — schema validation, Pydantic models |
+| `pysnmp-automation` | SNMP v1/v2c/v3 async — GET/BULK/SET, traps, MIB resolution |
+| `pyats-genie` | Cisco Genie parsers + AEtest — MetaParser, differential pre/post |
+| `tf-state-surgery` | State migration — moved/import/removed, zero-destroy verify |
+| `ttp-parsers` | Hierarchical text parsing — TTP templates, nested output, matchers |
 
 ---
 
@@ -203,10 +262,7 @@ python3 skills/gnmi-client/scripts/validate_client.py --help
 
 ## Offline Use
 
-Skills work offline with local dependencies. See [references/open-source-local.md](references/open-source-local.md) for:
-- Recommended local layout (venv, vendor YANG, fixtures, snapshots)
-- Dependency tiers (stdlib → pinned open-source → platform adapters)
-- Offline quality gates (local validators, fixtures, dependency contracts)
+Skills work offline with local dependencies. See [references/open-source-local.md](references/open-source-local.md) for recommended layout, dependency tiers, and quality gates.
 
 ---
 
