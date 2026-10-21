@@ -32,15 +32,15 @@ config/state status, or XPath predicates from a device CLI name alone.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Collect the exact YANG modules, revisions, import path, namespace map, target node, and device capability advertisement. Inspect augments, deviations, list keys, and config/state status before selecting a path.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Generate the tree view, absolute XPath, NETCONF subtree filter, RESTCONF resource path, or XML/JSON skeleton from the model. Preserve namespaces and predicates exactly; do not infer them from CLI names.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run pyang with the complete dependency path and validate the generated payload or filter against the model. Check read-only nodes, key predicates, revision, and portability across the stated vendor releases.
 

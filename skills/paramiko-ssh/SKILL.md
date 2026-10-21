@@ -83,21 +83,21 @@ parsing, config mode, or paging belongs in Netmiko or Scrapli.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Confirm the target host, port, username source, authentication method,
 known_hosts policy, command or file operation, timeout budget, output limit,
 and whether the target is a server, appliance, or network device. Reject raw
 passwords and reject a request that asks to bypass host-key verification.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Create a small connection factory and a typed operation function. Use strict
 host-key loading, fixed command templates, explicit timeout values, structured
 logging, and context-managed cleanup. Select Netmiko or Scrapli instead when
 the requested behavior depends on vendor CLI prompts or configuration modes.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run the operation against a local sshd or test server with a known host key.
 Exercise authentication failure, unknown host key, timeout, non-zero exit,

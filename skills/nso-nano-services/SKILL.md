@@ -36,15 +36,15 @@ postconditions are satisfied.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Map the service lifecycle, plan/deploy stages, kickers, component ownership, LSA boundaries, and rollback semantics. Identify which transitions are synchronous and which depend on device or service readiness.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Model stage transitions and component callbacks explicitly, keeping service data, state, and device actions separate. Generate timeout, retry, redeploy, and rollback behavior from documented lifecycle events rather than sleeps.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Exercise create, redeploy, partial failure, timeout, restart, delete, and rollback paths in an NSO lab. Inspect operational state after each transition and verify no orphaned component remains.
 

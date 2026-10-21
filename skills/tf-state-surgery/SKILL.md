@@ -32,15 +32,15 @@ state backup and a precise mapping from old to new addresses.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Capture the current state addresses, configuration addresses, provider aliases, workspace/backend, and the exact desired address change. Take a verified state backup and identify resources that must not be destroyed.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Generate declarative moved, import, or removed-state operations with the smallest possible scope. Use configuration and state commands appropriate to the Terraform/OpenTofu version; never edit the state file by hand.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run state-list and plan checks against a copy or disposable workspace, assert zero unintended destroys, and test missing addresses, provider alias changes, and rollback from the backup.
 

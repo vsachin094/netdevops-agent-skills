@@ -31,15 +31,15 @@ being accepted by an API does not prove that dependent fabric policy is ready.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Record the controller type and version, provider version, account or organization scope, object hierarchy, state backend, and asynchronous readiness signals. Confirm which resources are authoritative and which are generated dependencies.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Model controller objects with stable for_each keys, explicit parent dependencies, YAML intent, sensitive variables, and provider-supported readiness behavior. Keep ACI, SD-WAN, Meraki, and CloudVision differences behind clear resource boundaries.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run fmt, validate, plan, and provider tests with mocked or lab controller responses. Test duplicate keys, parent deletion, eventual consistency, rejected policy, and post-apply health or fault checks.
 

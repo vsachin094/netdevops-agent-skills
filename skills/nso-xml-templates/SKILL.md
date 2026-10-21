@@ -33,15 +33,15 @@ particular device's CLI representation.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Define the service input model, NED variants, template variables, tags, device groups, and expected generated config. Identify which fields are optional and what absence means for each device type.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Generate XML templates with explicit variable paths, loops, conditional branches, and servicepoint ownership. Keep templates idempotent and avoid embedding credentials or device-specific assumptions in generic paths.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Compile and render the package for each supported NED, then test missing optional data, repeated list entries, invalid references, and delete behavior. Compare the generated config with golden output.
 

@@ -35,15 +35,15 @@ partially successful.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Define the device inventory, transport and platform drivers, command or config operation, concurrency limit, timeout, retry policy, and result correlation key. Decide how partial fleet success is reported.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Build a worker pool with per-device exception isolation, bounded threads, context-managed connections, and structured results. Keep Scrapli or Netmiko transport details behind a small adapter and never share mutable connection state between workers.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run fake-device tests for success, slow response, authentication failure, malformed output, config rejection, and thread cancellation. Verify all connections close and results remain correlated with the input inventory.
 

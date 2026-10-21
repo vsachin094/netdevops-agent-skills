@@ -32,15 +32,15 @@ configuration separate from resources.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Define the network intent, cloud and region, parent CIDR, subnet tiers, route domains, security boundaries, NAT/DNS requirements, state backend, and ownership of shared resources.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Generate reusable VPC/VNet modules with stable maps, explicit route and security relationships, validated CIDRs, provider constraints, and outputs that downstream inventory can consume.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run fmt, validate, plan, and policy tests for overlap, missing routes, invalid subnet sizes, accidental public exposure, and safe removal. Compare a second plan for no-op behavior.
 

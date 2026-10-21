@@ -34,15 +34,15 @@ operation explicit.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Start from the exact YANG module, revision, namespace, operation, datastore, and device capability set. Record list keys and config/state status before writing XML or JSON.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Construct namespace-correct payloads and filters with explicit edit operations, list predicates, defaults, and content selection. Reject read-only nodes and unknown namespaces instead of producing plausible XML.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Validate XML/JSON syntax and model structure locally, then run fixture responses for success, rpc-error, malformed input, and unsupported capability. Compare the payload against the intended tree path.
 

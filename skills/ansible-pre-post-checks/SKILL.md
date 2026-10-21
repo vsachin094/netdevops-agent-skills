@@ -1,45 +1,39 @@
 ---
 name: ansible-pre-post-checks
-description: "[Tier: Advanced] Wrap Ansible network changes in structured pre-change snapshots, controlled execution, post-change assertions, and rescue rollback. Use this skill when a change must prove BGP, OSPF, interface, or service health remains within an approved baseline."
+description: "Wrap Ansible network changes in structured pre-change snapshots, controlled execution, post-change assertions, and rescue rollback. Use this skill when a change must prove BGP, OSPF, interface, or service health remains within an approved baseline."
 license: MIT
 compatibility: Ansible Core; vendor network collections; cli_parse or structured facts; optional NAPALM/pyATS/Containerlab
 ---
 
 # Ansible Pre/Post Checks (Advanced)
 
-Make operational safety a playbook stage rather than an operator memory item.
-The baseline must be comparable, the change bounded, and rollback explicit.
+Make operational safety a playbook stage rather than an operator memory item. The baseline must be comparable, the change bounded, and rollback explicit.
 
 ## Core Engineering Capabilities
 
 - Capture structured pre-change state, execute a change, and compare post-state.
-- Assert BGP established counts, OSPF neighbors, interface state, reachability,
-  and service-specific invariants.
+- Assert BGP established counts, OSPF neighbors, interface state, reachability, and service-specific invariants.
 - Use `block`, `rescue`, and `always` to rollback and report cleanup results.
 
 ## Strict Engineering Guardrails (Anti-Hallucination & Best Practices)
 
-- Normalize snapshots and exclude documented volatile fields; never compare
-  raw command text when order or counters are unstable.
-- Scope assertions to the intended device, VRF, address family, and peer set.
-  A global count can mask a failed critical neighbor.
+- Normalize snapshots and exclude documented volatile fields; never compare raw command text when order or counters are unstable.
+- Scope assertions to the intended device, VRF, address family, and peer set. A global count can mask a failed critical neighbor.
 - Fail closed when the baseline is incomplete or parser output is malformed.
-- Make rescue rollback idempotent and verify it; `rescue` is not proof that
-  the device returned to baseline.
-- Always emit baseline, postcheck, failure, and rollback artifacts without
-  exposing secrets.
+- Make rescue rollback idempotent and verify it; `rescue` is not proof that the device returned to baseline.
+- Always emit baseline, postcheck, failure, and rollback artifacts without exposing secrets.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake & Scope)
 
 Define the pre-change facts, the exact change boundary, post-change assertions, acceptable transient states, and rollback trigger. Identify which checks are safe to run against the target and which require a lab fixture.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Build a block/rescue workflow that snapshots state, performs the change, evaluates explicit postconditions, and restores the approved snapshot on failure. Keep rescue logic bounded and observable rather than hiding errors.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run the workflow in check mode and a lab, then force failures at the change, postcheck, and rollback stages. Confirm that the original evidence is retained and that a partial fleet result is reported per host.
 
@@ -58,32 +52,62 @@ Provide precheck commands, the change play or role, postconditions, rollback art
 
 Return the playbook with block/rescue structure, evidence paths, failure injection tests, and an operator runbook for aborting or recovering the change.
 
-
 ```yaml
-- block:
-    - name: Capture baseline
-      cisco.ios.ios_facts:
-        gather_network_resources: [bgp_global, ospf_interfaces]
-      register: before
-      changed_when: false
-    - name: Apply change
-      cisco.ios.ios_config:
-        lines: ["router bgp 65001", "neighbor 192.0.2.1 description managed"]
-  rescue:
-    - name: Roll back approved commands
-      cisco.ios.ios_config:
-        lines: ["router bgp 65001", "no neighbor 192.0.2.1 description managed"]
-  always:
-    - name: Collect final evidence
-      cisco.ios.ios_command:
-        commands: [show ip bgp summary]
-      changed_when: false
+- name: Network change with pre/post checks
+  hosts: network
+  gather_facts: false
+  tasks:
+    - block:
+        - name: Capture baseline
+          cisco.ios.ios_facts:
+            gather_network_resources: [bgp_global, ospf_interfaces]
+          register: before
+          changed_when: false
+
+        - name: Apply change
+          cisco.ios.ios_config:
+            lines:
+              - "router bgp 65001"
+              - "neighbor 192.0.2.1 description managed"
+          register: change
+
+      rescue:
+        - name: Roll back approved commands
+          cisco.ios.ios_config:
+            lines:
+              - "router bgp 65001"
+              - "no neighbor 192.0.2.1 description managed"
+          register: rollback
+
+      always:
+        - name: Collect final evidence
+          cisco.ios.ios_command:
+            commands: [show ip bgp summary]
+          register: after
+          changed_when: false
+
+        - name: Assert BGP peers unchanged
+          assert:
+            that:
+              - "after.stdout[0] | regex_search('Estab') == before.stdout[0] | regex_search('Estab')"
+            fail_msg: "BGP peer count changed"
+```
+
+```python
+# scripts/normalize_bgp.py
+import re
+def normalize_bgp(output: str) -> dict:
+    peers = {}
+    for line in output.splitlines():
+        m = re.search(r'(\d+\.\d+\.\d+\.\d+)\s+\d+\s+\w+\s+\w+\s+\w+\s+\w+\s+\w+\s+\w+\s+\w+\s+(\w+)', line)
+        if m:
+            peers[m.group(1)] = m.group(2)
+    return peers
 ```
 
 ## Validation, Linting & Testing Commands
 
-- Test failed baseline, change failure, postcheck failure, rescue failure, and
-  successful idempotent repeat.
+- Test failed baseline, change failure, postcheck failure, rescue failure, and successful idempotent repeat.
 - Assert critical neighbor identities, not only aggregate totals.
 - Run `ansible-lint`, lab tests, and `python3 scripts/validate_skills.py`.
 
@@ -107,11 +131,4 @@ interfaces:
   GigabitEthernet0/0: {admin: up, oper: up}
 ```
 
-Capture the same fields after the change. Assert critical peer identity and
-state, not only an aggregate count; permit an explicitly documented delta such
-as one new peer while requiring all existing peers to remain established.
-Put the change and postcheck in a `block`, rollback in `rescue`, and evidence
-collection in `always`. If rollback runs, perform the same postcheck against
-the baseline and report `recovered`, `not_recovered`, or `unknown` separately.
-Do not use `ignore_errors` to continue after a missing baseline or malformed
-parser result.
+Capture the same fields after the change. Assert critical peer identity and state, not only an aggregate count; permit an explicitly documented delta such as one new peer while requiring all existing peers to remain established. Put the change and postcheck in a `block`, rollback in `rescue`, and evidence collection in `always`. If rollback runs, perform the same postcheck against the baseline and report `recovered`, `not_recovered`, or `unknown` separately. Do not use `ignore_errors` to continue after a missing baseline or malformed parser result.

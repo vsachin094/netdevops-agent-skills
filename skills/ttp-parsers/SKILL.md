@@ -41,15 +41,15 @@ data if group names and list/dictionary choices are left implicit.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Capture representative hierarchical text, section boundaries, repeated records, optional lines, and malformed or truncated input. Define the output nesting and normalization contract before writing groups.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Build a TTP template with explicit groups, record boundaries, variable names, and output shaping. Keep vendor or command variants separate when a shared template would create ambiguous matches.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run the template against complete, empty, multi-section, reordered, and malformed fixtures. Compare full nested structures and verify optional groups do not leak values into the next section.
 

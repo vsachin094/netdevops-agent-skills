@@ -34,15 +34,15 @@ diffs, and reconciliation.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Identify the service YANG model, keypath, input leaves, device or service dependencies, and the exact create/update/delete behavior. Separate transaction-time mapping from operational side effects.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Implement FASTMAP callbacks that read transaction data, create deterministic service components, and map dependencies without opening out-of-band MAAPI transactions. Keep validation and side effects in the correct NSO phase.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Compile the package and exercise create, update, delete, invalid input, duplicate key, and dependency failure cases. Inspect transaction diffs and confirm rollback leaves the CDB consistent.
 

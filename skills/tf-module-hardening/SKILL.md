@@ -28,15 +28,15 @@ are complementary to semantic validation and must not replace plan review.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Inventory module sources, provider constraints, state backend, variables, outputs, secrets, tests, and required security controls. Identify the Terraform/OpenTofu versions and CI runners that must reproduce the plan.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Add exact provider and module constraints, validation blocks, sensitive flags, least-privilege assumptions, secure state settings, and tests without changing the module's public contract unintentionally.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run fmt, validate, lint, security scans, unit or native tests, and plan fixtures. Test invalid variables, provider drift, secret exposure, and a clean initialization with the lock file.
 

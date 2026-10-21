@@ -88,7 +88,7 @@ an end-of-subtree condition; never loop until an agent stops responding.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Collect the SNMP version, target addresses, context names, credential
 references, OIDs or MIB objects, polling interval, timeout/retry budget,
@@ -96,14 +96,14 @@ maximum walk size, and output schema. Confirm that every OID is readable or
 explicitly approved for SET and that the target supports the selected security
 model.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Create a Python asyncio manager with the correct PySNMP architecture, typed
 authentication, transport targets, bounded concurrency, and explicit result
 handling. Keep OID definitions and credentials outside the polling function;
 make notification and SET paths opt-in rather than incidental.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run the manager against a local SNMP simulator or fixture-backed fake. Test
 valid values, timeouts, retries, invalid credentials, unsupported OIDs,

@@ -30,15 +30,15 @@ failure-domain behavior are reviewable.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Collect account and region boundaries, availability zones, VPC and subnet CIDRs, routing intent, TGW or Direct Connect requirements, DNS behavior, and firewall ownership. Record provider and module versions.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Generate stable Terraform/OpenTofu modules with explicit maps for VPCs, subnets, route tables, attachments, Resolver, and firewall resources. Keep state ownership and cross-account dependencies visible.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run fmt, validate, plan, policy checks, and fixture tests for overlapping CIDRs, missing AZs, route conflicts, deletion protection, and provider errors. Never infer a successful apply from plan output.
 

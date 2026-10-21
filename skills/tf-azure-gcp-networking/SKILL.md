@@ -30,15 +30,15 @@ consistent module interfaces for CIDRs, regions, tags, logging, and ownership.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Separate Azure and GCP requirements: subscriptions/projects, regions, hub and spoke CIDRs, routing, NAT, DNS, identity, and firewall ownership. Record provider versions and cross-cloud connectivity assumptions.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Generate cloud-specific modules with stable keys and explicit dependencies while keeping the shared intent model provider-neutral. Avoid copying Azure semantics into GCP resources or vice versa.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run fmt, validate, plan, and policy checks for each provider. Test overlapping CIDRs, missing identity permissions, route propagation, NAT edge cases, and safe removal using fixtures or provider mocks.
 

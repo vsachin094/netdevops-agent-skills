@@ -79,21 +79,21 @@ deviations against the exact YANG revision supplied for the target release.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Collect the device capability XML, NETCONF base version, YANG modules and
 revision, datastore, operation type, desired intent, lock/commit support, and
 postcheck definition. Reject a payload with unresolved namespaces, keys, or
 read-only nodes.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Build the payload or filter from the model, open a strictly verified ncclient
 session, and execute a bounded transaction: capability check, lock, edit,
 validate, commit or confirmed commit, postcheck, confirm/cancel, and unlock.
 Keep payload generation and transaction control independently testable.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run against XML fixtures or a NETCONF simulator before using a device. Test
 unsupported capabilities, malformed namespaces, lock contention, validation

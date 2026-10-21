@@ -44,15 +44,15 @@ result.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Identify the device OS, software release, command, connection alias, parser version, and expected schema. Capture golden output from a stable lab device and include variation that should not change the semantic result.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Generate a pyATS test or Genie parser workflow that separates connection setup, parsed data, assertions, and differential comparison. Normalize only fields known to be volatile and keep parser failures visible.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run the test against golden, changed, empty, timeout, and unsupported-command fixtures. Compare semantic records rather than raw timestamps and verify the test fails for a real topology or state regression.
 

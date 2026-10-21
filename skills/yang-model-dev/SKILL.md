@@ -35,15 +35,15 @@ clients and devices consume them.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Define the namespace, module name, revision, imports, feature set, namespace ownership, data tree, constraints, and compatibility target before writing YANG. Identify whether the model is standard, vendor, or local.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Generate a YANG 1.1 module with clear containers, lists and keys, typedefs, identities, must/when constraints, descriptions, and revision history. Keep the model implementable and avoid constraints that cannot be evaluated by clients.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run pyang strict lint with all dependencies, validate example XML/JSON or instance data, and test invalid keys, leafrefs, must/when conditions, and feature combinations.
 

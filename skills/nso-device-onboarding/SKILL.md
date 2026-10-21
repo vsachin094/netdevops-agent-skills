@@ -35,15 +35,15 @@ compatibility, reachability, SSH trust, synchronization, and verification.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Record the NSO version, device address and auth source, NED package and version, protocol, authgroup, device type, and sync-from policy. Confirm whether the device is reachable and whether onboarding may alter it.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Generate a repeatable onboarding sequence that creates the device, assigns the NED and authgroup, commits the candidate, and runs connect/sync verification. Keep device credentials external and make partial onboarding recoverable.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Test duplicate onboarding, invalid NED, unreachable device, auth failure, failed commit, and sync mismatch in a lab or fixture-backed environment. Capture NSO transaction output without leaking secrets.
 

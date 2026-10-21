@@ -32,15 +32,15 @@ ownership, not on catching duplicate errors after the fact.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Identify the object type, unique key, tenancy and site scope, custom fields, relationship requirements, API version, pagination behavior, and dry-run expectation. Use recorded responses when the source of truth is unavailable.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Generate idempotent API operations that reconcile by stable natural keys, validate foreign references, paginate safely, and distinguish create, update, no-op, and delete. Keep tokens outside code and logs.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Replay create, update, unchanged, missing-parent, pagination, rate-limit, and permission-denied fixtures. Confirm the second reconciliation is a no-op and that deletion requires an explicit policy.
 

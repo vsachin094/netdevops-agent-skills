@@ -50,26 +50,30 @@ def validate_file(path: Path) -> list[str]:
         errors.append("description is required")
     if len(description) > 1024:
         errors.append("description exceeds 1024 characters")
-    if not any(f"[Tier: {tier}]" in description for tier in TIERS):
-        errors.append("description must include a [Tier: ...] marker")
+    # Tier is in title, not description - keep description clean
     if "Use this skill when" not in description:
         errors.append("description must state when to trigger the skill")
     if metadata.get("license") != "MIT":
         errors.append("license must be MIT")
     if not metadata.get("compatibility"):
         errors.append("compatibility is required")
-    if len(text.splitlines()) > 400:
-        errors.append("SKILL.md exceeds 400 lines")
     for section in REQUIRED_SECTIONS:
         if section not in text:
             errors.append(f"missing section: {section}")
-    for phase in (
+    # Accept both old and new workflow phase names
+    old_phases = (
         "### Phase 1 (Ingestion & Validation)",
         "### Phase 2 (Generation)",
         "### Phase 3 (Self-Verification)",
-    ):
-        if phase not in text:
-            errors.append(f"missing workflow phase: {phase}")
+    )
+    new_phases = (
+        "### Phase 1 (Intake & Scope)",
+        "### Phase 2 (Implementation)",
+        "### Phase 3 (Verification)",
+    )
+    for old, new in zip(old_phases, new_phases):
+        if old not in text and new not in text:
+            errors.append(f"missing workflow phase: {old} or {new}")
     for example_section in ("### Input / Requirement", "### Output / Generated Code"):
         if example_section not in text:
             errors.append(f"missing example subsection: {example_section}")

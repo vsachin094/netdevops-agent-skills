@@ -31,15 +31,15 @@ renumber production policy accidentally.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Define the policy schema, stable rule identity, ordering semantics, address/service objects, default action, logging fields, and provider-specific constraints. Decide how duplicates and shadowed rules are handled.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Translate YAML intent into stable resource maps keyed by semantic identity. Validate references and ordering before resource creation, and keep rule replacement behavior explicit when a key changes.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run fmt, validate, plan, schema tests, and provider-specific checks for duplicate keys, missing objects, shadowing, reorder-only changes, and default-deny behavior.
 

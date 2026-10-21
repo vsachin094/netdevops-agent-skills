@@ -37,15 +37,15 @@ default and expose provider-specific differences at a clear boundary.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Record the API base URL and version, authentication method, resource identity, pagination shape, rate-limit headers, retryable status codes, timeout, and idempotency key policy.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Implement a typed client with session reuse, bounded retries, backoff, pagination, request correlation, and response validation. Keep authentication external and never retry a non-idempotent mutation without an explicit contract.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Replay success, pagination, 429, 5xx, malformed response, timeout, auth failure, and duplicate-request fixtures. Verify retry counts, backoff bounds, and that sensitive headers never appear in logs.
 

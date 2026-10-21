@@ -94,15 +94,15 @@ validation, and rollback considerations.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
 
 Capture the protocol intent, topology assumptions, timer and policy constraints, vendor targets, feature support, and the source-of-truth fields. Resolve ambiguous terms such as neighbor, area, ASN, or preference before modeling.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Represent the protocol as a vendor-neutral data model, then render or translate through explicit vendor adapters. Validate relationships such as peer endpoints, ASNs, areas, policies, and authentication before generating device syntax.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run schema validation, positive and negative topology fixtures, vendor render checks, and diff comparisons. Mark features that are modeled but not validated against a device or simulator.
 
@@ -256,3 +256,31 @@ one template adapter. Unsupported features return a structured finding with
 back to another vendor's syntax. Prechecks should verify interfaces, BGP/IGP
 adjacency, MTU, and policy object existence; postchecks should verify the same
 state plus intended route/EVPN changes.
+
+## Vendor Version Compatibility
+
+| Platform | Version | BGP | OSPF/ISIS | EVPN-VXLAN | MPLS | VRF | Notes |
+|----------|---------|-----|-----------|------------|------|-----|-------|
+| IOS-XE | 16.x | ✓ | ✓ | ✓ (17.3+) | ✓ | ✓ | BGP add-path 16.12+ |
+| IOS-XE | 17.x | ✓ | ✓ | ✓ | ✓ | ✓ | EVPN multi-homing 17.6+ |
+| NX-OS | 7.x | ✓ | ✓ | ✓ | ✓ | ✓ | VXLAN 7.0(3)I7+ |
+| NX-OS | 9.x/10.x | ✓ | ✓ | ✓ | ✓ | ✓ | BGP graceful restart |
+| EOS | 4.25+ | ✓ | ✓ | ✓ | ✗ | ✓ | MPLS not supported |
+| EOS | 4.30+ | ✓ | ✓ | ✓ | ✗ | ✓ | BGP ORF 4.30+ |
+| Junos | 18.x | ✓ | ✓ | ✓ (19.1+) | ✓ | ✓ | EVPN 19.1R1+ |
+| Junos | 21.x | ✓ | ✓ | ✓ | ✓ | ✓ | SR-TE 21.2+ |
+
+**Unsupported Feature Handling:**
+- EOS MPLS: Returns finding `{feature: "mpls", platform: "eos", reason: "not_implemented"}`
+- IOS-XE < 17.3 EVPN: Returns finding with minimum version
+- NX-OS VRF-lite: Limited route leaking vs full VRF
+- Junos BGP add-path: Requires explicit `multipath` config
+
+## Related Skills
+
+- [jinja2-multivendor-sot](jinja2-multivendor-sot.md) — Template rendering for this intent model
+- [containerlab-topologies](containerlab-topologies.md) — Lab validation of rendered configs
+- [batfish-validation](batfish-validation.md) — Mathematical verification of rendered configs
+- [network-change-runbooks](network-change-runbooks.md) — Pre/post checks for protocol changes
+- [tf-aci-sdwan-meraki](tf-aci-sdwan-meraki.md) — Controller-based alternative for fabric intent
+- [ansible-resource-modules](ansible-resource-modules.md) — Declarative Ansible alternative

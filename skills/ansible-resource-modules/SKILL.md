@@ -1,47 +1,38 @@
 ---
 name: ansible-resource-modules
-description: "[Tier: Intermediate] Write idempotent Ansible network playbooks with modern resource modules for interfaces, VLANs, BGP, and L3 services. Use this skill when a supported resource module can express the desired state more safely than raw CLI configuration."
+description: "Write idempotent Ansible network playbooks with modern resource modules for interfaces, VLANs, BGP, and L3 services. Use this skill when a supported resource module can express the desired state more safely than raw CLI configuration."
 license: MIT
 compatibility: Ansible Core; ansible.netcommon; vendor network collections and resource modules
 ---
 
 # Ansible Resource Modules (Intermediate)
 
-Use resource modules as structured reconciliation primitives. The selected
-state is part of the change design and must match the intended ownership
-boundary.
+Use resource modules as structured reconciliation primitives. The selected state is part of the change design and must match the intended ownership boundary.
 
 ## Core Engineering Capabilities
 
-- Configure Cisco IOS/NX-OS, Arista EOS, Junos, and other supported resources
-  with `merged`, `replaced`, `overridden`, `deleted`, `gathered`, `rendered`,
-  and `parsed` states.
-- Gather structured device state, render offline configuration, and assert
-  before/after idempotency.
+- Configure Cisco IOS/NX-OS, Arista EOS, Junos, and other supported resources with `merged`, `replaced`, `overridden`, `deleted`, `gathered`, `rendered`, and `parsed` states.
+- Gather structured device state, render offline configuration, and assert before/after idempotency.
 
 ## Strict Engineering Guardrails (Anti-Hallucination & Best Practices)
 
-- Prefer resource modules over legacy `ios_config`, `nxos_config`, `eos_config`,
-  and raw `cli_config` when an equivalent resource module exists.
-- Choose state deliberately: `merged` adds intent, `replaced` owns a resource
-  subsection, and `overridden` can remove unrelated configuration and lock out
-  management. Use `overridden` only with explicit ownership and review.
+- Prefer resource modules over legacy `ios_config`, `nxos_config`, `eos_config`, and raw `cli_config` when an equivalent resource module exists.
+- Choose state deliberately: `merged` adds intent, `replaced` owns a resource subsection, and `overridden` can remove unrelated configuration and lock out management. Use `overridden` only with explicit ownership and review.
 - Pin collection versions and confirm module/platform support.
-- Use gathered data and `--check --diff` before change; do not assume check
-  mode perfectly models every platform.
+- Use gathered data and `--check --diff` before change; do not assume check mode perfectly models every platform.
 - Keep structured config in vars or templates, not embedded opaque CLI.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Ingestion & Validation)
+### Phase 1 (Intake & Scope)
 
 Identify the resource model, collection namespace, supported states, platform capabilities, and whether the request is present, absent, or rendered-only. Compare the requested fields with the module's documented return and diff behavior.
 
-### Phase 2 (Generation)
+### Phase 2 (Implementation)
 
 Generate resource-module tasks with normalized data, explicit state, stable keys, and check-mode-compatible diffs. Use module defaults deliberately and avoid falling back to cli_config for fields the resource model can own.
 
-### Phase 3 (Self-Verification)
+### Phase 3 (Verification)
 
 Run syntax and lint checks, then execute create, converge, modify, remove, and invalid-input cases. Confirm the second run is unchanged and that check mode predicts the same diff as the first real run.
 
@@ -59,7 +50,6 @@ Provide the target platform, collection version, resource definition, desired st
 
 Return the playbook or role, vars fixture, expected diff, and tests covering present, absent, changed, and unsupported-field cases.
 
-
 ```yaml
 - name: Merge a loopback address
   cisco.ios.ios_l3_interfaces:
@@ -68,14 +58,33 @@ Return the playbook or role, vars fixture, expected diff, and tests covering pre
         ipv4:
           - address: 192.0.2.10/32
     state: merged
+
+- name: Replace VLANs on trunk
+  cisco.ios.ios_vlans:
+    config:
+      - vlan_id: 100
+        name: SERVERS
+        state: active
+    state: replaced
+```
+
+```python
+# scripts/verify_resource_module.py
+import subprocess, sys
+result = subprocess.run(
+    ["ansible-playbook", "playbook.yml", "--check", "--diff"],
+    capture_output=True, text=True
+)
+if result.returncode != 0:
+    print(f"FAIL: {result.stderr}")
+    sys.exit(1)
+if "changed=true" in result.stdout and "--check" in " ".join(sys.argv):
+    print("WARN: check mode shows changes on clean system")
 ```
 
 ## Validation, Linting & Testing Commands
 
-At minimum, run `python3 scripts/validate_skills.py` from the repository root in addition to the domain-specific commands below.
-
-- Test every state used, empty config, round-trip, and second-run unchanged
-  behavior.
+- Test every state used, empty config, round-trip, and second-run unchanged behavior.
 - Review `before`, `after`, and `commands`; assert `changed: false` on repeat.
 - Run `ansible-lint`, syntax check, and the repository validator.
 
@@ -90,16 +99,6 @@ Use rendered/parsed states and fixture-based before/after data without a device.
 
 ## Architecture & Technical Design Patterns
 
-Choose state from ownership: `merged` adds specified elements and preserves
-unmanaged peers; `replaced` owns the selected resource subsection; `overridden`
-owns the entire resource and can remove unrelated configuration; `deleted`
-removes the selected resource; `gathered` returns structured device state;
-`rendered` produces native commands offline; `parsed` converts supplied
-`running_config` offline. Use `overridden` only when the role is authoritative
-for the entire resource, never for a management interface by accident.
+Choose state from ownership: `merged` adds specified elements and preserves unmanaged peers; `replaced` owns the selected resource subsection; `overridden` owns the entire resource and can remove unrelated configuration; `deleted` removes the selected resource; `gathered` returns structured device state; `rendered` produces native commands offline; `parsed` converts supplied `running_config` offline. Use `overridden` only when the role is authoritative for the entire resource, never for a management interface by accident.
 
-The normal lifecycle is gather/inspect, render or check-mode diff, apply,
-assert `after`, and run the same task again expecting `changed: false`. Test
-empty config, duplicate list keys, unsupported fields, platform version
-differences, and the exact `before/commands/after` result. Treat module
-warnings and partial failures as review data rather than suppressing them.
+The normal lifecycle is gather/inspect, render or check-mode diff, apply, assert `after`, and run the same task again expecting `changed: false`. Test empty config, duplicate list keys, unsupported fields, platform version differences, and the exact `before/commands/after` result. Treat module warnings and partial failures as review data rather than suppressing them.
