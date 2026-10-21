@@ -39,101 +39,23 @@ Validate with the skill's test suite.
 ## Skill Map
 
 ```mermaid
-graph TD
-    subgraph TRANSPORT["Transport"]
-        T1[netmiko-core]
-        T2[ncclient-restconf]
-        T3[paramiko-ssh]
-        T4[async-network-automation]
-        T5[scrapli-netmiko-threaded]
-        T6[gnmi-client]
-        T7[gnmi-snmp-telemetry]
-        T8[netconf-automation]
-    end
+graph LR
+    TRANSPORT[Transport<br/>8 skills]
+    PARSING[Parsing & Modeling<br/>6 skills]
+    ANSIBLE[Ansible<br/>9 skills]
+    TERRAFORM[Terraform<br/>8 skills]
+    TESTING[Testing & Validation<br/>6 skills]
+    OBSERVABILITY[Observability<br/>1 skill]
+    OPERATIONS[Operations<br/>4 skills]
+    UTILITIES[Utilities<br/>14 skills]
 
-    subgraph PARSING["Parsing & Modeling"]
-        P1[ntc-textfsm]
-        P2[ttp-parsers]
-        P3[cli-regex]
-        P4[pyang-xpath]
-        P5[yang-model-dev]
-        P6[network-protocols-as-code]
-    end
-
-    subgraph ANSIBLE["Ansible"]
-        A1[ansible-role-creation]
-        A2[ansible-plugin-development]
-        A3[ansible-ee-build]
-        A4[ansible-vault-hygiene]
-        A5[ansible-dynamic-inventory]
-        A6[ansible-resource-modules]
-        A7[ansible-linux-networking]
-        A8[ansible-netcli-playbooks]
-        A9[ansible-pre-post-checks]
-    end
-
-    subgraph TERRAFORM["Terraform"]
-        TF1[tf-vpc-foundations]
-        TF2[tf-aws-networking]
-        TF3[tf-azure-gcp-networking]
-        TF4[tf-firewall-policies]
-        TF5[tf-module-hardening]
-        TF6[tf-state-surgery]
-        TF7[tf-aci-sdwan-meraki]
-        TF8[tf-to-ansible-inventory]
-    end
-
-    subgraph TESTING["Testing & Validation"]
-        V1[containerlab-topologies]
-        V2[batfish-validation]
-        V3[network-testing-framework]
-        V4[config-diff-audit]
-        V5[config-sanitizer]
-        V6[network-config-drift-detection]
-    end
-
-    subgraph OBSERVABILITY["Observability"]
-        O1[network-observability-stack]
-    end
-
-    subgraph OPERATIONS["Operations"]
-        OP1[gitops-network-automation]
-        OP2[network-device-onboarding]
-        OP3[network-change-runbooks]
-        OP4[nso-device-onboarding]
-    end
-
-    subgraph UTILITIES["Utilities"]
-        U1[ipam-subnetting]
-        U2[jinja2-network-templates]
-        U3[cli-tool-packaging]
-        U4[network-data-pipelines]
-        U5[network-rest-clients]
-        U6[network-protocols-as-code]
-        U7[netbox-nautobot-api]
-        U8[nornir-napalm]
-        U9[netconf-automation]
-        U10[netconf-restconf-payloads]
-        U11[pysnmp-automation]
-        U12[pyats-genie]
-        U13[ttp-parsers]
-        U14[tf-state-surgery]
-    end
-
-    %% Cross-category connections
-    T6 -.-> O1
-    T7 -.-> O1
-    V1 -.-> V3
-    V2 -.-> V3
-    V4 -.-> V6
-    V5 -.-> V6
-    OP1 -.-> V1
-    OP2 -.-> V1
-    OP3 -.-> V4
-    A9 -.-> OP3
-    U2 -.-> P6
-    A1 -.-> OP3
-    TF8 -.-> A5
+    TRANSPORT --> TESTING
+    PARSING --> ANSIBLE
+    ANSIBLE --> OPERATIONS
+    TERRAFORM --> ANSIBLE
+    TESTING --> OPERATIONS
+    OBSERVABILITY --> TRANSPORT
+    UTILITIES -.-> all
 ```
 
 ---
