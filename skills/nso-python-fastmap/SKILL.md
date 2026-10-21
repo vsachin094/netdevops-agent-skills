@@ -36,15 +36,15 @@ diffs, and reconciliation.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Identify the service YANG model, keypath, input leaves, device or service dependencies, and the exact create/update/delete behavior. Separate transaction-time mapping from operational side effects.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Implement FASTMAP callbacks that read transaction data, create deterministic service components, and map dependencies without opening out-of-band MAAPI transactions. Keep validation and side effects in the correct NSO phase.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Compile the package and exercise create, update, delete, invalid input, duplicate key, and dependency failure cases. Inspect transaction diffs and confirm rollback leaves the CDB consistent.
 
 1. Define service YANG and allocation ownership.
 2. Scaffold package and implement callback with validation and template apply.
@@ -56,9 +56,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the service model, Python package skeleton, keypaths, component mapping, validation rules, and expected transaction outcomes.
 
 ### Output / Generated Code
+
+Return the package code, service model changes, mapping explanation, test fixtures, compile commands, and known platform prerequisites.
 
 
 ```python

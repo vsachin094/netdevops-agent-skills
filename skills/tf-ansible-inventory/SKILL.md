@@ -31,15 +31,15 @@ Terraform outputs as an API with stable keys and sensitivity metadata.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Define the Terraform/OpenTofu outputs, host identity, group rules, sensitive values, inventory format, and the point at which Ansible consumes the result. Check output types before generating inventory data.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate a deterministic inventory adapter that maps declared outputs to hosts, groups, and vars without leaking sensitive outputs. Preserve stable ordering and distinguish an empty inventory from a failed plan.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run fmt, validate, plan fixtures, inventory rendering, and Ansible parse checks. Test missing outputs, duplicate hosts, sensitive values, empty groups, and a second rendering for stable diffs.
 
 1. Define output contract and inventory mapping.
 2. Apply infrastructure, collect outputs, validate readiness, and render.
@@ -49,9 +49,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide Terraform/OpenTofu output definitions, desired inventory schema, group and variable rules, sensitivity policy, and the downstream Ansible command.
 
 ### Output / Generated Code
+
+Return the handoff code or template, output fixtures, generated inventory, sensitivity checks, and an end-to-end parse test.
 
 
 ```hcl

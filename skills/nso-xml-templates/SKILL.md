@@ -35,15 +35,15 @@ particular device's CLI representation.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Define the service input model, NED variants, template variables, tags, device groups, and expected generated config. Identify which fields are optional and what absence means for each device type.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate XML templates with explicit variable paths, loops, conditional branches, and servicepoint ownership. Keep templates idempotent and avoid embedding credentials or device-specific assumptions in generic paths.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Compile and render the package for each supported NED, then test missing optional data, repeated list entries, invalid references, and delete behavior. Compare the generated config with golden output.
 
 1. Define service model, ownership, device references, and lifecycle.
 2. Scaffold package, implement YANG and templates, and compile dependencies.
@@ -54,9 +54,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide service input examples, NED names and versions, variable paths, expected config, and the package compile/render environment.
 
 ### Output / Generated Code
+
+Return the XML templates, service mapping, sample inputs, golden output, and package validation commands for every supported NED.
 
 
 ```xml

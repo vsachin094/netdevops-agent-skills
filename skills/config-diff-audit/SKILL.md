@@ -38,15 +38,15 @@ or command prompts that change every collection cycle.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Identify the configuration source, capture timestamp, device identity, normalization rules, secret handling, and files or sections that are intentionally noisy. Decide whether line order is meaningful before comparing snapshots.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate a deterministic capture and diff workflow that normalizes only approved noise, preserves evidence, and produces both machine-readable and reviewer-friendly output. Never hide a change merely because it is inconvenient to compare.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Compare identical, reordered, secret-bearing, and materially changed snapshots. Confirm the scrubber and diff filters do not erase an ACL, route, credential reference, or device-context change.
 
 1. Identify the source, device key, retention policy, and canonical filename.
 2. Collect or load raw configuration and validate that it is not an error page,
@@ -59,9 +59,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide baseline and candidate configurations, device metadata, approved ignore patterns, redaction rules, and the required diff format.
 
 ### Output / Generated Code
+
+Return normalized snapshots, a diff report, the filter configuration, and regression fixtures proving meaningful changes remain visible.
 
 
 ```python

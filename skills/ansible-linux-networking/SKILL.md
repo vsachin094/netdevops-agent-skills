@@ -35,15 +35,15 @@ assume the control interface is unaffected by a route or firewall change.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Collect the distribution, network manager, interface names, default route, SSH source path, existing firewall policy, and service state before changing anything. Reject a request that does not identify a recovery path for a remote host.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Select the installed backend—Netplan/networkd or NetworkManager—and generate distribution-specific tasks for routes, VLANs, bonds, FRR, nftables, or WireGuard. Render and validate temporary configuration before notifying a restart handler.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run native syntax checks, apply the change in a VM or namespace lab, and assert the management route, interface state, firewall policy, FRR neighbors, and WireGuard handshake. Exercise the rollback path with an intentionally invalid candidate.
 
 1. Gather OS, interface, route, SSH, and service facts.
 2. Render candidate config and run native validators.
@@ -55,9 +55,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the target distribution and version, active network backend, interface and route facts, desired network state, SSH path, and recovery constraints.
 
 ### Output / Generated Code
+
+Return an idempotent role or task set with handlers, prechecks, postchecks, and rollback notes. Include the exact native validation commands for the selected distribution.
 
 
 ```yaml

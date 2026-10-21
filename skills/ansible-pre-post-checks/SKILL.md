@@ -33,15 +33,15 @@ The baseline must be comparable, the change bounded, and rollback explicit.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Define the pre-change facts, the exact change boundary, post-change assertions, acceptable transient states, and rollback trigger. Identify which checks are safe to run against the target and which require a lab fixture.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Build a block/rescue workflow that snapshots state, performs the change, evaluates explicit postconditions, and restores the approved snapshot on failure. Keep rescue logic bounded and observable rather than hiding errors.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run the workflow in check mode and a lab, then force failures at the change, postcheck, and rollback stages. Confirm that the original evidence is retained and that a partial fleet result is reported per host.
 
 1. Gather and validate baseline; stop if required signals are missing.
 2. Apply the authorized change inside a block.
@@ -52,9 +52,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide precheck commands, the change play or role, postconditions, rollback artifact, timeout policy, and the definition of a successful run.
 
 ### Output / Generated Code
+
+Return the playbook with block/rescue structure, evidence paths, failure injection tests, and an operator runbook for aborting or recovering the change.
 
 
 ```yaml

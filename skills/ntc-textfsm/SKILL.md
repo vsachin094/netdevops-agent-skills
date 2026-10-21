@@ -48,15 +48,15 @@ commands.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Capture raw command output from each supported OS and release, including headers, empty output, wrapped lines, and malformed records. Define the record schema before choosing Value options or state transitions.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Write the smallest TextFSM state machine that expresses record boundaries, Filldown context, required fields, and EOF behavior. Keep parsing separate from normalization and match NTC-Templates naming and index conventions.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run TextFSM directly against every fixture and compare complete dictionaries. Add negative cases for changed headers, missing keys, truncated output, and context leakage before testing Netmiko, Scrapli, or Ansible integration.
 
 1. Capture representative raw output, including empty, partial, paginated, and
    multi-record cases. Identify record boundaries and context fields.
@@ -77,9 +77,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide raw fixtures, expected records, command and platform names, supported software variants, and the consuming library or index requirements.
 
 ### Output / Generated Code
+
+Return the template, index entry where applicable, raw and expected fixtures, integration example, and parser/test output.
 
 
 ### Template

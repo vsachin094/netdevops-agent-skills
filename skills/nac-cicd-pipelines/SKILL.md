@@ -32,15 +32,15 @@ deployment. A green syntax check is not a green production change.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Map the pipeline stages, repository artifacts, approval gates, target environments, credentials boundaries, and rollback owner. Define what can run offline and which stage requires a lab, controller, or production approval.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate a staged pipeline that lints, renders, validates in a twin or lab, creates a plan, pauses for approval, and deploys only the approved artifact. Pass immutable artifacts between stages rather than regenerating intent.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run the pipeline with valid changes, schema failures, twin failures, approval rejection, deployment failure, and rollback. Confirm secrets are masked and every gate leaves evidence suitable for audit.
 
 1. Lint and scan changed files.
 2. Run offline parser/template/model and twin tests.
@@ -51,9 +51,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the CI system, repository layout, change inputs, validation tools, approval rules, target environments, and rollback or break-glass procedure.
 
 ### Output / Generated Code
+
+Return pipeline configuration, artifact contracts, gate conditions, environment variables without secrets, and a test matrix covering success and failure paths.
 
 
 ```yaml

@@ -96,15 +96,15 @@ validation, and rollback considerations.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Capture the protocol intent, topology assumptions, timer and policy constraints, vendor targets, feature support, and the source-of-truth fields. Resolve ambiguous terms such as neighbor, area, ASN, or preference before modeling.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Represent the protocol as a vendor-neutral data model, then render or translate through explicit vendor adapters. Validate relationships such as peer endpoints, ASNs, areas, policies, and authentication before generating device syntax.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run schema validation, positive and negative topology fixtures, vendor render checks, and diff comparisons. Mark features that are modeled but not validated against a device or simulator.
 
 1. **Clarify the design boundary.** Identify platforms/releases, device roles,
    topology, address plan, VRFs, protocol scope, target output, and whether
@@ -134,9 +134,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the protocol, topology or adjacency data, vendor and software targets, policy requirements, timers, authentication references, and desired outputs.
 
 ### Output / Generated Code
+
+Return the intent schema, example data, vendor-specific rendering or adapter code, validation errors, and a test matrix for supported protocol variants.
 
 
 ### Vendor-neutral intent

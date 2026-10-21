@@ -37,15 +37,15 @@ change network intent.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+List each filter or macro's input types, output contract, null behavior, exception policy, and the templates that consume it. Identify whether a filter must preserve order, formatting, or vendor-specific aliases.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Implement small pure filters with type checks, useful error messages, and no hidden I/O. Register them explicitly and document examples that match the actual return type consumed by Jinja.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run unit tests for normal, boundary, null, invalid-type, and idempotent cases, then render a fixture through Jinja StrictUndefined. Confirm filter failures identify the input and filter name.
 
 1. Identify repeated transformation and decide whether it belongs in a macro,
    filter, or pre-render model transformation.
@@ -57,9 +57,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide filter signatures, sample inputs and expected outputs, registration mechanism, supported Python/Jinja versions, and the templates that use the filters.
 
 ### Output / Generated Code
+
+Return the filter module, registration code, tests, and a rendered example showing the filter in its real template context.
 
 
 ```python

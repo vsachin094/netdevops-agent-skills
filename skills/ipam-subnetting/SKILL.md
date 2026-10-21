@@ -60,15 +60,15 @@ binary math, approximate host counts, or an unverified model response.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Collect address pools, site and environment boundaries, required host counts, reserved ranges, IPv4/IPv6 policy, and output consumers. Reject overlapping pools, impossible allocations, and ambiguous reservation rules before calculating subnets.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Implement deterministic CIDR allocation with explicit ordering, alignment, reservation, and utilization rules. Produce a human-readable plan plus machine-readable records suitable for NetBox, Infoblox, Terraform, or review.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run the CIDR verifier against valid, overlap, exhaustion, boundary, and IPv6 cases. Re-run the allocation to prove stability and compare the output with the requested host counts and reserved ranges.
 
 1. **Normalize the request into an allocation model.** Capture the parent
    CIDR, address family, allocation units, required host counts, reserved
@@ -104,9 +104,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the parent prefixes, site/environment hierarchy, required hosts, reserved addresses, allocation order, and downstream data format.
 
 ### Output / Generated Code
+
+Return the allocation table, machine-readable seed data, utilization summary, and clear errors for overlaps, exhaustion, or invalid prefix boundaries.
 
 
 ### JSON plan input

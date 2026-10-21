@@ -46,15 +46,15 @@ result.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Identify the device OS, software release, command, connection alias, parser version, and expected schema. Capture golden output from a stable lab device and include variation that should not change the semantic result.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate a pyATS test or Genie parser workflow that separates connection setup, parsed data, assertions, and differential comparison. Normalize only fields known to be volatile and keep parser failures visible.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run the test against golden, changed, empty, timeout, and unsupported-command fixtures. Compare semantic records rather than raw timestamps and verify the test fails for a real topology or state regression.
 
 1. Identify the command, platform/OS release, expected schema, and whether the
    parser is for a local project or intended for upstream contribution.
@@ -73,9 +73,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide device type and version, command or API operation, golden output, expected parsed structure, and the pyATS/Genie test entry point.
 
 ### Output / Generated Code
+
+Return the test or parser code, golden fixtures, expected schema, differential policy, and commands for local and lab execution.
 
 
 ```python

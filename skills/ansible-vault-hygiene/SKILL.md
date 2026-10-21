@@ -31,15 +31,15 @@ secret, not know how to print or persist it.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Map every secret source, vault ID, variable file, environment variable, log path, and CI context. Identify values that must remain encrypted at rest and values that may be exposed to a target module.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate Vault-backed vars and task usage with no_log at secret boundaries, explicit vault-id handling, and safe failure messages. Keep secret names stable while keeping secret values out of fixtures and rendered output.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run the leak scanner against source, logs, diffs, and failed-task output. Test wrong vault IDs, missing secrets, check mode, and accidental debug statements; confirm the scanner catches known canaries without false confidence.
 
 1. Classify secret fields and choose Vault or an approved external provider.
 2. Reference `vault_` variables through clear, non-secret role interfaces.
@@ -50,9 +50,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the secret inventory, vault layout, CI or controller invocation, redaction requirements, and sanitized canary values for testing.
 
 ### Output / Generated Code
+
+Return the encrypted-variable layout, playbook changes, invocation examples, leak-scan results, and a rotation or recovery note.
 
 
 ```yaml

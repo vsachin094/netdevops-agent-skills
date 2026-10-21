@@ -36,15 +36,15 @@ operation explicit.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Start from the exact YANG module, revision, namespace, operation, datastore, and device capability set. Record list keys and config/state status before writing XML or JSON.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Construct namespace-correct payloads and filters with explicit edit operations, list predicates, defaults, and content selection. Reject read-only nodes and unknown namespaces instead of producing plausible XML.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Validate XML/JSON syntax and model structure locally, then run fixture responses for success, rpc-error, malformed input, and unsupported capability. Compare the payload against the intended tree path.
 
 1. Identify model revision, namespace, datastore, target protocol, and media
    type from capabilities and documentation.
@@ -56,9 +56,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide YANG modules or schemas, target revision, operation, datastore, namespace map, desired values, and representative device responses.
 
 ### Output / Generated Code
+
+Return the payload or filter, namespace declarations, expected response handling, and a fixture-based validation result.
 
 
 ```xml

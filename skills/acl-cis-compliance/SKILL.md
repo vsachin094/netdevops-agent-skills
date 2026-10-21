@@ -34,15 +34,15 @@ management path.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Start with the platform, ACL direction, interface or zone, CIS baseline, and the intended traffic matrix. Parse the supplied ACLs into ordered entries and stop if object names, address groups, or service definitions are missing.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Build a normalized rule model, then calculate shadowing, redundancy, overly broad matches, and explicit exceptions. Produce findings with line references and a minimal remediation diff; preserve rule order and default-deny behavior.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run the bundled shadow-analysis helper against clean, shadowed, duplicate, and malformed fixtures. Review every proposed permit or deny change against the traffic matrix before treating the report as actionable.
 
 1. Scrub and parse config, identify platform/version, and collect evidence.
 2. Evaluate controls and ACL relations, then produce findings with confidence.
@@ -53,9 +53,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide sanitized ACL text, platform syntax, direction and attachment point, the compliance baseline, and the approved traffic matrix. State which rules are intentional exceptions.
 
 ### Output / Generated Code
+
+Return a findings report with severity, evidence, affected rule, and remediation. When remediation is requested, generate a reviewable patch and a regression fixture for every changed decision.
 
 
 ```text

@@ -34,15 +34,15 @@ intentional.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Define the source models, gNMI paths or SNMP OIDs, encoding, scrape interval, labels, retention, alert thresholds, and cardinality budget. Check that the requested paths exist in the target release or local schema.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate collector configuration, normalized metric names, PromQL rules, and dashboard panels with explicit labels and ownership. Keep secrets external and avoid labels derived from unbounded device data.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Validate configuration syntax, replay local telemetry fixtures, evaluate alert expressions for firing and recovery, and inspect series cardinality. Mark live subscription and device support as unverified without a target.
 
 1. Define SLO signal, metric schema, labels, collection mode, and cardinality.
 2. Validate device support and generate collector/config assets.
@@ -53,9 +53,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide telemetry paths or OIDs, target versions, collector endpoints, label policy, retention requirements, and alert acceptance criteria.
 
 ### Output / Generated Code
+
+Return collector configuration, sample metrics, PromQL alerts, dashboard JSON where requested, and tests for missing, stale, and recovered telemetry.
 
 
 ```promql

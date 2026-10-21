@@ -37,15 +37,15 @@ retries, then make cancellation and partial failure observable.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Quantify fleet size, per-device timeout, concurrency budget, retry policy, rate limits, cancellation behavior, and the operation's idempotency. Separate connection errors from device command failures before writing the worker pool.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Implement bounded concurrency with semaphores or a worker queue, per-task timeouts, structured results, and cancellation-safe cleanup. Preserve input order or expose an explicit correlation key so operators can reconcile outcomes.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run against local fakes that simulate slow devices, timeouts, rate-limit responses, cancellation, malformed payloads, and partial success. Measure concurrency and verify no task or connection is leaked.
 
 1. Classify operations as read-only, idempotent write, or non-repeatable.
 2. Choose concurrency and rate limits from platform capacity and lab tests.
@@ -57,9 +57,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the device inventory, operation contract, fleet size, timeout and rate limits, retryable errors, and the required result schema.
 
 ### Output / Generated Code
+
+Return the async worker implementation, configuration knobs, structured result example, fixture-based tests, and an explanation of retry and cancellation semantics.
 
 
 ```python

@@ -37,15 +37,15 @@ compatibility, reachability, SSH trust, synchronization, and verification.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Record the NSO version, device address and auth source, NED package and version, protocol, authgroup, device type, and sync-from policy. Confirm whether the device is reachable and whether onboarding may alter it.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate a repeatable onboarding sequence that creates the device, assigns the NED and authgroup, commits the candidate, and runs connect/sync verification. Keep device credentials external and make partial onboarding recoverable.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Test duplicate onboarding, invalid NED, unreachable device, auth failure, failed commit, and sync mismatch in a lab or fixture-backed environment. Capture NSO transaction output without leaking secrets.
 
 1. Validate inventory, credentials, NED, device group, and reachability.
 2. Create or reconcile authgroup and device metadata.
@@ -56,9 +56,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide device metadata, NED package, authgroup reference, protocol, address, onboarding scope, and the expected sync-from or rollback behavior.
 
 ### Output / Generated Code
+
+Return the NSO commands or package artifacts, prechecks, postchecks, failure recovery, and a verification transcript suitable for operator review.
 
 
 ```text

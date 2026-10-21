@@ -37,15 +37,15 @@ burying them in Python flags or environment-specific assumptions.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Define the command tree, input sources, configuration precedence, exit codes, logging format, output modes, and supported Python versions. Identify which commands may mutate infrastructure and which are read-only.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Build a typed Typer or Click CLI with explicit options, configuration loading, structured errors, stable exit codes, and dependency injection for device or API clients. Keep human output separate from machine-readable output.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run help, valid, invalid, missing-config, timeout, dry-run, JSON-output, and unexpected-exception cases. Build a wheel in a clean environment and confirm the installed entry point behaves like the source checkout.
 
 1. Define operator commands, flags, exit codes, and read/write boundaries.
 2. Build a typed settings object from CLI and environment inputs.
@@ -57,9 +57,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the command contract, sample configuration, input/output schemas, exit-code policy, packaging metadata, and target Python versions.
 
 ### Output / Generated Code
+
+Return the CLI package, sample config, command reference, tests, and build/install verification output.
 
 
 ```python

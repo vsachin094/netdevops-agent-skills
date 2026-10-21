@@ -36,15 +36,15 @@ privilege behavior explicit in inventory or group variables.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Identify the network OS, collection and connection plugin, inventory variables, fact requirements, command set, backup location, and whether the task is read-only or mutating. Separate show-command collection from configuration change.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate FQCN-based tasks with explicit timeouts, privilege behavior, redacted output, check-mode handling, and a predictable backup path. Use resource modules where a supported declarative module exists instead of raw command mutation.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run ansible-lint, syntax checks, check mode, and fixture-backed parsing. Verify idempotency on a second run and test unreachable devices, privilege failure, malformed output, and backup write failure.
 
 1. Validate inventory, collection versions, and connection variables.
 2. Run facts/commands with a bounded timeout and register results.
@@ -55,9 +55,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the platform, connection method, inventory variables, commands or desired resource state, backup policy, and the expected evidence after execution.
 
 ### Output / Generated Code
+
+Return the playbook, inventory example with secrets omitted, backup and logging behavior, and the commands used for lint, check mode, and test execution.
 
 
 ```yaml

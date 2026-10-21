@@ -38,15 +38,15 @@ postconditions are satisfied.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Map the service lifecycle, plan/deploy stages, kickers, component ownership, LSA boundaries, and rollback semantics. Identify which transitions are synchronous and which depend on device or service readiness.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Model stage transitions and component callbacks explicitly, keeping service data, state, and device actions separate. Generate timeout, retry, redeploy, and rollback behavior from documented lifecycle events rather than sleeps.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Exercise create, redeploy, partial failure, timeout, restart, delete, and rollback paths in an NSO lab. Inspect operational state after each transition and verify no orphaned component remains.
 
 1. Define lifecycle stages, external readiness signals, components, and final
    success criteria.
@@ -60,9 +60,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the service model, lifecycle stages, kickers, component graph, LSA or device boundaries, timeout policy, and failure recovery requirements.
 
 ### Output / Generated Code
+
+Return the service package structure, state transition map, callback or template logic, test scenarios, and operator commands for recovery.
 
 
 ```yang

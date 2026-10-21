@@ -37,15 +37,15 @@ express syntax differences, not redefine the network design.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Define the canonical source-of-truth model, vendor capability differences, required defaults, and unsupported features. Confirm which fields are authoritative and which are derived per platform.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Build vendor-specific renderers behind one normalized model, using capability maps or explicit adapter templates instead of scattered vendor conditionals. Make unsupported combinations fail with the platform and field named.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Render the same intent for each supported vendor, compare golden outputs, test capability gaps and empty collections, and parse or lint the results with platform-aware checks.
 
 1. Define the vendor-neutral model and capability matrix.
 2. Build shared macros and one vendor implementation with golden fixtures.
@@ -56,9 +56,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide canonical intent data, target vendors and versions, capability matrix, expected output differences, and the platform validation tools available locally.
 
 ### Output / Generated Code
+
+Return the shared model, vendor templates or adapters, capability declarations, golden outputs, and a matrix of supported and rejected features.
 
 
 ```text

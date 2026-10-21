@@ -30,15 +30,15 @@ are complementary to semantic validation and must not replace plan review.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Inventory module sources, provider constraints, state backend, variables, outputs, secrets, tests, and required security controls. Identify the Terraform/OpenTofu versions and CI runners that must reproduce the plan.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Add exact provider and module constraints, validation blocks, sensitive flags, least-privilege assumptions, secure state settings, and tests without changing the module's public contract unintentionally.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run fmt, validate, lint, security scans, unit or native tests, and plan fixtures. Test invalid variables, provider drift, secret exposure, and a clean initialization with the lock file.
 
 1. Inventory providers, state, secrets, resources, and invariants.
 2. Add constraints and tests, then run all static/security checks.
@@ -48,9 +48,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the module source, current constraints, security baseline, test framework, state policy, and the compatibility versions that must remain supported.
 
 ### Output / Generated Code
+
+Return hardened module files, lock/constraint changes, scan configuration, test cases, and a concise list of security findings resolved or deferred.
 
 
 ```hcl

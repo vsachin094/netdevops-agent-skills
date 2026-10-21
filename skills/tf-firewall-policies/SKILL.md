@@ -33,15 +33,15 @@ renumber production policy accidentally.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Define the policy schema, stable rule identity, ordering semantics, address/service objects, default action, logging fields, and provider-specific constraints. Decide how duplicates and shadowed rules are handled.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Translate YAML intent into stable resource maps keyed by semantic identity. Validate references and ordering before resource creation, and keep rule replacement behavior explicit when a key changes.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run fmt, validate, plan, schema tests, and provider-specific checks for duplicate keys, missing objects, shadowing, reorder-only changes, and default-deny behavior.
 
 1. Validate YAML schema, stable IDs, order, and object references.
 2. Generate plan and run policy analysis for shadow/redundant/broad rules.
@@ -51,9 +51,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide policy YAML, object definitions, rule identity convention, provider and version, default action, and expected diff for add, change, reorder, and remove.
 
 ### Output / Generated Code
+
+Return the schema, Terraform/OpenTofu resources, validation tests, rendered policy view, and a plan showing stable behavior across edits.
 
 
 ```hcl

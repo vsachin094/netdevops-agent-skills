@@ -38,15 +38,15 @@ the platform actually supports the getter or config operation.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Define the inventory schema, platform drivers, groups, credentials source, read-only getters, configuration actions, concurrency, and rollback expectations. Confirm that each device has a usable driver and connection profile.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate an inventory-driven task with Nornir and NAPALM that separates collection, intended diff, approval, and commit. Aggregate per-host results without discarding exceptions or mixing device output.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run against mocked or lab devices with success, unreachable, unsupported getter, diff mismatch, commit failure, and cleanup cases. Verify dry-run output and second-run idempotency where the driver supports it.
 
 1. Validate inventory and filter the intended host set.
 2. Run read-only prechecks and collect a baseline.
@@ -59,9 +59,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide inventory data, driver names, task parameters, desired configuration or getter set, concurrency limit, and the commit or rollback policy.
 
 ### Output / Generated Code
+
+Return the inventory example, task modules, structured result format, mocked fixtures, and commands for linting and dry-run verification.
 
 
 ```python

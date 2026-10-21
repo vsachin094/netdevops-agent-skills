@@ -35,15 +35,15 @@ boundary.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Identify the resource model, collection namespace, supported states, platform capabilities, and whether the request is present, absent, or rendered-only. Compare the requested fields with the module's documented return and diff behavior.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate resource-module tasks with normalized data, explicit state, stable keys, and check-mode-compatible diffs. Use module defaults deliberately and avoid falling back to cli_config for fields the resource model can own.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run syntax and lint checks, then execute create, converge, modify, remove, and invalid-input cases. Confirm the second run is unchanged and that check mode predicts the same diff as the first real run.
 
 1. Identify resource ownership and current state.
 2. Gather/parse state, select state mode, and render or diff offline.
@@ -53,9 +53,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the target platform, collection version, resource definition, desired state, existing-state fixture, and the expected idempotency and removal behavior.
 
 ### Output / Generated Code
+
+Return the playbook or role, vars fixture, expected diff, and tests covering present, absent, changed, and unsupported-field cases.
 
 
 ```yaml

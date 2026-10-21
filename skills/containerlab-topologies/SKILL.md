@@ -35,15 +35,15 @@ reviewable before deployment.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Confirm the lab purpose, node kinds and images, links, management network, startup configs, required capabilities, and resource budget. Verify that every referenced image is available locally or explicitly mark it as a prerequisite.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate a valid Containerlab topology with stable node names, explicit links, management addressing, and test inventory output. Keep secrets and proprietary images out of the topology repository.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run topology validation, deploy in a disposable lab when images exist, inspect links and interfaces, and destroy the lab cleanly. Test an invalid link, missing image, and duplicate node name.
 
 1. Define nodes, images, management subnet, links, startup config, and tests.
 2. Run `containerlab validate -t topology.clab.yml`.
@@ -54,9 +54,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the topology diagram, node images, link map, management requirements, startup configuration, and the assertions the lab must support.
 
 ### Output / Generated Code
+
+Return the topology YAML, inventory or addressing data, validation command output, and a short list of checks that require the actual images.
 
 
 ```yaml

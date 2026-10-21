@@ -33,15 +33,15 @@ being accepted by an API does not prove that dependent fabric policy is ready.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Record the controller type and version, provider version, account or organization scope, object hierarchy, state backend, and asynchronous readiness signals. Confirm which resources are authoritative and which are generated dependencies.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Model controller objects with stable for_each keys, explicit parent dependencies, YAML intent, sensitive variables, and provider-supported readiness behavior. Keep ACI, SD-WAN, Meraki, and CloudVision differences behind clear resource boundaries.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run fmt, validate, plan, and provider tests with mocked or lab controller responses. Test duplicate keys, parent deletion, eventual consistency, rejected policy, and post-apply health or fault checks.
 
 1. Define hierarchy, ownership, dependencies, and stable IDs.
 2. Validate YAML intent and generate plan.
@@ -51,9 +51,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide controller type and version, provider constraints, hierarchy, YAML intent, backend policy, and the plan or post-apply evidence required for acceptance.
 
 ### Output / Generated Code
+
+Return the Terraform/OpenTofu module, intent data, provider constraints, plan output expectations, and controller-specific postchecks.
 
 
 ```hcl

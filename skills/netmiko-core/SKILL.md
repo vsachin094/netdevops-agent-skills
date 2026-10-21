@@ -42,15 +42,15 @@ manager, transaction engine, or substitute for a change workflow.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Define the inventory, platform type, authentication source, connection timeout, command or config set, privilege requirements, and change boundary. Decide whether the operation is read-only before opening a session.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate a small connection wrapper with secret-safe logging, explicit timeouts, prompt handling, configuration diff or dry-run behavior, and cleanup in a finally block. Never hide command failures behind a successful connection result.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Exercise fake or lab connections for success, authentication failure, timeout, invalid command, partial config failure, and cleanup. Confirm output is scrubbed and a second intended run is safe.
 
 1. Define inventory fields, platform type, read/write intent, timeout policy,
    and expected result schema.
@@ -66,9 +66,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide device type, connection parameters without secrets, commands or desired config, timeout policy, expected prompts, and the evidence required after execution.
 
 ### Output / Generated Code
+
+Return the Python module or command runner, inventory example, mocked responses, error handling, and the exact read-only or lab validation procedure.
 
 
 ```python

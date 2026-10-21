@@ -32,15 +32,15 @@ consistent module interfaces for CIDRs, regions, tags, logging, and ownership.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Separate Azure and GCP requirements: subscriptions/projects, regions, hub and spoke CIDRs, routing, NAT, DNS, identity, and firewall ownership. Record provider versions and cross-cloud connectivity assumptions.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate cloud-specific modules with stable keys and explicit dependencies while keeping the shared intent model provider-neutral. Avoid copying Azure semantics into GCP resources or vice versa.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run fmt, validate, plan, and policy checks for each provider. Test overlapping CIDRs, missing identity permissions, route propagation, NAT edge cases, and safe removal using fixtures or provider mocks.
 
 1. Define cloud boundary, hub/spoke ownership, address plan, and inspection.
 2. Validate provider-specific topology and generate plan.
@@ -51,9 +51,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide cloud, subscription or project, regions, CIDR plan, hub/spoke topology, routing and DNS intent, identity constraints, and state policy.
 
 ### Output / Generated Code
+
+Return provider-specific modules, shared intent examples, plan expectations, policy tests, and a matrix of cloud features that are supported or rejected.
 
 
 ```hcl

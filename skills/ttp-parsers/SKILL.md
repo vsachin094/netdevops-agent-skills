@@ -43,15 +43,15 @@ data if group names and list/dictionary choices are left implicit.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Capture representative hierarchical text, section boundaries, repeated records, optional lines, and malformed or truncated input. Define the output nesting and normalization contract before writing groups.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Build a TTP template with explicit groups, record boundaries, variable names, and output shaping. Keep vendor or command variants separate when a shared template would create ambiguous matches.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run the template against complete, empty, multi-section, reordered, and malformed fixtures. Compare full nested structures and verify optional groups do not leak values into the next section.
 
 1. Capture nested fixtures with at least two parent objects and one empty or
    optional child section.
@@ -72,9 +72,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide raw text fixtures, desired nested output, hierarchy rules, supported variants, and the TTP version or consumer integration.
 
 ### Output / Generated Code
+
+Return the template, fixture set, expected structured output, variant notes, and tests for section isolation and incomplete records.
 
 
 ### TTP template

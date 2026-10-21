@@ -34,15 +34,15 @@ state backup and a precise mapping from old to new addresses.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Capture the current state addresses, configuration addresses, provider aliases, workspace/backend, and the exact desired address change. Take a verified state backup and identify resources that must not be destroyed.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate declarative moved, import, or removed-state operations with the smallest possible scope. Use configuration and state commands appropriate to the Terraform/OpenTofu version; never edit the state file by hand.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run state-list and plan checks against a copy or disposable workspace, assert zero unintended destroys, and test missing addresses, provider alias changes, and rollback from the backup.
 
 1. Inventory state addresses and desired configuration.
 2. Add moved/import/removed blocks and run plan with JSON output.
@@ -54,9 +54,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide current and desired addresses, resource identity, backend/workspace, provider alias, backup location, and the zero-destroy acceptance condition.
 
 ### Output / Generated Code
+
+Return the moved/import/remove declarations or commands, preflight output, expected plan, rollback procedure, and explicit confirmation of any intentional destroy.
 
 
 ```hcl

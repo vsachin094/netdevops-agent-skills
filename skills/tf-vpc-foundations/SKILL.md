@@ -34,15 +34,15 @@ configuration separate from resources.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Define the network intent, cloud and region, parent CIDR, subnet tiers, route domains, security boundaries, NAT/DNS requirements, state backend, and ownership of shared resources.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate reusable VPC/VNet modules with stable maps, explicit route and security relationships, validated CIDRs, provider constraints, and outputs that downstream inventory can consume.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run fmt, validate, plan, and policy tests for overlap, missing routes, invalid subnet sizes, accidental public exposure, and safe removal. Compare a second plan for no-op behavior.
 
 1. Define network contract and CIDR allocation.
 2. Validate variables and generate plan.
@@ -53,9 +53,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide cloud, region, CIDR plan, subnet tiers, route requirements, security intent, state policy, provider version, and required outputs.
 
 ### Output / Generated Code
+
+Return module inputs, resources, outputs, example intent, plan expectations, and tests for create, update, no-op, and removal scenarios.
 
 
 ```hcl

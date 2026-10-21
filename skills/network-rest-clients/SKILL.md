@@ -39,15 +39,15 @@ default and expose provider-specific differences at a clear boundary.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Record the API base URL and version, authentication method, resource identity, pagination shape, rate-limit headers, retryable status codes, timeout, and idempotency key policy.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Implement a typed client with session reuse, bounded retries, backoff, pagination, request correlation, and response validation. Keep authentication external and never retry a non-idempotent mutation without an explicit contract.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Replay success, pagination, 429, 5xx, malformed response, timeout, auth failure, and duplicate-request fixtures. Verify retry counts, backoff bounds, and that sensitive headers never appear in logs.
 
 1. Read the target API's versioned documentation and identify auth, limits,
    pagination, mutation semantics, and idempotency behavior.
@@ -62,9 +62,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide API documentation or fixtures, resource schema, authentication contract, retry policy, pagination examples, and the operations that must be idempotent.
 
 ### Output / Generated Code
+
+Return the client module, models, fixture suite, retry behavior, and an example showing safe list, create, update, and delete handling.
 
 
 ```python

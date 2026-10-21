@@ -32,15 +32,15 @@ Terraform logs or sleep for an assumed completion time.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Identify which system owns each resource, the Terraform/OpenTofu workspace and state policy, the Ansible handoff values, and the approval boundary. Never infer a handoff contract from undocumented output names.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate a plan-first workflow that validates Terraform output, passes only declared values to Ansible, and keeps apply and configuration steps separately reviewable. Make failure and partial handoff behavior explicit.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run terraform or tofu fmt/validate/plan with fixtures, verify output types and sensitivity, then execute Ansible in check mode. Test an empty output, failed plan, and rejected downstream configuration.
 
 1. Initialize/validate workspace and generate plan artifact.
 2. Inspect plan summary and require approval according to environment policy.
@@ -51,9 +51,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the IaC module, expected outputs, state/workspace policy, Ansible inventory or vars format, and the point at which human approval is required.
 
 ### Output / Generated Code
+
+Return the Terraform/OpenTofu outputs, handoff mechanism, Ansible entry point, and a plan-to-configuration test showing the contract end to end.
 
 
 ```yaml

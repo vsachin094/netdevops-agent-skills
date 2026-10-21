@@ -34,15 +34,15 @@ config/state status, or XPath predicates from a device CLI name alone.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Collect the exact YANG modules, revisions, import path, namespace map, target node, and device capability advertisement. Inspect augments, deviations, list keys, and config/state status before selecting a path.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate the tree view, absolute XPath, NETCONF subtree filter, RESTCONF resource path, or XML/JSON skeleton from the model. Preserve namespaces and predicates exactly; do not infer them from CLI names.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run pyang with the complete dependency path and validate the generated payload or filter against the model. Check read-only nodes, key predicates, revision, and portability across the stated vendor releases.
 
 1. Collect module, revision, and dependency files from the target release.
 2. Run pyang tree and lint output, then inspect the selected node and ancestry.
@@ -54,9 +54,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide YANG modules and dependencies, revision, target node, desired operation, namespace requirements, and the device capability output if available.
 
 ### Output / Generated Code
+
+Return the pyang commands, selected tree path, namespace/predicate explanation, payload skeleton, and the limitations that remain unverified without the target device.
 
 
 ```bash

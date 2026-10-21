@@ -34,15 +34,15 @@ must be reviewed before external sharing.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Determine the input syntax, vendor, secret classes, identifier-preservation requirement, and whether the output must remain parseable. Treat unknown credential-like values as findings rather than guessing their meaning.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Build deterministic redaction rules with stable placeholders, preserving line structure, indentation, references, and topology identifiers. Keep reversible mappings outside the repository and never emit original secrets to logs.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run the helper against known tokens, keys, hashes, URLs, certificates, and near-miss values. Parse the scrubbed output where possible and verify repeated runs produce identical output.
 
 1. Identify output destination and required topology fidelity.
 2. Apply ordered secret/address patterns and collect replacement counts.
@@ -53,9 +53,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide sanitized or synthetic configuration samples, the secret patterns to remove, identifiers that must remain stable, and the downstream parser or sharing requirement.
 
 ### Output / Generated Code
+
+Return scrubbed output, a findings summary, the rule set, and positive/negative fixtures. State any value that remains ambiguous and needs operator review.
 
 
 ```text

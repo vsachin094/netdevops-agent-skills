@@ -63,15 +63,15 @@ context across lines.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Start with representative raw lines, including headers, empty output, malformed lines, and vendor variations. Define the record schema and normalization rules before writing a regular expression.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Write anchored named-group patterns with explicit optionality and bounded whitespace. Keep parsing separate from type conversion and return a predictable result for ignored or unmatched lines.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run the parser helper against positive and negative fixtures, assert exact fields rather than only match counts, and inspect catastrophic-backtracking risk on long or adversarial input.
 
 1. **Characterize the command.** Capture representative output from at least
    two software versions or operational states when possible. Identify the
@@ -109,9 +109,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide raw CLI or syslog samples, the desired field names and types, acceptable vendor variants, and the behavior required for unmatched lines.
 
 ### Output / Generated Code
+
+Return the parser, fixture set, expected records, and tests for normal, empty, malformed, and variant input.
 
 
 ### Input

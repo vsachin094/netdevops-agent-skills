@@ -33,15 +33,15 @@ platforms, idempotency, and check mode as API commitments.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Define the role contract before creating files: supported platforms, defaults, variables, handlers, dependencies, privilege requirements, and Molecule scenarios. Decide which behavior is common and which belongs in platform-specific task files.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Create a conventional role layout with typed defaults, narrowly scoped tasks, handlers, documentation, and a Molecule scenario. Keep defaults safe, avoid hidden network access, and make unsupported platforms fail clearly.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run ansible-lint, yamllint, syntax checks, and Molecule converge/idempotence/verify. Include a negative scenario for invalid variables and inspect the rendered documentation against the actual role interface.
 
 1. Define role contract and supported OS matrix.
 2. Scaffold layout and argument specs, then implement vendor task includes.
@@ -52,9 +52,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the role purpose, supported distributions or network platforms, variable contract, required packages, scenario matrix, and acceptance tests.
 
 ### Output / Generated Code
+
+Return the role tree, defaults, tasks, handlers, Molecule configuration, README usage, and the exact commands used to lint and test it.
 
 
 ```yaml

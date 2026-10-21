@@ -37,15 +37,15 @@ records visible in the report.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Inventory each source, schema, identity key, timestamp field, normalization rule, retention requirement, and downstream consumer. Decide how duplicates, stale records, and partial source failures should appear in the output.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate a staged pipeline that validates at ingestion, normalizes into a stable schema, records provenance, and emits deterministic reports or artifacts. Keep source adapters separate from transformation and presentation.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run clean, duplicate, stale, missing-field, malformed, and partial-source fixtures. Compare output hashes or golden records and verify a rerun does not duplicate or reorder records unexpectedly.
 
 1. Inventory sources and define schemas and field lineage.
 2. Parse and validate each source independently.
@@ -57,9 +57,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide source samples, schema and identity keys, transformation rules, expected output, failure policy, and the report or API consumed downstream.
 
 ### Output / Generated Code
+
+Return schemas, pipeline stages, normalized fixtures, validation errors, and a sample report with provenance for every material field.
 
 
 ```python

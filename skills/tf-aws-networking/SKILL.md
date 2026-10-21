@@ -32,15 +32,15 @@ failure-domain behavior are reviewable.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Collect account and region boundaries, availability zones, VPC and subnet CIDRs, routing intent, TGW or Direct Connect requirements, DNS behavior, and firewall ownership. Record provider and module versions.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate stable Terraform/OpenTofu modules with explicit maps for VPCs, subnets, route tables, attachments, Resolver, and firewall resources. Keep state ownership and cross-account dependencies visible.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run fmt, validate, plan, policy checks, and fixture tests for overlapping CIDRs, missing AZs, route conflicts, deletion protection, and provider errors. Never infer a successful apply from plan output.
 
 1. Define regions/AZs, CIDRs, routing domains, inspection path, and ownership.
 2. Render plan and inspect route graph, security, logs, and replacements.
@@ -50,9 +50,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide AWS account/region scope, CIDR plan, AZs, connectivity requirements, DNS and security intent, state backend, and provider constraints.
 
 ### Output / Generated Code
+
+Return the module inputs, resources, outputs, plan expectations, policy checks, and a test matrix for create, update, and removal.
 
 
 ```hcl

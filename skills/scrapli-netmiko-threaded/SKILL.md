@@ -37,15 +37,15 @@ partially successful.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Define the device inventory, transport and platform drivers, command or config operation, concurrency limit, timeout, retry policy, and result correlation key. Decide how partial fleet success is reported.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Build a worker pool with per-device exception isolation, bounded threads, context-managed connections, and structured results. Keep Scrapli or Netmiko transport details behind a small adapter and never share mutable connection state between workers.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run fake-device tests for success, slow response, authentication failure, malformed output, config rejection, and thread cancellation. Verify all connections close and results remain correlated with the input inventory.
 
 1. Validate inventory uniqueness and required connection fields.
 2. Partition read versus write jobs and establish a bounded concurrency policy.
@@ -58,9 +58,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide inventory data, library and driver versions, operation list, concurrency and timeout limits, retryable failures, and result format.
 
 ### Output / Generated Code
+
+Return the threaded runner, adapter interface, result schema, fixture tests, and an example report showing success, failure, and skipped devices.
 
 
 ```python

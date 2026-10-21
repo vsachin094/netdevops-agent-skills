@@ -35,15 +35,15 @@ without embedding secrets or stale assumptions.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Confirm the source of truth, authentication method, object-to-host mapping, group rules, cache policy, and required host variables. Use a recorded API response or local fixture when live inventory access is not available.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate a deterministic inventory plugin or script with explicit pagination, filtering, caching, timeout, and failure behavior. Keep credentials out of inventory output and make group membership explainable from source attributes.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run the inventory command twice to verify stable output and cache reuse, then test empty results, API pagination, stale cache, malformed objects, and partial source outages. Diff the generated inventory before accepting it.
 
 1. Define authoritative source, filters, host key, groups, variables, and TTL.
 2. Configure plugin and credentials securely.
@@ -55,9 +55,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the source system, endpoint or fixture, host identity field, grouping rules, required variables, cache lifetime, and the expected inventory format.
 
 ### Output / Generated Code
+
+Return the inventory implementation, example configuration, sanitized fixture, and a sample JSON or YAML inventory. Document how stale data is detected and cleared.
 
 
 ```yaml

@@ -34,15 +34,15 @@ inspectable.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Record the Ansible Core, Python, collection, system-package, and base-image versions that the automation requires. Separate build-time dependencies from runtime credentials and target access.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Create a pinned execution-environment definition with a reproducible build context, minimal operating-system packages, and collection dependencies. Do not hide version constraints in an unreviewed install command.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Build the image, inspect installed versions, run ansible-lint and a smoke playbook, and verify the same image works without network access after dependencies are cached. Test a missing collection and an incompatible Python version.
 
 1. Inventory required modules, plugins, collections, and OS libraries.
 2. Pin versions and generate dependency files.
@@ -53,9 +53,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the controller or runner type, Ansible and Python versions, required collections, system packages, base image policy, and the smoke playbook or module set.
 
 ### Output / Generated Code
+
+Return the execution-environment definition, dependency pins, build command, smoke test, and a short compatibility report for the target runner.
 
 
 ```yaml

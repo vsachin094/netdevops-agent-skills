@@ -36,15 +36,15 @@ incomplete even if its happy path works.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Identify the device endpoint, advertised capabilities, authentication and host-key policy, datastore or RESTCONF root, lock/commit behavior, timeout, and expected error payloads.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Generate a context-managed client with capability checks, namespace-aware filters, explicit transaction boundaries, bounded retries, and cleanup on every error path. Keep payload construction separate from transport.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run against local XML/JSON fixtures or a simulator, testing capability mismatch, malformed payload, lock contention, timeout, RPC error, and cleanup after failure. Never claim device success from client construction alone.
 
 1. Connect, verify capabilities, and read the baseline.
 2. Build and validate payload, lock the correct datastore, and edit candidate.
@@ -55,9 +55,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide endpoint and model metadata, operation type, payload or filter, datastore, commit strategy, timeout policy, and sanitized error fixtures.
 
 ### Output / Generated Code
+
+Return the client module, payload/filter fixtures, mocked responses, exception mapping, and a runbook for verifying the same operation on a lab device.
 
 
 ```python

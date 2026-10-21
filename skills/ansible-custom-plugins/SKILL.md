@@ -37,15 +37,15 @@ mode, diff mode, failure, and repeated execution.
 
 ### Phase 1 (Ingestion & Validation)
 
-Inspect the user-provided inputs, target versions, schemas, fixtures, inventory, and authorization boundary. Reject missing or ambiguous inputs before generation.
+Identify the plugin type, Ansible Core version, supported collections, input and return contracts, and the execution context. Read an existing plugin or module contract before inventing argument names or connection behavior.
 
 ### Phase 2 (Generation)
 
-Generate the requested artifact using the data model, implementation patterns, and guardrails defined in this skill. Keep output deterministic, reviewable, and secret-safe.
+Implement the smallest plugin that satisfies the contract, using Ansible module utilities, documented argument specs, check-mode behavior, and safe error messages. Keep transport, parsing, and business logic separable so each can be tested.
 
 ### Phase 3 (Self-Verification)
 
-Run the skill-specific examples, validators, linters, tests, dry-run, render, or plan checks available locally. Report skipped checks and never claim an external system was verified without access.
+Run unit tests with valid, invalid, check-mode, timeout, and authentication-failure cases. Exercise the plugin through ansible-test where available and inspect output for secrets, unstable return shapes, and non-idempotent changes.
 
 1. Confirm no existing collection module or plugin is appropriate.
 2. Define module contract and current/desired state behavior.
@@ -56,9 +56,11 @@ Run the skill-specific examples, validators, linters, tests, dry-run, render, or
 
 ### Input / Requirement
 
-Use the user’s stated target, supplied data, platform/version, and acceptance criteria. If the example below omits an environment-specific value, keep it as an explicit variable or placeholder.
+Provide the plugin type, target collection namespace, supported Ansible versions, argument schema, expected return structure, and representative success and failure inputs.
 
 ### Output / Generated Code
+
+Return the plugin source, tests, documentation, and collection placement. Include the exact invocation used to exercise it and identify any behavior that still requires a live target.
 
 
 ```python

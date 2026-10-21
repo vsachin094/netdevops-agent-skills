@@ -2,7 +2,7 @@
 
 ## NetDevOps skills for AI coding agents
 
-NetDevOps Agent Skills is an open-source catalog of 50 production-oriented skills for
+NetDevOps Agent Skills is an open-source catalog of production-oriented skills for
 network automation, infrastructure as code, data-center fabrics, cloud
 networking, observability, compliance, and SRE workflows.
 
@@ -252,7 +252,7 @@ See [Cursor Rules](https://docs.cursor.com/context/rules-for-ai).
 
 Continue supports workspace rules in .continue/rules. Keep each NetDevOps Agent Skills
 skill as the source of truth and add a small local rule that tells Continue
-when to read the relevant SKILL.md. Do not merge all 50 skills into one
+when to read the relevant SKILL.md. Do not merge the entire catalog into one
 always-loaded rule; that wastes context and increases instruction conflicts.
 
 Example .continue/rules/netdevops.md:
@@ -348,58 +348,61 @@ responsibility and must use the organization's change-control process.
 
 ## Skill catalog
 
-| # | Tier | Skill | Primary outcome |
-|---:|---|---|---|
-| 1 | Basic | ipam-subnetting | Verified IPv4/IPv6 VLSM and IPAM seed data |
-| 2 | Advanced | network-protocols-as-code | Vendor-neutral protocol models and device configuration |
-| 3 | Basic | cli-regex | Named-group parsers for CLI and syslog output |
-| 4 | Intermediate | ntc-textfsm | Tested TextFSM templates for network automation |
-| 5 | Advanced | ttp-parsers | Hierarchical TTP parsers for structured output |
-| 6 | Expert | pyats-genie | pyATS/Genie parsers and differential tests |
-| 7 | Basic | netmiko-core | Safe SSH command and configuration execution |
-| 8 | Basic | config-diff-audit | Noise-filtered backups and reviewable diffs |
-| 9 | Intermediate | scrapli-netmiko-threaded | Exception-isolated threaded fleet automation |
-| 10 | Intermediate | network-rest-clients | Retry-safe clients for controller APIs |
-| 11 | Advanced | nornir-napalm | Inventory-driven multi-vendor automation |
-| 12 | Advanced | netops-data-pipelines | Validated network datasets and compliance reports |
-| 13 | Expert | async-netops | Rate-limited asynchronous fleet automation |
-| 14 | Expert | netops-cli-packaging | Installable Typer/Click automation CLIs |
-| 15 | Basic | jinja2-config-base | Strict YAML data and Jinja configuration rendering |
-| 16 | Intermediate | jinja2-multivendor-sot | Multi-vendor templates from one source of truth |
-| 17 | Advanced | jinja2-custom-filters | Typed and tested Jinja filters and macros |
-| 18 | Basic | pyang-xpath | YANG trees, XPath, XML, and JSON skeletons |
-| 19 | Intermediate | netconf-restconf-payloads | Namespace-correct model-driven payloads |
-| 20 | Advanced | ncclient-restconf | Validated NETCONF/RESTCONF Python clients |
-| 21 | Expert | yang-model-dev | RFC 7950 YANG 1.1 models and linting |
-| 22 | Basic | nso-device-onboarding | Repeatable Cisco NSO onboarding and sync |
-| 23 | Intermediate | nso-xml-templates | Idempotent multi-NED NSO service templates |
-| 24 | Advanced | nso-python-fastmap | Transaction-pure NSO FASTMAP services |
-| 25 | Expert | nso-nano-services | Multi-stage NSO Nano Services and rollback design |
-| 26 | Basic | ansible-netcli-playbooks | FQCN-compliant facts, commands, and backups |
-| 27 | Basic | ansible-vault-hygiene | Vault-backed secret handling and leak prevention |
-| 28 | Intermediate | ansible-resource-modules | Idempotent network resource modules |
-| 29 | Intermediate | ansible-role-scaffolding | Multi-vendor roles with Molecule and linting |
-| 30 | Intermediate | ansible-dynamic-inventory | Cached NetBox, cloud, and Terraform inventories |
-| 31 | Intermediate | ansible-linux-networking | Linux routing, VLAN, FRR, nftables, and WireGuard |
-| 32 | Advanced | ansible-pre-post-checks | Snapshot, change, assertion, and rollback workflows |
-| 33 | Advanced | ansible-terraform-role | Plan-reviewed Terraform and Ansible handoff |
-| 34 | Advanced | ansible-execution-envs | Pinned AAP/AWX execution environments |
-| 35 | Expert | ansible-custom-plugins | Tested Ansible modules, filters, and connections |
-| 36 | Basic | tf-vpc-foundations | VPC/VNet, routing, security, and state modules |
-| 37 | Intermediate | tf-aws-networking | AWS multi-AZ, TGW, Direct Connect, and DNS |
-| 38 | Intermediate | tf-azure-gcp-networking | Azure and GCP hub, routing, NAT, and DNS |
-| 39 | Intermediate | tf-ansible-inventory | Terraform/OpenTofu to Ansible inventory handoff |
-| 40 | Advanced | tf-firewall-policies | Stable-key, YAML-driven firewall policies |
-| 41 | Advanced | tf-aci-sdwan-meraki | Controller-based network automation |
-| 42 | Advanced | tf-module-hardening | Provider pinning, scans, and Terraform tests |
-| 43 | Expert | tf-state-surgery | Safe state moves, imports, and removals |
-| 44 | Basic | containerlab-topologies | Digital-twin topologies and test inventories |
-| 45 | Basic | config-scrubber | Deterministic secret removal with structure preserved |
-| 46 | Intermediate | netbox-nautobot-api | Idempotent source-of-truth API automation |
-| 47 | Intermediate | gnmi-snmp-telemetry | gNMI, SNMP exporter, PromQL, and Grafana assets |
-| 48 | Advanced | acl-cis-compliance | CIS audits and ACL remediation analysis |
-| 49 | Advanced | nac-cicd-pipelines | Lint, twin-test, plan, approval, and deploy pipelines |
-| 50 | Expert | batfish-validation | Offline routing, ACL, BGP, and reachability proofs |
+| Tier | Skill | Primary outcome |
+|---|---|---|
+| Basic | ipam-subnetting | Verified IPv4/IPv6 VLSM and IPAM seed data |
+| Advanced | network-protocols-as-code | Vendor-neutral protocol models and device configuration |
+| Basic | cli-regex | Named-group parsers for CLI and syslog output |
+| Intermediate | ntc-textfsm | Tested TextFSM templates for network automation |
+| Advanced | ttp-parsers | Hierarchical TTP parsers for structured output |
+| Expert | pyats-genie | pyATS/Genie parsers and differential tests |
+| Basic | netmiko-core | Safe SSH command and configuration execution |
+| Intermediate | paramiko-ssh | Secure raw SSH transport and controlled command execution |
+| Basic | config-diff-audit | Noise-filtered backups and reviewable diffs |
+| Intermediate | scrapli-netmiko-threaded | Exception-isolated threaded fleet automation |
+| Intermediate | network-rest-clients | Retry-safe clients for controller APIs |
+| Advanced | nornir-napalm | Inventory-driven multi-vendor automation |
+| Advanced | netops-data-pipelines | Validated network datasets and compliance reports |
+| Expert | async-netops | Rate-limited asynchronous fleet automation |
+| Expert | netops-cli-packaging | Installable Typer/Click automation CLIs |
+| Basic | jinja2-config-base | Strict YAML data and Jinja configuration rendering |
+| Intermediate | jinja2-multivendor-sot | Multi-vendor templates from one source of truth |
+| Advanced | jinja2-custom-filters | Typed and tested Jinja filters and macros |
+| Basic | pyang-xpath | YANG trees, XPath, XML, and JSON skeletons |
+| Intermediate | netconf-restconf-payloads | Namespace-correct model-driven payloads |
+| Advanced | ncclient-restconf | Validated NETCONF/RESTCONF Python clients |
+| Advanced | netconf-automation | Capability-gated transactional NETCONF workflows |
+| Expert | yang-model-dev | RFC 7950 YANG 1.1 models and linting |
+| Basic | nso-device-onboarding | Repeatable Cisco NSO onboarding and sync |
+| Intermediate | nso-xml-templates | Idempotent multi-NED NSO service templates |
+| Advanced | nso-python-fastmap | Transaction-pure NSO FASTMAP services |
+| Expert | nso-nano-services | Multi-stage NSO Nano Services and rollback design |
+| Basic | ansible-netcli-playbooks | FQCN-compliant facts, commands, and backups |
+| Basic | ansible-vault-hygiene | Vault-backed secret handling and leak prevention |
+| Intermediate | ansible-resource-modules | Idempotent network resource modules |
+| Intermediate | ansible-role-scaffolding | Multi-vendor roles with Molecule and linting |
+| Intermediate | ansible-dynamic-inventory | Cached NetBox, cloud, and Terraform inventories |
+| Intermediate | ansible-linux-networking | Linux routing, VLAN, FRR, nftables, and WireGuard |
+| Advanced | ansible-pre-post-checks | Snapshot, change, assertion, and rollback workflows |
+| Advanced | ansible-terraform-role | Plan-reviewed Terraform and Ansible handoff |
+| Advanced | ansible-execution-envs | Pinned AAP/AWX execution environments |
+| Expert | ansible-custom-plugins | Tested Ansible modules, filters, and connections |
+| Basic | tf-vpc-foundations | VPC/VNet, routing, security, and state modules |
+| Intermediate | tf-aws-networking | AWS multi-AZ, TGW, Direct Connect, and DNS |
+| Intermediate | tf-azure-gcp-networking | Azure and GCP hub, routing, NAT, and DNS |
+| Intermediate | tf-ansible-inventory | Terraform/OpenTofu to Ansible inventory handoff |
+| Advanced | tf-firewall-policies | Stable-key, YAML-driven firewall policies |
+| Advanced | tf-aci-sdwan-meraki | Controller-based network automation |
+| Advanced | tf-module-hardening | Provider pinning, scans, and Terraform tests |
+| Expert | tf-state-surgery | Safe state moves, imports, and removals |
+| Basic | containerlab-topologies | Digital-twin topologies and test inventories |
+| Basic | config-scrubber | Deterministic secret removal with structure preserved |
+| Intermediate | netbox-nautobot-api | Idempotent source-of-truth API automation |
+| Intermediate | gnmi-snmp-telemetry | gNMI, SNMP exporter, PromQL, and Grafana assets |
+| Advanced | pysnmp-automation | Python PySNMP polling, walks, SET, traps, and informs |
+| Advanced | acl-cis-compliance | CIS audits and ACL remediation analysis |
+| Advanced | nac-cicd-pipelines | Lint, twin-test, plan, approval, and deploy pipelines |
+| Expert | batfish-validation | Offline routing, ACL, BGP, and reachability proofs |
 
 ## Validate the catalog
 
@@ -413,7 +416,7 @@ python3 scripts/validate_skills.py
 Expected result:
 
 ~~~text
-Validated 50 skills: 50 valid, 0 invalid.
+Validated N skills: N valid, 0 invalid.
 ~~~
 
 Each skill also documents its own validation commands. Run those commands when
