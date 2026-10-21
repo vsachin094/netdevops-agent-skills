@@ -39,23 +39,123 @@ Validate with the skill's test suite.
 ## Skill Map
 
 ```mermaid
-graph LR
-    TRANSPORT[Transport<br/>8 skills]
-    PARSING[Parsing & Modeling<br/>6 skills]
-    ANSIBLE[Ansible<br/>9 skills]
-    TERRAFORM[Terraform<br/>8 skills]
-    TESTING[Testing & Validation<br/>6 skills]
-    OBSERVABILITY[Observability<br/>1 skill]
-    OPERATIONS[Operations<br/>4 skills]
-    UTILITIES[Utilities<br/>14 skills]
+graph TD
+    classDef transport fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+    classDef parsing fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px;
+    classDef ansible fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef terraform fill:#fff3e0,stroke:#ef6c00,stroke-width:2px;
+    classDef testing fill:#fce4ec,stroke:#c2185b,stroke-width:2px;
+    classDef observability fill:#f1f8e9,stroke:#558b2f,stroke-width:2px;
+    classDef operations fill:#e0f2f1,stroke:#00695c,stroke-width:2px;
+    classDef utilities fill:#fafafa,stroke:#616161,stroke-width:2px;
 
-    TRANSPORT --> TESTING
-    PARSING --> ANSIBLE
-    ANSIBLE --> OPERATIONS
-    TERRAFORM --> ANSIBLE
-    TESTING --> OPERATIONS
-    OBSERVABILITY --> TRANSPORT
-    UTILITIES -.-> all
+    subgraph TRANSPORT["Transport (8)"]
+        T1[netmiko-core]
+        T2[ncclient-restconf]
+        T3[paramiko-ssh]
+        T4[async-network-automation]
+        T5[scrapli-netmiko-threaded]
+        T6[gnmi-client]
+        T7[gnmi-snmp-telemetry]
+        T8[netconf-automation]
+    end
+
+    subgraph PARSING["Parsing & Modeling (6)"]
+        P1[ntc-textfsm]
+        P2[ttp-parsers]
+        P3[cli-regex]
+        P4[pyang-xpath]
+        P5[yang-model-dev]
+        P6[network-protocols-as-code]
+    end
+
+    subgraph ANSIBLE["Ansible (9)"]
+        A1[ansible-role-creation]
+        A2[ansible-plugin-development]
+        A3[ansible-ee-build]
+        A4[ansible-vault-hygiene]
+        A5[ansible-dynamic-inventory]
+        A6[ansible-resource-modules]
+        A7[ansible-linux-networking]
+        A8[ansible-netcli-playbooks]
+        A9[ansible-pre-post-checks]
+    end
+
+    subgraph TERRAFORM["Terraform (8)"]
+        TF1[tf-vpc-foundations]
+        TF2[tf-aws-networking]
+        TF3[tf-azure-gcp-networking]
+        TF4[tf-firewall-policies]
+        TF5[tf-module-hardening]
+        TF6[tf-state-surgery]
+        TF7[tf-aci-sdwan-meraki]
+        TF8[tf-to-ansible-inventory]
+    end
+
+    subgraph TESTING["Testing & Validation (6)"]
+        V1[containerlab-topologies]
+        V2[batfish-validation]
+        V3[network-testing-framework]
+        V4[config-diff-audit]
+        V5[config-sanitizer]
+        V6[network-config-drift-detection]
+    end
+
+    subgraph OBSERVABILITY["Observability (1)"]
+        O1[network-observability-stack]
+    end
+
+    subgraph OPERATIONS["Operations (4)"]
+        OP1[gitops-network-automation]
+        OP2[network-device-onboarding]
+        OP3[network-change-runbooks]
+        OP4[nso-device-onboarding]
+    end
+
+    subgraph UTILITIES["Utilities (14)"]
+        U1[ipam-subnetting]
+        U2[jinja2-network-templates]
+        U3[cli-tool-packaging]
+        U4[network-data-pipelines]
+        U5[network-rest-clients]
+        U6[network-protocols-as-code]
+        U7[netbox-nautobot-api]
+        U8[nornir-napalm]
+        U9[netconf-automation]
+        U10[netconf-restconf-payloads]
+        U11[pysnmp-automation]
+        U12[pyats-genie]
+        U13[ttp-parsers]
+        U14[tf-state-surgery]
+    end
+
+    %% Key cross-category relationships
+    T6 -.-> O1
+    T7 -.-> O1
+    V1 --> V3
+    V2 --> V3
+    V4 --> V6
+    V5 --> V6
+    OP1 --> V1
+    OP2 --> V1
+    OP3 --> V4
+    A9 --> OP3
+    U2 --> P6
+    A1 --> OP3
+    TF8 --> A5
+    P6 --> A6
+    T8 --> A7
+    P4 --> P1
+    P4 --> P2
+
+    class T1,T2,T3,T4,T5,T6,T7,T8 transport;
+    class P1,P2,P3,P4,P5,P6 parsing;
+    class A1,A2,A3,A4,A5,A6,A7,A8,A9 ansible;
+    class TF1,TF2,TF3,TF4,TF5,TF6,TF7,TF8 terraform;
+    class V1,V2,V3,V4,V5,V6 testing;
+    class O1 observability;
+    class OP1,OP2,OP3,OP4 operations;
+    class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14 utilities;
 ```
 
 ---
