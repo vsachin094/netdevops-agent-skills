@@ -183,27 +183,20 @@ Start
 - Vendor adds structured API (NETCONF/RESTCONF/gNMI) for the same data
 - Template requires context that spans non-adjacent lines (TextFSM is line-oriented)
 
-## Vendor Version Compatibility
+## Output Version Compatibility
 
-| Vendor | Command | Version | Template File | Notes |
-|--------|---------|---------|---------------|-------|
-| Cisco IOS | show ip bgp summary | 15.x | cisco_ios_show_ip_bgp_summary.textfsm | Legacy format |
-| Cisco IOS | show ip bgp summary | 17.x | cisco_ios_17_show_ip_bgp_summary.textfsm | "Established" vs "Estab" |
-| Cisco NX-OS | show ip bgp summary | 7.x | cisco_nxos_show_ip_bgp_summary.textfsm | Different column layout |
-| Cisco NX-OS | show ip bgp summary | 9.x | cisco_nxos_9_show_ip_bgp_summary.textfsm | Updated headers |
-| Juniper Junos | show bgp summary | 18.x | juniper_junos_show_bgp_summary.textfsm | Different output format |
-| Juniper Junos | show bgp summary | 21.x | juniper_junos_21_show_bgp_summary.textfsm | XML-like formatting |
-| Arista EOS | show ip bgp summary | 4.25+ | arista_eos_show_ip_bgp_summary.textfsm | Consistent across versions |
-
-**Notes:**
-- Always test against at least two major versions per vendor
-- NTC-Templates index maps command+platform+version to template
-- TextFSM 1.1+ required for `Key` and `Filldown` behavior
+CLI output can change across device releases, even when the command is
+unchanged. Do not assume a template is compatible across a vendor's versions:
+retain sanitized raw fixtures from each supported release, test the template
+against those fixtures, and document the exact versions exercised. The
+NTC-Templates index and current upstream template are useful references, but
+must not replace tests against the output your automation will parse. Confirm
+the supported TextFSM syntax against the installed TextFSM version.
 
 ## Related Skills
 
-- [ttp-parsers](ttp-parsers.md) — Hierarchical parsing when TextFSM state machine becomes unwieldy
-- [pyats-genie](pyats-genie.md) — Cisco Genie parsers for structured output
-- [netmiko-core](netmiko-core.md) — Consumer of TextFSM via `use_textfsm=True`
-- [cli-regex](cli-regex.md) — Simpler regex parsing for stable output formats
-- [network-protocols-as-code](network-protocols-as-code.md) — Intent-driven rendering avoids parsing entirely
+- [ttp-parsers](../ttp-parsers/SKILL.md) — Hierarchical parsing when TextFSM state machine becomes unwieldy
+- [pyats-genie](../pyats-genie/SKILL.md) — Cisco Genie parsers for structured output
+- [netmiko-core](../netmiko-core/SKILL.md) — Consumer of TextFSM via `use_textfsm=True`
+- [cli-regex](../cli-regex/SKILL.md) — Simpler regex parsing for stable output formats
+- [network-protocols-as-code](../network-protocols-as-code/SKILL.md) — Intent-driven rendering avoids parsing entirely

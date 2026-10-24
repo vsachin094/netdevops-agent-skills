@@ -52,6 +52,10 @@ Provide endpoint and model metadata, operation type, payload or filter, datastor
 
 Return the client module, payload/filter fixtures, mocked responses, exception mapping, and a runbook for verifying the same operation on a lab device.
 
+Confirmed-commit timeout values shown below are examples. Select the
+confirmation interval from the change window and recovery procedure, and
+verify the target device's NETCONF capabilities and implementation limits.
+
 ```python
 # client/netconf.py
 from __future__ import annotations

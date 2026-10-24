@@ -37,7 +37,7 @@ default and expose provider-specific differences at a clear boundary.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Record the API base URL and version, authentication method, resource identity, pagination shape, rate-limit headers, retryable status codes, timeout, and idempotency key policy.
 

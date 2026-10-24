@@ -35,7 +35,7 @@ records visible in the report.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Inventory each source, schema, identity key, timestamp field, normalization rule, retention requirement, and downstream consumer. Decide how duplicates, stale records, and partial source failures should appear in the output.
 

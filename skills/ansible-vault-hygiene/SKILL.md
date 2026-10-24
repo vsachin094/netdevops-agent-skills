@@ -2,7 +2,7 @@
 name: ansible-vault-hygiene
 description: "[Tier: Intermediate] Secure Ansible network repositories with ansible-vault, vault-id rotation, CI secret scanning, no_log boundaries, and external secret lookups. Use this skill when playbooks, roles, inventories, or logs handle passwords, tokens, keys, SNMP communities, or other credentials and must pass audit."
 license: MIT
-compatibility: Ansible Core 2.15+; ansible-vault; optional community.hashi_vault 3+, amazon.aws 5+, azure.azcollection 2+, CI secret scanner (trufflehog, gitleaks, detect-secrets)
+compatibility: Ansible Core and secret-provider collection versions supported by the selected Python/runtime environment; optional CI secret scanners (TruffleHog, Gitleaks, detect-secrets)
 ---
 
 # Ansible Vault Hygiene (Intermediate)
@@ -206,29 +206,20 @@ Secret scanning and variable-structure checks work locally. Without Ansible Vaul
 
 **Rotation runbook:** Documented procedure: 1) Generate new key, 2) `ansible-vault rekey`, 3) Update CI secret, 4) Deploy to staging, 5) Verify, 6) Deploy to prod, 7) Revoke old key in provider.
 
-**CI artifact hygiene:** `actions/upload-artifact` with `retention-days: 1` for logs. Never upload vault files. Scan artifacts before upload.
+**CI artifact hygiene:** Set artifact retention to the shortest period permitted by your audit, incident-response, and legal requirements. A retention value in a workflow example is a local policy choice, not a security standard. Never upload vault files; scan artifacts before upload.
 
-## Tool Version Compatibility
+## Tool and Provider Compatibility
 
-| Tool | Version | Purpose | Notes |
-|------|---------|---------|-------|
-| Ansible Core | 2.15+ | Vault operations | `vault_identity_list` requires 2.14+ |
-| ansible-vault | bundled | Encryption/decryption | AES256 default |
-| trufflehog | 3.x | Secret scanning | `--fail --json` for CI |
-| gitleaks | 8.x | Secret scanning | `--redact` for safe logs |
-| HashiCorp Vault | 1.13+ | External secrets | KV v2 engine |
-| AWS Secrets Manager | API v1 | External secrets | IAM role auth |
-| Azure Key Vault | API 7.3 | External secrets | Managed identity |
-
-**Notes:**
-- TruffleHog 3.x has different CLI flags than 2.x
-- Gitleaks 8.x uses new config format
-- Ansible Vault rekey requires same cipher (AES256)
+Pin the Ansible collections, secret-provider integrations, and scanners used by
+CI. Verify their current command-line options, configuration formats, and
+supported API versions against the official documentation for the versions
+actually installed. Do not assume provider API versions or scanner flags are
+interchangeable across releases.
 
 ## Related Skills
 
-- [ansible-role-scaffolding](ansible-role-scaffolding.md) — Vault variable structure in role defaults
-- [ansible-execution-envs](ansible-execution-envs.md) — Vault password injection in EE builds
-- [ansible-terraform-role](ansible-terraform-role.md) — Terraform output secrets into Ansible Vault
-- [network-change-runbooks](network-change-runbooks.md) — Secret handling in change execution
-- [ncclient-restconf](ncclient-restconf.md) — NETCONF/RESTCONF credential management
+- [ansible-role-creation](../ansible-role-creation/SKILL.md) — Vault variable structure in role defaults
+- [ansible-ee-build](../ansible-ee-build/SKILL.md) — Vault password injection in EE builds
+- [tf-to-ansible-inventory](../tf-to-ansible-inventory/SKILL.md) — Terraform output secrets into Ansible Vault
+- [network-change-runbooks](../network-change-runbooks/SKILL.md) — Secret handling in change execution
+- [ncclient-restconf](../ncclient-restconf/SKILL.md) — NETCONF/RESTCONF credential management

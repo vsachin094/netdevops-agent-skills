@@ -2,7 +2,7 @@
 name: netconf-automation
 description: "[Tier: Advanced] Build model-driven NETCONF automation with ncclient, including capability negotiation, namespace-safe filters, candidate and running datastores, locks, validate, commit, confirmed commit, rollback, and notifications. Use this skill when a device exposes NETCONF and the workflow must change configuration transactionally rather than by CLI scraping."
 license: MIT
-compatibility: Python 3.10+; ncclient 0.6.15+; NETCONF RFC 6241/6242; YANG modules and device capability output; pytest
+compatibility: Python and ncclient versions supported by the selected dependency set; NETCONF device implementing the required capabilities; YANG modules; pytest optional
 ---
 
 # NETCONF Automation (Advanced)
@@ -79,7 +79,7 @@ deviations against the exact YANG revision supplied for the target release.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Collect the device capability XML, NETCONF base version, YANG modules and
 revision, datastore, operation type, desired intent, lock/commit support, and
@@ -114,6 +114,10 @@ and operational postchecks. Do not infer support for optional NETCONF features.
 Return a capability-gated transaction function that preserves RPC errors,
 validates the candidate, uses confirmed commit when available, and always
 releases the lock.
+
+Confirmed-commit timeout values shown below are examples. Select the
+confirmation interval from the change window and recovery procedure, and
+verify the target device's NETCONF capabilities and implementation limits.
 
 ```python
 from __future__ import annotations

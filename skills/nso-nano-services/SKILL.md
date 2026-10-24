@@ -36,7 +36,7 @@ postconditions are satisfied.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Map the service lifecycle, plan/deploy stages, kickers, component ownership, LSA boundaries, and rollback semantics. Identify which transitions are synchronous and which depend on device or service readiness.
 

@@ -34,7 +34,7 @@ operation explicit.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Start from the exact YANG module, revision, namespace, operation, datastore, and device capability set. Record list keys and config/state status before writing XML or JSON.
 

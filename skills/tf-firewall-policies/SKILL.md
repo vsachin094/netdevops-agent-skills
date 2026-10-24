@@ -31,7 +31,7 @@ renumber production policy accidentally.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Define the policy schema, stable rule identity, ordering semantics, address/service objects, default action, logging fields, and provider-specific constraints. Decide how duplicates and shadowed rules are handled.
 

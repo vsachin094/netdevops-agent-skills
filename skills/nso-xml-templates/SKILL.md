@@ -33,7 +33,7 @@ particular device's CLI representation.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Define the service input model, NED variants, template variables, tags, device groups, and expected generated config. Identify which fields are optional and what absence means for each device type.
 

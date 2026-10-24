@@ -32,7 +32,7 @@ state backup and a precise mapping from old to new addresses.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Capture the current state addresses, configuration addresses, provider aliases, workspace/backend, and the exact desired address change. Take a verified state backup and identify resources that must not be destroyed.
 

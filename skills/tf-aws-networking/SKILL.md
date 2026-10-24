@@ -30,7 +30,7 @@ failure-domain behavior are reviewable.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Collect account and region boundaries, availability zones, VPC and subnet CIDRs, routing intent, TGW or Direct Connect requirements, DNS behavior, and firewall ownership. Record provider and module versions.
 

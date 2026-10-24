@@ -308,23 +308,18 @@ template_name = f"{platform}/interfaces.j2"
 rendered = env.get_template(template_name).render(device=device, intent=intent)
 ```
 
-**Version Compatibility Matrix:**
+**Platform feature support:** Do not encode generic vendor/version support
+tables as truth. For each rendered feature, check the official documentation
+for the target hardware family and exact software release. Record the source
+and verification date alongside the capability entry. If support is unknown,
+fail rendering with an explicit unsupported/unverified result instead of
+assuming a nearby version behaves the same.
 
-| Platform | Version | EVPN | VXLAN | MPLS | SR-TE | Notes |
-|----------|---------|------|-------|------|-------|-------|
-| IOS-XE | 16.x | Partial | ✗ | ✓ | ✗ | EVPN 17.3+ |
-| IOS-XE | 17.x | ✓ | ✗ | ✓ | ✗ | Multi-homing 17.6+ |
-| NX-OS | 7.x | ✓ | ✓ | ✓ | ✗ | 7.0(3)I7+ |
-| NX-OS | 9.x/10.x | ✓ | ✓ | ✓ | ✓ | Full feature |
-| EOS | 4.25+ | ✓ | ✓ | ✗ | ✗ | No MPLS |
-| EOS | 4.30+ | ✓ | ✓ | ✗ | ✗ | BGP ORF |
-| Junos | 18.x | 19.1+ | ✗ | ✓ | ✗ | EVPN 19.1R1+ |
-| Junos | 21.x | ✓ | ✗ | ✓ | 21.2+ | SR-TE |
 
 **Related Skills:**
 
-- [network-protocols-as-code](network-protocols-as-code.md) — Intent model that feeds these templates
-- [containerlab-topologies](containerlab-topologies.md) — Lab validation of rendered configs
-- [network-change-runbooks](network-change-runbooks.md) — Pre/post checks for template-driven changes
-- [ansible-role-creation](ansible-role-creation.md) — Ansible roles that wrap template rendering
-- [cli-tool-packaging](cli-tool-packaging.md) — Package renderer as internal CLI tool
+- [network-protocols-as-code](../network-protocols-as-code/SKILL.md) — Intent model that feeds these templates
+- [containerlab-topologies](../containerlab-topologies/SKILL.md) — Lab validation of rendered configs
+- [network-change-runbooks](../network-change-runbooks/SKILL.md) — Pre/post checks for template-driven changes
+- [ansible-role-creation](../ansible-role-creation/SKILL.md) — Ansible roles that wrap template rendering
+- [cli-tool-packaging](../cli-tool-packaging/SKILL.md) — Package renderer as internal CLI tool

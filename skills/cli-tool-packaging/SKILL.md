@@ -35,7 +35,7 @@ burying them in Python flags or environment-specific assumptions.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Define the command tree, input sources, configuration precedence, exit codes, logging format, output modes, and supported Python versions. Identify which commands may mutate infrastructure and which are read-only.
 

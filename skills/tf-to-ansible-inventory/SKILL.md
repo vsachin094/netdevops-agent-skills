@@ -29,7 +29,7 @@ Terraform outputs as an API with stable keys and sensitivity metadata.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Define the Terraform/OpenTofu outputs, host identity, group rules, sensitive values, inventory format, and the point at which Ansible consumes the result. Check output types before generating inventory data.
 

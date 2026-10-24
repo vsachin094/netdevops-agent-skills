@@ -44,7 +44,7 @@ result.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Identify the device OS, software release, command, connection alias, parser version, and expected schema. Capture golden output from a stable lab device and include variation that should not change the semantic result.
 

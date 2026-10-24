@@ -35,7 +35,7 @@ partially successful.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Define the device inventory, transport and platform drivers, command or config operation, concurrency limit, timeout, retry policy, and result correlation key. Decide how partial fleet success is reported.
 

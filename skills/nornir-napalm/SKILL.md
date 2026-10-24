@@ -36,7 +36,7 @@ the platform actually supports the getter or config operation.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Define the inventory schema, platform drivers, groups, credentials source, read-only getters, configuration actions, concurrency, and rollback expectations. Confirm that each device has a usable driver and connection profile.
 
@@ -117,30 +117,21 @@ data. Use `nr.run()` result aggregation rather than shared mutable globals.
 Use vendor-specific Nornir tasks only where the NAPALM driver lacks the needed
 getter or operation, and keep that exception documented per platform.
 
-## NAPALM Driver Version Compatibility
+## Driver and Platform Support
 
-| Driver | NAPALM Version | Nornir Version | Supported Features | Missing/Partial |
-|--------|----------------|----------------|-------------------|-----------------|
-| ios | 4.x, 5.x | 3.4+ | config, getters, ping | replace_config ✗ |
-| nxos | 4.x, 5.x | 3.4+ | config, getters, ping | replace_config ✗ |
-| eos | 4.x, 5.x | 3.4+ | config, getters, ping | Full support |
-| junos | 4.x, 5.x | 3.4+ | config, getters, ping | Full support |
-| iosxr | 4.x, 5.x | 3.4+ | config, getters | Limited getters |
-| sros | 4.x, 5.x | 3.4+ | config, getters | NAPALM 4.0+ |
-| panos | 4.x, 5.x | 3.4+ | config, getters | API-based |
-
-**Notes:**
-- NAPALM 5.x requires Python 3.8+
-- Nornir 3.4+ uses `nornir_napalm` plugin
-- `replace_config` not supported on IOS/NX-OS; use `load_replace` + `compare_config` + `commit_config`
-- SR Linux uses `nornir_sros` plugin instead of NAPALM
-- Use `nornir_scrapli` for connection transport instead of NAPALM's built-in
+Driver coverage varies by NAPALM release, platform, transport, and operation.
+Check the official NAPALM documentation and the installed driver's
+documentation for the exact getter or configuration method before relying on
+it. Test the operation against the target device OS and release; do not
+assume that a method supported by one driver or release is available on
+another. Record pinned NAPALM, Nornir, plugin, and Python versions with test
+results.
 
 ## Related Skills
 
-- [netmiko-core](netmiko-core.md) — Underlying transport for NAPALM SSH drivers
-- [scrapli-netmiko-threaded](scrapli-netmiko-threaded.md) — Alternative fleet execution
-- [async-netops](async-netops.md) — AsyncIO alternative for high concurrency
-- [ansible-resource-modules](ansible-resource-modules.md) — Declarative Ansible alternative
-- [network-change-runbooks](network-change-runbooks.md) — Pre/post checks for Nornir changes
-- [containerlab-topologies](containerlab-topologies.md) — Lab fixtures for Nornir testing
+- [netmiko-core](../netmiko-core/SKILL.md) — Underlying transport for NAPALM SSH drivers
+- [scrapli-netmiko-threaded](../scrapli-netmiko-threaded/SKILL.md) — Alternative fleet execution
+- [async-network-automation](../async-network-automation/SKILL.md) — AsyncIO alternative for high concurrency
+- [ansible-resource-modules](../ansible-resource-modules/SKILL.md) — Declarative Ansible alternative
+- [network-change-runbooks](../network-change-runbooks/SKILL.md) — Pre/post checks for Nornir changes
+- [containerlab-topologies](../containerlab-topologies/SKILL.md) — Lab fixtures for Nornir testing

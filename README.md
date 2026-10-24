@@ -1,8 +1,8 @@
 # netdevops-agent-skills
 
-AI agent skills for network automation — transport, parsing, Ansible, Terraform, testing, observability, operations.
+AI agent skills for network automation — transport, parsing, Ansible, Terraform, testing, observability, operations, and Cisco NSO.
 
-Each skill is a self-contained directory with a `SKILL.md` containing domain context, workflow, guardrails, production code, validation commands, vendor compatibility tables, and cross-refs to related skills.
+Each skill is organized in its own directory around a `SKILL.md`. Depending on the topic, a skill may also include examples, scripts, references, compatibility notes, and links to related skills.
 
 ```bash
 python3 scripts/validate_skills.py
@@ -31,7 +31,7 @@ cp -R skills/gnmi-client .agents/skills/
 ```
 Use skills/gnmi-client/SKILL.md.
 Build a Python gNMI client that subscribes to interface counters on SR Linux.
-Validate with the skill's test suite.
+Follow the skill's verification steps and run any applicable tests.
 ```
 
 ---
@@ -47,6 +47,7 @@ graph TD
     classDef testing fill:#fce4ec,stroke:#c2185b,stroke-width:2px;
     classDef observability fill:#f1f8e9,stroke:#558b2f,stroke-width:2px;
     classDef operations fill:#e0f2f1,stroke:#00695c,stroke-width:2px;
+    classDef nso fill:#ede7f6,stroke:#5e35b1,stroke-width:2px;
     classDef utilities fill:#fafafa,stroke:#616161,stroke-width:2px;
 
     subgraph TRANSPORT["Transport (8)"]
@@ -71,7 +72,7 @@ graph TD
 
     subgraph ANSIBLE["Ansible (9)"]
         A1[ansible-role-creation]
-        A2[ansible-plugin-development]
+        A2[ansible-custom-plugins]
         A3[ansible-ee-build]
         A4[ansible-vault-hygiene]
         A5[ansible-dynamic-inventory]
@@ -92,41 +93,45 @@ graph TD
         TF8[tf-to-ansible-inventory]
     end
 
-    subgraph TESTING["Testing & Validation (6)"]
+    subgraph TESTING["Testing & Validation (7)"]
         V1[containerlab-topologies]
         V2[batfish-validation]
         V3[network-testing-framework]
         V4[config-diff-audit]
         V5[config-sanitizer]
         V6[network-config-drift-detection]
+        V7[forwardnetworks-nqe]
     end
 
     subgraph OBSERVABILITY["Observability (1)"]
         O1[network-observability-stack]
     end
 
-    subgraph OPERATIONS["Operations (4)"]
+    subgraph OPERATIONS["Operations (3)"]
         OP1[gitops-network-automation]
         OP2[network-device-onboarding]
         OP3[network-change-runbooks]
-        OP4[nso-device-onboarding]
     end
 
-    subgraph UTILITIES["Utilities (14)"]
+    subgraph NSO["Cisco NSO (5)"]
+        N1[nso-device-onboarding]
+        N2[nso-nano-services]
+        N3[nso-python-fastmap]
+        N4[nso-service-package-development]
+        N5[nso-xml-templates]
+    end
+
+    subgraph UTILITIES["Utilities (10)"]
         U1[ipam-subnetting]
         U2[jinja2-network-templates]
         U3[cli-tool-packaging]
         U4[network-data-pipelines]
         U5[network-rest-clients]
-        U6[network-protocols-as-code]
-        U7[netbox-nautobot-api]
-        U8[nornir-napalm]
-        U9[netconf-automation]
-        U10[netconf-restconf-payloads]
-        U11[pysnmp-automation]
-        U12[pyats-genie]
-        U13[ttp-parsers]
-        U14[tf-state-surgery]
+        U6[netbox-nautobot-api]
+        U7[nornir-napalm]
+        U8[netconf-restconf-payloads]
+        U9[pysnmp-automation]
+        U10[pyats-genie]
     end
 
     %% Key cross-category relationships
@@ -136,6 +141,7 @@ graph TD
     V2 --> V3
     V4 --> V6
     V5 --> V6
+    V7 --> V3
     OP1 --> V1
     OP2 --> V1
     OP3 --> V4
@@ -152,10 +158,11 @@ graph TD
     class P1,P2,P3,P4,P5,P6 parsing;
     class A1,A2,A3,A4,A5,A6,A7,A8,A9 ansible;
     class TF1,TF2,TF3,TF4,TF5,TF6,TF7,TF8 terraform;
-    class V1,V2,V3,V4,V5,V6 testing;
+    class V1,V2,V3,V4,V5,V6,V7 testing;
     class O1 observability;
-    class OP1,OP2,OP3,OP4 operations;
-    class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14 utilities;
+    class OP1,OP2,OP3 operations;
+    class N1,N2,N3,N4,N5 nso;
+    class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10 utilities;
 ```
 
 ---
@@ -188,7 +195,7 @@ graph TD
 | Skill | Purpose |
 |-------|---------|
 | `ansible-role-creation` | Reusable multi-vendor roles — Molecule, argument_specs, platform task split |
-| `ansible-plugin-development` | Custom modules/filters/connection — check_mode, ansible-test |
+| `ansible-custom-plugins` | Custom Ansible modules, filters, and connection plugins — check mode, ansible-test |
 | `ansible-ee-build` | Pinned execution environments — requirements.yml/txt, bindep.txt |
 | `ansible-vault-hygiene` | Secret management — vault-id per env, no_log boundaries, trufflehog/gitleaks |
 | `ansible-dynamic-inventory` | NetBox/AWS/Azure/Terraform sources — keyed_groups, compose, caching |
@@ -209,7 +216,7 @@ graph TD
 | `tf-aci-sdwan-meraki` | Controller-based — hierarchy, stable for_each, async readiness |
 | `tf-to-ansible-inventory` | TF outputs → Ansible inventory — structured outputs, readiness checks |
 
-### Testing & Validation (6)
+### Testing & Validation (7)
 | Skill | Purpose |
 |-------|---------|
 | `containerlab-topologies` | Lab topologies as code — pinned images, startup config validation |
@@ -218,21 +225,30 @@ graph TD
 | `config-diff-audit` | Config drift detection — normalization, volatile stripping |
 | `config-sanitizer` | Config/log redaction — deterministic placeholders, topology preservation |
 | `network-config-drift-detection` | Scheduled drift detection — collect → normalize → diff → alert → remediate |
+| `forwardnetworks-nqe` | Forward Networks NQE — query modeled network state and preserve snapshot-aware evidence |
 
 ### Observability (1)
 | Skill | Purpose |
 |-------|---------|
 | `network-observability-stack` | Prometheus/Grafana/Loki/Tempo — snmp_exporter, gnmic, PromQL alerts |
 
-### Operations (4)
+### Operations (3)
 | Skill | Purpose |
 |-------|---------|
 | `gitops-network-automation` | ArgoCD/Flux for network config — Kustomize overlays, pre/post sync hooks |
 | `network-device-onboarding` | Day-0: ZTP, creds, host-keys, verify — idempotent, rollback per stage |
 | `network-change-runbooks` | Auditable change execution — pre-checks, approval gates, rollback, evidence |
-| `nso-device-onboarding` | NSO-specific onboarding — authgroups, NED assignment, sync-from |
 
-### Utilities (14)
+### Cisco NSO (5)
+| Skill | Purpose |
+|-------|---------|
+| `nso-device-onboarding` | NSO device onboarding — authgroups, NED assignment, sync-from |
+| `nso-nano-services` | Reactive, multi-stage NSO services — plans, transitions, and recovery |
+| `nso-python-fastmap` | Python-backed NSO services — FASTMAP callbacks and transactional mapping |
+| `nso-service-package-development` | Cisco NSO service package design, implementation, and validation |
+| `nso-xml-templates` | YANG-backed NSO services using XML templates |
+
+### Utilities (10)
 | Skill | Purpose |
 |-------|---------|
 | `ipam-subnetting` | Hierarchical CIDR allocation — VLSM, overlap detection, NetBox/TF seed data |
@@ -240,32 +256,27 @@ graph TD
 | `cli-tool-packaging` | Packaged Python CLIs — Typer/Click, Rich, dry-run, JSON output |
 | `network-data-pipelines` | Pandas/Polars + Pydantic — normalization, cardinality control, quarantine |
 | `network-rest-clients` | Typed REST clients — timeouts, retries, pagination, idempotency keys |
-| `network-protocols-as-code` | Intent → multi-vendor config — BGP/OSPF/EVPN, unsupported feature findings |
 | `netbox-nautobot-api` | NetBox/Nautobot client — GraphQL bulk, pagination, dry-run |
 | `nornir-napalm` | Fleet automation with Nornir — inventory layers, compare/commit/discard |
-| `netconf-automation` | NETCONF patterns — lock/validate/commit, capability check |
 | `netconf-restconf-payloads` | XML/JSON payload construction — schema validation, Pydantic models |
 | `pysnmp-automation` | SNMP v1/v2c/v3 async — GET/BULK/SET, traps, MIB resolution |
 | `pyats-genie` | Cisco Genie parsers + AEtest — MetaParser, differential pre/post |
-| `tf-state-surgery` | State migration — moved/import/removed, zero-destroy verify |
-| `ttp-parsers` | Hierarchical text parsing — TTP templates, nested output, matchers |
 
 ---
 
-## Each Skill Contains
+## Skill Structure
 
 ```
 skills/<skill-slug>/
-├── SKILL.md              # Full spec: workflow, guardrails, code, validation
-├── scripts/
-│   └── validate_*.py     # Runnable validator (pytest, linter, schema check)
-└── references/           # (optional) local fixtures, schemas
+├── SKILL.md              # Required: domain guidance, workflow, examples, validation
+├── scripts/              # Optional: runnable helpers or validators
+└── references/           # Optional: local fixtures, schemas, and supporting material
 ```
 
-**Run a skill's validator:**
+Not every skill has an offline validator: some require a live controller, device lab, or vendor-specific environment. Validate the collection's shared skill structure with:
+
 ```bash
-python3 skills/netmiko-core/scripts/validate_runner.py --help
-python3 skills/gnmi-client/scripts/validate_client.py --help
+python3 scripts/validate_skills.py
 ```
 
 ---
@@ -284,17 +295,19 @@ python3 skills/gnmi-client/scripts/validate_client.py --help
 
 ## Offline Use
 
-Skills work offline with local dependencies. See [references/open-source-local.md](references/open-source-local.md) for recommended layout, dependency tiers, and quality gates.
+Skill documents can be read offline. Running their examples or validating
+deployment behavior may require vendor tools, network devices, controllers,
+or other external services. See
+[references/open-source-local.md](references/open-source-local.md) for
+recommended layout, dependency tiers, and quality gates.
 
 ---
 
 ## Contributing
 
-1. Add skill at `skills/<lowercase-hyphenated-slug>/SKILL.md`
-2. Include runnable validator in `scripts/`
-3. Follow the skill structure (frontmatter + 9 required sections)
-4. No credentials, private keys, customer data, proprietary files
-5. Run `python3 scripts/validate_skills.py` before PR
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidance on adding or updating
+skills, citing technical claims, validating changes, and submitting pull
+requests.
 
 ---
 

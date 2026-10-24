@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import re
 from pathlib import Path
+from urllib.parse import unquote, urlsplit
 
 REQUIRED_SECTIONS = (
     "## Core Engineering Capabilities",
@@ -17,6 +18,7 @@ REQUIRED_SECTIONS = (
 )
 ALLOWED_KEYS = {"name", "description", "license", "compatibility"}
 TIERS = {"Basic", "Intermediate", "Advanced", "Expert"}
+MARKDOWN_LINK = re.compile(r"(?<!)\[[^\]]*\]\(([^)]+)\)")
 
 
 def parse_frontmatter(text: str) -> tuple[dict[str, str], list[str]]:
@@ -39,10 +41,25 @@ def parse_frontmatter(text: str) -> tuple[dict[str, str], list[str]]:
     return values, errors
 
 
+def validate_local_links(path: Path) -> list[str]:
+    errors: list[str] = []
+    text = path.read_text(encoding="utf-8")
+    for target in MARKDOWN_LINK.findall(text):
+        target = target.strip().split(maxsplit=1)[0].strip("<>")
+        parsed = urlsplit(target)
+        if parsed.scheme or parsed.netloc or not parsed.path:
+            continue
+        destination = (path.parent / unquote(parsed.path)).resolve()
+        if not destination.exists():
+            errors.append(f"broken local link: {target}")
+    return errors
+
+
 def validate_file(path: Path) -> list[str]:
     text = path.read_text(encoding="utf-8")
     slug = path.parent.name
     metadata, errors = parse_frontmatter(text)
+    errors.extend(validate_local_links(path))
     if metadata.get("name") != slug:
         errors.append(f"name must exactly match directory slug {slug!r}")
     description = metadata.get("description", "")
@@ -71,14 +88,28 @@ def validate_file(path: Path) -> list[str]:
         "### Phase 2 (Implementation)",
         "### Phase 3 (Verification)",
     )
+    headings = set(text.splitlines())
     for old, new in zip(old_phases, new_phases):
-        if old not in text and new not in text:
+        if old not in headings and new not in headings:
             errors.append(f"missing workflow phase: {old} or {new}")
     for example_section in ("### Input / Requirement", "### Output / Generated Code"):
         if example_section not in text:
             errors.append(f"missing example subsection: {example_section}")
     if not re.search(r"^# .+\((Basic|Intermediate|Advanced|Expert)\)$", text, re.M):
         errors.append("missing tiered top-level title")
+    return errors
+
+
+def validate_readme(root: Path) -> list[str]:
+    path = root / "README.md"
+    errors = validate_local_links(path)
+    text = path.read_text(encoding="utf-8")
+    listed_skills = set(re.findall(r"^\| `([a-z0-9-]+)` \|", text, re.M))
+    actual_skills = {skill.parent.name for skill in (root / "skills").glob("*/SKILL.md")}
+    for slug in sorted(actual_skills - listed_skills):
+        errors.append(f"skill missing from README category tables: {slug}")
+    for slug in sorted(listed_skills - actual_skills):
+        errors.append(f"README references unknown skill: {slug}")
     return errors
 
 
@@ -96,6 +127,13 @@ def main(root: Path) -> int:
                 print(f"ERROR {path}: {error}")
         else:
             print(f"OK    {path}")
+    readme_errors = validate_readme(root)
+    if readme_errors:
+        failures += 1
+        for error in readme_errors:
+            print(f"ERROR {root / 'README.md'}: {error}")
+    else:
+        print(f"OK    {root / 'README.md'}")
     print(f"Validated {len(files)} skills: {len(files) - failures} valid, {failures} invalid.")
     return 1 if failures else 0
 

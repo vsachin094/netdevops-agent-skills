@@ -31,7 +31,7 @@ A runbook is executable, not documentation. It encodes intent, validates precond
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Collect the change request: device inventory, config delta (or intent model), protocol impact, risk assessment, maintenance window, approval requirements, rollback SLA, and post-check success criteria. Reject requests missing scope, approval path, or rollback definition.
 
@@ -60,6 +60,11 @@ Provide the change scope: target devices, configuration delta or intent model, p
 ### Output / Generated Code
 
 Return the runbook YAML, rendered markdown, device command files, pre/post-check scripts, rollback procedures, evidence schema, and validation results from lab/simulator.
+
+All deadlines, retry counts, intervals, timestamps, and alert thresholds in
+the examples are illustrative runbook inputs. Set them from the change's
+maintenance window, convergence behavior, service objective, and recovery
+requirements; do not reuse them as general defaults.
 
 ```yaml
 # runbook.yaml
@@ -195,16 +200,13 @@ Rollback triggers: `post_check_failed`, `manual_abort`, `timeout`, `pre_check_re
 
 Command files use Jinja2 templates with device facts; render per device, validate with platform parser (e.g., `pyang --lint`, vendor syntax check, Batfish), then write to `commands/`. Evidence emitted at each gate: `{gate, timestamp, status, artifacts: [...], operator: ...}`. Exit codes: `0` success, `1` validation error, `2` pre-check failed, `3` approval denied, `4` execution failed, `5` post-check failed, `6` rollback failed.
 
-## Transport Version Compatibility
+## Transport and Library Compatibility
 
-| Transport | Library | Version | check_mode | diff_mode | rollback |
-|-----------|---------|---------|------------|-----------|----------|
-| NETCONF | ncclient | 0.6.15+ | ✓ | ✓ | ✓ (candidate) |
-| RESTCONF | httpx | 0.25+ | ✓ | ✓ | ✓ (candidate) |
-| CLI/SSH | Netmiko | 4.3+ | ✓ | ✓ | Manual |
-| CLI/SSH | Scrapli | 2023.12+ | ✓ | ✓ | Manual |
-| gNMI | gnmic | 0.20+ | ✗ | ✗ | Manual |
-| Ansible | network_cli | 2.15+ | ✓ | ✓ | ✓ (backup) |
+Check the documentation for the pinned client, server/device OS, and transport
+before claiming check, diff, candidate, or rollback support. These behaviors
+are not implied by the protocol or by the client library version alone. Test
+each capability against the actual target and document any vendor-specific
+limitations.
 
 **Notes:**
 - NETCONF candidate datastore required for native rollback
@@ -215,10 +217,10 @@ Command files use Jinja2 templates with device facts; render per device, validat
 
 ## Related Skills
 
-- [netmiko-core](netmiko-core.md) — CLI transport for runbook execution
-- [ncclient-restconf](ncclient-restconf.md) — NETCONF/RESTCONF transport with transaction support
-- [ansible-pre-post-checks](ansible-pre-post-checks.md) — Ansible-native pre/post check pattern
-- [containerlab-topologies](containerlab-topologies.md) — Lab validation for runbook execution
-- [batfish-validation](batfish-validation.md) — Mathematical pre/post verification
-- [ansible-vault-hygiene](ansible-vault-hygiene.md) — Secret management in runbooks
-- [nac-cicd-pipelines](nac-cicd-pipelines.md) — CI/CD pipeline integration for runbook gates
+- [netmiko-core](../netmiko-core/SKILL.md) — CLI transport for runbook execution
+- [ncclient-restconf](../ncclient-restconf/SKILL.md) — NETCONF/RESTCONF transport with transaction support
+- [ansible-pre-post-checks](../ansible-pre-post-checks/SKILL.md) — Ansible-native pre/post check pattern
+- [containerlab-topologies](../containerlab-topologies/SKILL.md) — Lab validation for runbook execution
+- [batfish-validation](../batfish-validation/SKILL.md) — Mathematical pre/post verification
+- [ansible-vault-hygiene](../ansible-vault-hygiene/SKILL.md) — Secret management in runbooks
+- [network-testing-framework](../network-testing-framework/SKILL.md) — CI/CD pipeline integration for runbook gates

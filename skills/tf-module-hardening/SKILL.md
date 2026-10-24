@@ -28,7 +28,7 @@ are complementary to semantic validation and must not replace plan review.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Inventory module sources, provider constraints, state backend, variables, outputs, secrets, tests, and required security controls. Identify the Terraform/OpenTofu versions and CI runners that must reproduce the plan.
 

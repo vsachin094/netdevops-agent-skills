@@ -32,7 +32,7 @@ configuration separate from resources.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Define the network intent, cloud and region, parent CIDR, subnet tiers, route domains, security boundaries, NAT/DNS requirements, state backend, and ownership of shared resources.
 

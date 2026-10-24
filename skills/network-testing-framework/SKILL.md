@@ -2,7 +2,7 @@
 name: network-testing-framework
 description: "Build a pytest-based network testing framework with Containerlab topologies, Batfish validation, and structured test fixtures for unit, integration, and contract testing. Use this skill when network automation needs repeatable, CI-integrated test suites with mocked and live device validation."
 license: MIT
-compatibility: Python 3.10+; pytest 7+; Containerlab 0.50+; Batfish (optional); pyATS/Genie (optional); vendor container images
+compatibility: Python and pytest versions supported by the selected test dependencies; Containerlab for lab tests; Batfish and pyATS/Genie optional; vendor container images
 ---
 
 # Network Testing Framework (Advanced)

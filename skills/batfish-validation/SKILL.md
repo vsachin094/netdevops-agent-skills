@@ -122,26 +122,25 @@ bf.q.forwardingDetail()
 
 Use the exact query syntax supported by the installed pybatfish version and assert returned rows, not merely that a query ran. Differential tests should encode expected changes and reject new reachability, missing routes, changed next hops, incompatible BGP sessions, undefined references, ACL violations, and forwarding loops. Store snapshot name, Batfish version, query parameters, and evidence traces with the review; a parser warning affecting a query is a failed validation prerequisite, not a harmless warning.
 
-## Batfish Version Compatibility
+## Version and Vendor Support
 
-| Batfish Version | Python pybatfish | Supported Vendors | Key Features | Notes |
-|-----------------|------------------|-------------------|--------------|-------|
-| 2023.01 | 2023.1.x | Cisco IOS/NX-OS, Juniper, Arista, FRR | BGP, OSPF, ACL, Reachability | Baseline |
-| 2023.06 | 2023.6.x | + SR Linux, VPP | EVPN-VXLAN, MPLS | VXLAN parsing |
-| 2024.01 | 2024.1.x | + SONiC, OpenConfig | SR-TE, BGP Sec | OpenConfig models |
-| 2024.06 | 2024.6.x | + Cumulus, Dell | BFD, BGP Add-Path | Enhanced BGP |
+Do not infer vendor or feature support from Batfish version numbers alone.
+Check Batfish documentation and release notes for the installed engine and
+pybatfish client, then confirm support for the exact configuration syntax and
+question being used. Record the tested versions and parser warnings with the
+validation evidence. A vendor name in a support list does not establish that
+every feature or release is modeled.
 
-**Parser Limitations:**
-- Cisco ASA: Limited ACL support only
-- Palo Alto: Partial policy parsing
-- Check Point: No native support (use generic)
-- SONiC: Requires OpenConfig models
+**Parser limitations:** Consult the installed Batfish release documentation
+for the exact vendor syntax and features under test. Treat parser warnings as
+evidence that must be investigated; do not generalize a limitation from one
+device release or configuration feature to every release of that vendor.
 
 ## Related Skills
 
-- [containerlab-topologies](containerlab-topologies.md) — Snapshot source for lab configs
-- [network-protocols-as-code](network-protocols-as-code.md) — Intent model for candidate snapshots
-- [network-change-runbooks](network-change-runbooks.md) — Pre/post validation in change workflow
-- [tf-aci-sdwan-meraki](tf-aci-sdwan-meraki.md) — Controller config as snapshot input
-- [ansible-pre-post-checks](ansible-pre-post-checks.md) — Ansible-native alternative for simpler checks
-- [config-diff-audit](config-diff-audit.md) — Text-based diff alternative
+- [containerlab-topologies](../containerlab-topologies/SKILL.md) — Snapshot source for lab configs
+- [network-protocols-as-code](../network-protocols-as-code/SKILL.md) — Intent model for candidate snapshots
+- [network-change-runbooks](../network-change-runbooks/SKILL.md) — Pre/post validation in change workflow
+- [tf-aci-sdwan-meraki](../tf-aci-sdwan-meraki/SKILL.md) — Controller config as snapshot input
+- [ansible-pre-post-checks](../ansible-pre-post-checks/SKILL.md) — Ansible-native alternative for simpler checks
+- [config-diff-audit](../config-diff-audit/SKILL.md) — Text-based diff alternative

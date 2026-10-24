@@ -32,6 +32,17 @@ validation, and rollback considerations.
 
 ## Strict Engineering Guardrails (Anti-Hallucination & Best Practices)
 
+### Evidence for requirements and values
+
+- Cite the applicable RFC or standards-body document for protocol requirements,
+  behavior, and numeric limits. Cite official vendor documentation for
+  platform-, hardware-, and software-release-specific support or limits.
+- Keep only values that the cited source actually supports. A source that
+  describes packet format does not establish an operational default.
+- Mark example values as illustrative and non-prescriptive. If a value cannot
+  be verified, omit it or request the deployment-specific value instead of
+  presenting it as guidance.
+
 ### Intent and vendor boundaries
 
 - Start from a typed, vendor-neutral model. At minimum capture device role,
@@ -64,9 +75,10 @@ validation, and rollback considerations.
 ### Fabric, MTU, and security
 
 - For VXLAN fabrics, calculate overhead and enforce an end-to-end jumbo MTU
-  policy on underlay links, loopbacks, and relevant host-facing paths. The
-  catalog default is 9216 where the platform and transport permit it; verify
-  the actual supported value before rendering.
+  policy on underlay links, loopbacks, and relevant host-facing paths. Do not
+  assume a universal jumbo-MTU value: derive the required path MTU from the
+  encapsulation and packet format, then verify supported interface and system
+  limits in the official documentation for each target platform and release.
 - Model EVPN route targets, VNIs, VLAN-to-VNI mapping, anycast gateway MAC/IP,
   and multihoming or MLAG behavior as one coherent service. Do not generate a
   VNI without its tenant/VRF and bridge-domain relationship.
@@ -94,7 +106,7 @@ validation, and rollback considerations.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Capture the protocol intent, topology assumptions, timer and policy constraints, vendor targets, feature support, and the source-of-truth fields. Resolve ambiguous terms such as neighbor, area, ASN, or preference before modeling.
 
@@ -143,6 +155,11 @@ Return the intent schema, example data, vendor-specific rendering or adapter cod
 
 ### Vendor-neutral intent
 
+All numeric values in the examples below are illustrative, not operational
+defaults. The IP addresses and ASNs use ranges reserved for documentation or
+private use. No maximum-prefix number is prescribed: set it from the expected
+route count, growth headroom, platform limits, and local routing policy.
+
 ```yaml
 bgp:
   local_as: 65001
@@ -151,14 +168,17 @@ bgp:
     - name: spine-1
       address: 192.0.2.1
       remote_as: 65000
-      address_families: [ipv4_unicast, l2vpn_evpn]
+      address_families: [ipv4_unicast]
       import_policy: FABRIC-IN
       export_policy: FABRIC-OUT
-      maximum_prefixes: 500000
+      maximum_prefixes: ${VERIFIED_MAX_PREFIXES}
       bfd: true
 ```
 
-### IOS-XE-style output
+### Illustrative IOS-XE IPv4-unicast excerpt
+
+Replace `<verified-limit>` with the route limit established for the target
+network and supported device release before using this configuration.
 
 ```text
 router bgp 65001
@@ -168,7 +188,7 @@ router bgp 65001
  neighbor 192.0.2.1 fall-over bfd
  address-family ipv4
   neighbor 192.0.2.1 activate
-  neighbor 192.0.2.1 maximum-prefix 500000
+  neighbor 192.0.2.1 maximum-prefix <verified-limit>
   neighbor 192.0.2.1 route-map FABRIC-IN in
   neighbor 192.0.2.1 route-map FABRIC-OUT out
  exit-address-family
@@ -183,10 +203,10 @@ out capabilities that do not map one-to-one.
 For every external BGP peer, the review artifact should answer:
 
 ```text
-Peer: transit-a
+Peer: transit-a (illustrative review record)
 Import policy: TRANSIT-IN (present, tested)
 Export policy: TRANSIT-OUT (present, tested)
-Maximum prefixes: 500000
+Maximum prefixes: chosen from measured route scale and verified platform limits
 Default-originate: disabled
 Route authentication: reference only; secret externalized
 Rollback: remove peer activation, retain policy objects
@@ -212,17 +232,27 @@ At minimum, run `python3 scripts/validate_skills.py` from the repository root in
 
 ## Authoritative References
 
+- [RFC 7348: VXLAN](https://www.rfc-editor.org/rfc/rfc7348.html) — informational description of VXLAN encapsulation; it does not prescribe a universal underlay MTU.
+- [RFC 5737: IPv4 Address Blocks Reserved for Documentation](https://www.rfc-editor.org/rfc/rfc5737.html)
+- [RFC 6996: Autonomous System (AS) Reservation for Private Use](https://www.rfc-editor.org/rfc/rfc6996.html)
+- [RFC 4271: A Border Gateway Protocol 4 (BGP-4)](https://www.rfc-editor.org/rfc/rfc4271.html)
 - [RFC 8212: BGP Default Reject](https://www.rfc-editor.org/rfc/rfc8212.html)
+- [RFC 2328: OSPF Version 2](https://www.rfc-editor.org/rfc/rfc2328.html)
+- [RFC 1195: Use of OSI IS-IS for Routing in TCP/IP and Dual Environments](https://www.rfc-editor.org/rfc/rfc1195.html)
 - [RFC 5880: Bidirectional Forwarding Detection](https://www.rfc-editor.org/rfc/rfc5880.html)
 - [RFC 7432: BGP MPLS-Based Ethernet VPN](https://www.rfc-editor.org/rfc/rfc7432.html)
-- [Cisco IOS-XE BFD configuration guide](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bfd/configuration/xe-16-10/irb-xe-16-10-book.html)
-- [Cisco IOS-XE IPsec security guide](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_vpnips/configuration/xe-16-6/sec-sec-for-vpns-w-ipsec-xe-16-6-book.pdf)
-- [Arista EOS documentation](https://www.arista.com/en/support/toi)
-- [Juniper technical documentation](https://www.juniper.net/documentation/)
+- [RFC 7296: Internet Key Exchange Protocol Version 2 (IKEv2)](https://www.rfc-editor.org/rfc/rfc7296.html)
+- [RFC 4106: The Use of Galois/Counter Mode (GCM) in IPsec ESP](https://www.rfc-editor.org/rfc/rfc4106.html)
+- [Cisco IOS-XE documentation](https://www.cisco.com/c/en/us/support/ios-nx-os-software/ios-xe/products-installation-guides-list.html) — consult the guide for the exact release and platform.
+- [Arista EOS documentation](https://www.arista.com/en/support/toi) — verify feature support against the exact EOS release.
+- [Juniper technical documentation](https://www.juniper.net/documentation/) — verify feature support against the exact Junos release.
 
 ## Offline Execution Contract
 
-Use the vendor-neutral model, local templates, supplied capability matrix, and captured fixtures. If a vendor tool or live device is unavailable, render reviewable intent and validation artifacts, identify unsupported mappings, and do not claim platform acceptance.
+Use the vendor-neutral model, local templates, verified vendor documentation,
+and captured fixtures. If a vendor tool or live device is unavailable, render
+reviewable intent and validation artifacts, identify unsupported mappings,
+and do not claim platform acceptance.
 
 ## Architecture & Technical Design Patterns
 
@@ -239,7 +269,7 @@ peer:
   families: [ipv4_unicast, l2vpn_evpn]
   import_policy: FABRIC-IN
   export_policy: FABRIC-OUT
-  max_prefixes: 500000
+  max_prefixes: ${VERIFIED_MAX_PREFIXES}
 ```
 
 For every peer, derive the following checks before rendering: local/remote
@@ -257,30 +287,20 @@ back to another vendor's syntax. Prechecks should verify interfaces, BGP/IGP
 adjacency, MTU, and policy object existence; postchecks should verify the same
 state plus intended route/EVPN changes.
 
-## Vendor Version Compatibility
+## Platform and Release Compatibility
 
-| Platform | Version | BGP | OSPF/ISIS | EVPN-VXLAN | MPLS | VRF | Notes |
-|----------|---------|-----|-----------|------------|------|-----|-------|
-| IOS-XE | 16.x | ✓ | ✓ | ✓ (17.3+) | ✓ | ✓ | BGP add-path 16.12+ |
-| IOS-XE | 17.x | ✓ | ✓ | ✓ | ✓ | ✓ | EVPN multi-homing 17.6+ |
-| NX-OS | 7.x | ✓ | ✓ | ✓ | ✓ | ✓ | VXLAN 7.0(3)I7+ |
-| NX-OS | 9.x/10.x | ✓ | ✓ | ✓ | ✓ | ✓ | BGP graceful restart |
-| EOS | 4.25+ | ✓ | ✓ | ✓ | ✗ | ✓ | MPLS not supported |
-| EOS | 4.30+ | ✓ | ✓ | ✓ | ✗ | ✓ | BGP ORF 4.30+ |
-| Junos | 18.x | ✓ | ✓ | ✓ (19.1+) | ✓ | ✓ | EVPN 19.1R1+ |
-| Junos | 21.x | ✓ | ✓ | ✓ | ✓ | ✓ | SR-TE 21.2+ |
-
-**Unsupported Feature Handling:**
-- EOS MPLS: Returns finding `{feature: "mpls", platform: "eos", reason: "not_implemented"}`
-- IOS-XE < 17.3 EVPN: Returns finding with minimum version
-- NX-OS VRF-lite: Limited route leaking vs full VRF
-- Junos BGP add-path: Requires explicit `multipath` config
+Do not rely on a generic feature/version matrix. Record the exact product,
+hardware family, software release, feature, and relevant license, then verify
+support and configuration behavior against the corresponding official vendor
+documentation and release notes. Keep that source next to each compatibility
+claim in generated design artifacts. If support cannot be verified, mark the
+feature as unverified and do not render it as supported.
 
 ## Related Skills
 
-- [jinja2-multivendor-sot](jinja2-multivendor-sot.md) — Template rendering for this intent model
-- [containerlab-topologies](containerlab-topologies.md) — Lab validation of rendered configs
-- [batfish-validation](batfish-validation.md) — Mathematical verification of rendered configs
-- [network-change-runbooks](network-change-runbooks.md) — Pre/post checks for protocol changes
-- [tf-aci-sdwan-meraki](tf-aci-sdwan-meraki.md) — Controller-based alternative for fabric intent
-- [ansible-resource-modules](ansible-resource-modules.md) — Declarative Ansible alternative
+- [jinja2-network-templates](../jinja2-network-templates/SKILL.md) — Template rendering for this intent model
+- [containerlab-topologies](../containerlab-topologies/SKILL.md) — Lab validation of rendered configs
+- [batfish-validation](../batfish-validation/SKILL.md) — Mathematical verification of rendered configs
+- [network-change-runbooks](../network-change-runbooks/SKILL.md) — Pre/post checks for protocol changes
+- [tf-aci-sdwan-meraki](../tf-aci-sdwan-meraki/SKILL.md) — Controller-based alternative for fabric intent
+- [ansible-resource-modules](../ansible-resource-modules/SKILL.md) — Declarative Ansible alternative

@@ -31,7 +31,7 @@ being accepted by an API does not prove that dependent fabric policy is ready.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Record the controller type and version, provider version, account or organization scope, object hierarchy, state backend, and asynchronous readiness signals. Confirm which resources are authoritative and which are generated dependencies.
 

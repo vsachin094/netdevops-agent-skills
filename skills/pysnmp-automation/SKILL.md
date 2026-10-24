@@ -88,7 +88,7 @@ an end-of-subtree condition; never loop until an agent stops responding.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Collect the SNMP version, target addresses, context names, credential
 references, OIDs or MIB objects, polling interval, timeout/retry budget,
@@ -123,6 +123,10 @@ SET, provide the approved OID/value allow-list and the operational postcheck.
 
 Return a Python asyncio poller that uses SNMPv3 authPriv, applies bounded
 timeouts, preserves error classes, and closes the PySNMP engine cleanly.
+
+Timeout and retry values in the sample are starting parameters only. Tune
+them to the device, network, SNMP version, polling objective, and outage
+behavior; they are not protocol-mandated defaults.
 
 ```python
 from __future__ import annotations

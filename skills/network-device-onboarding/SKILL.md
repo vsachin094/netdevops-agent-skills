@@ -152,7 +152,7 @@ def run_ztp_bootstrap(device_identity: dict, intent: dict) -> OnboardingResult:
     serve_ztp_config(device_identity["serial"], config)
     
     # Wait for device to fetch and apply (poll or webhook)
-    if wait_for_device_online(intent["mgmt_ip"], timeout=300):
+    if wait_for_device_online(intent["mgmt_ip"], timeout=300):  # example deadline; set from the platform's boot and reachability objectives
         return OnboardingResult(device=device_identity["name"], stage=OnboardingStage.ZTP_BOOTSTRAP, success=True, message="ZTP bootstrap complete")
     
     return OnboardingResult(device=device_identity["name"], stage=OnboardingStage.ZTP_BOOTSTRAP, success=False, message="ZTP timeout")
@@ -355,9 +355,9 @@ ONBOARDED
 
 **Related Skills:**
 
-- [network-config-drift-detection](network-config-drift-detection.md) — Post-onboarding compliance
-- [ansible-role-creation](ansible-role-creation.md) — Ansible roles for baseline push
-- [netmiko-core](netmiko-core.md) — CLI transport for vendors without NETCONF
-- [ncclient-restconf](ncclient-restconf.md) — NETCONF/RESTCONF config push
-- [network-testing-framework](network-testing-framework.md) — Test onboarding in lab
-- [gitops-network-automation](gitops-network-automation.md) — Inventory as GitOps source
+- [network-config-drift-detection](../network-config-drift-detection/SKILL.md) — Post-onboarding compliance
+- [ansible-role-creation](../ansible-role-creation/SKILL.md) — Ansible roles for baseline push
+- [netmiko-core](../netmiko-core/SKILL.md) — CLI transport for vendors without NETCONF
+- [ncclient-restconf](../ncclient-restconf/SKILL.md) — NETCONF/RESTCONF config push
+- [network-testing-framework](../network-testing-framework/SKILL.md) — Test onboarding in lab
+- [gitops-network-automation](../gitops-network-automation/SKILL.md) — Inventory as GitOps source

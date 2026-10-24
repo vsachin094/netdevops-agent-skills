@@ -2,7 +2,7 @@
 name: ansible-linux-networking
 description: "[Tier: Intermediate] Build Ansible roles for Linux server and gateway networking, including sysctl tuning, Netplan/NetworkManager VLANs and bonds, FRRouting, nftables, and WireGuard. Use this skill when Linux networking changes need validation before handlers restart services and must avoid management lockout."
 license: MIT
-compatibility: Ansible Core 2.15+; Linux systemd; Netplan 0.105+ or NetworkManager 1.40+; FRRouting 8.5+; nftables 1.0+; WireGuard kernel module; target distribution docs (Ubuntu 22.04/24.04, RHEL 9, Debian 12)
+compatibility: Ansible Core and Linux networking stack versions supported by the selected distribution; Netplan or NetworkManager; FRRouting; nftables; WireGuard support where available
 ---
 
 # Ansible Linux Networking (Intermediate)
@@ -24,8 +24,8 @@ Treat a Linux network change as a potential loss-of-access event. Render and val
 - **Keep nftables default-deny policy explicit** with an established/related and management allow-list. Never flush a live firewall without a tested rollback rule set.
 - **Make WireGuard keys external and permissions restrictive** (`mode: "0600"`, owned by root). Generate keys in CI or a key ceremony, not in the role.
 - **FRR config must pass `vtysh -C` before reload.** A syntax error in `frr.conf` leaves the daemon running with stale config — not a safe state.
-- **Netplan `try` is not a substitute for pre-validation.** It rolls back after 120s but leaves the system in an undefined state during that window. Validate with `netplan generate` first.
-- **Bond/VLAN changes require parent interface validation.** Verify the intended parent/link exists and is up before creating the VLAN or bond slave.
+- **Netplan `try` is not a substitute for pre-validation.** Its confirmation and rollback behavior depends on the installed Netplan release and configured timeout. Consult that release's documentation, validate with `netplan generate` first, and use a timeout appropriate to the recovery path.
+- **Bond/VLAN changes require parent interface validation.** Verify the intended parent/link exists and is up before creating the VLAN or bond slave. Select link-monitoring and LACP timers from the failure-detection objective and verify compatibility with the peer and platform documentation; do not treat a timer value as a universal failover guarantee.
 
 ## Step-by-Step Agent Execution Workflow
 
@@ -56,6 +56,10 @@ Provide: target distribution and version, active network backend, interface and 
 ### Output / Generated Code
 
 Return an idempotent role with: `tasks/main.yml`, backend-specific task files, handlers, templates, `vars/` per distro, `defaults/main.yml`, Molecule scenarios, pre-flight and post-check tasks, rollback handler, and exact native validation commands for the selected distribution.
+
+Timeouts, release names, package versions, and rollback behavior in examples
+must be confirmed against the selected distribution and its installed tools;
+they are not universal defaults.
 
 ```yaml
 # tasks/preflight.yml
@@ -220,28 +224,21 @@ Gather `ansible_distribution`, `ansible_distribution_version`, network facts, de
 
 **WireGuard:** Keys via `ansible.builtin.slurp` from a secrets path or `lookup('env', 'WG_PRIVATE_KEY')`. Never generate in-role. `PostUp`/`PostDown` scripts for routing adjustments must be idempotent and tested.
 
-**Bond/LACP:** Require `mii-monitor-interval: 100` and `mode: 802.3ad` with `lacp-rate: fast` for sub-second failover. Validate peer switch config matches before applying.
+**Bond/LACP:** Use `mode: 802.3ad` only when the peer is configured compatibly. Select link-monitoring and LACP timing from the requirements and the documentation for both endpoints; a configured timer alone does not guarantee a specific failover time.
 
-## Vendor Version Compatibility
+## Platform and Package Compatibility
 
-| Distribution | Version | Netplan | NetworkManager | systemd-networkd | FRR | nftables | WireGuard |
-|--------------|---------|---------|----------------|------------------|-----|----------|-----------|
-| Ubuntu       | 22.04   | 0.105   | 1.36           | 249              | 8.1 | 1.0      | 5.15      |
-| Ubuntu       | 24.04   | 0.107   | 1.44           | 255              | 8.5 | 1.0      | 6.8       |
-| Debian       | 12      | 0.106   | 1.36           | 252              | 8.5 | 1.0      | 6.1       |
-| RHEL/Rocky   | 9       | N/A     | 1.42           | 252              | 8.4 | 1.0      | 5.14      |
-| Fedora       | 39      | 0.107   | 1.44           | 254              | 8.5 | 1.1      | 6.5       |
-
-**Notes:**
-- Ubuntu 22.04+ uses Netplan by default; NetworkManager available for desktop
-- RHEL 9 uses NetworkManager exclusively; Netplan not supported
-- FRR 8.5+ required for `vtysh -C` config validation
-- WireGuard kernel module required (built-in 5.6+)
+Distribution package versions vary by release, repository, and enabled
+backports. Confirm the installed Ansible, Netplan/NetworkManager,
+systemd-networkd, FRR, nftables, kernel, and WireGuard versions from the
+actual target and check the corresponding distribution and upstream
+maintainer documentation before using features or syntax. The distribution
+names in test scenarios are examples, not a certification matrix.
 
 ## Related Skills
 
-- [netmiko-core](netmiko-core.md) — SSH transport for device push when Ansible connection fails
-- [containerlab-topologies](containerlab-topologies.md) — Lab validation for Linux network configs
-- [ansible-vault-hygiene](ansible-vault-hygiene.md) — Secure WireGuard key management
-- [network-change-runbooks](network-change-runbooks.md) — Pre/post checks for Linux network changes
-- [config-diff-audit](config-diff-audit.md) — Drift detection for managed Linux hosts
+- [netmiko-core](../netmiko-core/SKILL.md) — SSH transport for device push when Ansible connection fails
+- [containerlab-topologies](../containerlab-topologies/SKILL.md) — Lab validation for Linux network configs
+- [ansible-vault-hygiene](../ansible-vault-hygiene/SKILL.md) — Secure WireGuard key management
+- [network-change-runbooks](../network-change-runbooks/SKILL.md) — Pre/post checks for Linux network changes
+- [config-diff-audit](../config-diff-audit/SKILL.md) — Drift detection for managed Linux hosts

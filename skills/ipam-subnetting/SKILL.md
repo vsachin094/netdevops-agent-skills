@@ -2,7 +2,7 @@
 name: ipam-subnetting
 description: "Design and verify hierarchical IPv4/IPv6 VLSM and CIDR allocations, then produce deterministic CSV, JSON, YAML, NetBox, Infoblox, or Terraform seed data. Use this skill when an agent must plan subnets, calculate host capacity, allocate child prefixes, or prove an IP plan has no overlaps before implementation."
 license: MIT
-compatibility: Python 3.10+ standard library; Terraform/OpenTofu 1.5+ when emitting HCL; optional NetBox or Infoblox API credentials supplied by the user
+compatibility: Python standard library; Terraform/OpenTofu when emitting HCL, with function support verified against the selected release; optional NetBox or Infoblox API credentials supplied by the user
 ---
 
 # IPAM Subnetting (Basic)
@@ -83,50 +83,10 @@ locals {
 }
 ```
 
-```python
-# scripts/verify_cidr.py
-import json, sys, ipaddress
-from pathlib import Path
-
-def verify(plan: dict) -> List[str]:
-    errors = []
-    aggregates = {a["name"]: ipaddress.ip_network(a["prefix"]) for a in plan.get("aggregates", [])}
-    allocations = plan.get("allocations", [])
-    
-    # Check canonical networks
-    for a in allocations:
-        net = ipaddress.ip_network(a["prefix"], strict=True)
-        if str(net) != a["prefix"]:
-            errors.append(f"{a['name']}: prefix {a['prefix']} is not a canonical network address")
-    
-    # Check parent containment
-    for a in allocations:
-        parent = aggregates.get(a.get("parent"))
-        if not parent:
-            errors.append(f"{a['name']}: parent {a.get('parent')} not found")
-        elif not ipaddress.ip_network(a["prefix"]).subnet_of(parent):
-            errors.append(f"{a['name']}: not contained in parent {a['parent']}")
-    
-    # Check sibling overlaps
-    for i, a1 in enumerate(allocations):
-        for a2 in allocations[i+1:]:
-            if a1.get("vrf") == a2.get("vrf") and a1.get("family", "ipv4") == a2.get("family", "ipv4"):
-                n1 = ipaddress.ip_network(a1["prefix"])
-                n2 = ipaddress.ip_network(a2["prefix"])
-                if n1.overlaps(n2):
-                    errors.append(f"OVERLAP: {a1['name']} ({a1['prefix']}) overlaps {a2['name']} ({a2['prefix']})")
-    
-    return errors
-
-if __name__ == "__main__":
-    plan = json.loads(Path(sys.argv[1]).read_text())
-    errors = verify(plan)
-    if errors:
-        for e in errors:
-            print(f"ERROR: {e}")
-        sys.exit(1)
-    print("OK: CIDR plan verified")
-```
+Use the maintained `scripts/verify_cidr.py` implementation for validation rather
+than copying a reduced checker into generated output. It also checks parent
+containment, address family, VRF consistency, duplicate names, sibling overlap,
+and declared host capacity.
 
 ## Validation, Linting & Testing Commands
 
@@ -139,6 +99,8 @@ if __name__ == "__main__":
 ## Authoritative References
 
 - Python `ipaddress` API: https://docs.python.org/3/library/ipaddress.html
+- [RFC 5737: IPv4 Address Blocks Reserved for Documentation](https://www.rfc-editor.org/rfc/rfc5737.html)
+- [RFC 3849: IPv6 Address Prefix Reserved for Documentation](https://www.rfc-editor.org/rfc/rfc3849.html)
 - Terraform `cidrsubnet` and `cidrsubnets`: https://developer.hashicorp.com/terraform/language/functions/cidrsubnets
 - NetBox IPAM hierarchy and VRF behavior: https://netbox.readthedocs.io/en/stable/features/ipam/
 - NetBox prefix model: https://netbox.readthedocs.io/en/feature/models/ipam/prefix/
@@ -154,8 +116,8 @@ Use this canonical plan shape when the user has not supplied one:
 
 ```json
 {
-  "aggregates": [{"name": "site-core", "prefix": "192.0.2.0/20", "vrf": "global"}],
-  "allocations": [{"name": "app-a", "prefix": "192.0.2.0/24", "parent": "site-core", "required_hosts": 200, "purpose": "application", "site": "site-a"}]
+  "aggregates": [{"name": "site-core", "prefix": "192.0.2.0/24", "vrf": "global"}],
+  "allocations": [{"name": "app-a", "prefix": "192.0.2.0/25", "parent": "site-core", "required_hosts": 100, "purpose": "application", "site": "site-a"}]
 }
 ```
 
@@ -166,7 +128,7 @@ When emitting Terraform, prefer stable maps:
 ```hcl
 locals {
   subnets = {
-    app_a = "192.0.2.0/24"
+    app_a = "192.0.2.0/25"
   }
 }
 ```

@@ -41,7 +41,7 @@ data if group names and list/dictionary choices are left implicit.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Capture representative hierarchical text, section boundaries, repeated records, optional lines, and malformed or truncated input. Define the output nesting and normalization contract before writing groups.
 

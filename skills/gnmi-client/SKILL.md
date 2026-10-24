@@ -20,7 +20,7 @@ Direct gNMI access for config, operational state, and streaming telemetry. Prefe
 ## Strict Engineering Guardrails (Anti-Hallucination & Best Practices)
 
 - **Use Path objects, not raw strings** — Build `gnmi.Path` with `elem` list; encode keys as map. Avoid string concatenation for paths.
-- **Set timeouts on every RPC** — Default 10s connect, 30s read; Set may need 60s+ for large commits.
+- **Set deadlines on every RPC** based on the operation, device response characteristics, and caller's end-to-end budget. Example values are not protocol defaults; large Set operations may require a different deadline and should be validated on the target.
 - **Handle `NOT_FOUND` vs `PERMISSION_DENIED`** — Distinguish missing path from auth; retry only transient gRPC codes (UNAVAILABLE, DEADLINE_EXCEEDED).
 - **Set: prefer `REPLACE` for atomic, `UPDATE` for merge** — Use `validate_only=true` for dry-run; check `response.prefix` for errors.
 - **Subscribe: bound memory** — Use bounded channel/queue; drop or backpressure on slow consumer; track sync_response for alignment.
@@ -61,6 +61,10 @@ Provide gNMI target (host:port), TLS cert paths or insecure flag, paths to Get/S
 ### Output / Generated Code
 
 Return client module with Get/Set/Subscribe methods, typed response models, TLS config, and test suite.
+
+The sample interval and timeout values below are caller-selected examples,
+not gNMI protocol defaults. Confirm device capabilities and choose intervals
+and RPC deadlines based on the telemetry objective and tested device capacity.
 
 ```python
 # gnmi_client.py
@@ -401,8 +405,8 @@ INVALID_ARGUMENT -> malformed path/value
 
 **Related Skills:**
 
-- [gnmi-snmp-telemetry](gnmi-snmp-telemetry.md) — Telemetry collection config using gnmic
-- [network-observability-stack](network-observability-stack.md) — Prometheus/Grafana stack consuming gNMI
-- [network-testing-framework](network-testing-framework.md) — Test gNMI client in CI
-- [containerlab-topologies](containerlab-topologies.md) — Lab devices with gNMI enabled
-- [network-config-drift-detection](network-config-drift-detection.md) — Drift detection via gNMI Get
+- [gnmi-snmp-telemetry](../gnmi-snmp-telemetry/SKILL.md) — Telemetry collection config using gnmic
+- [network-observability-stack](../network-observability-stack/SKILL.md) — Prometheus/Grafana stack consuming gNMI
+- [network-testing-framework](../network-testing-framework/SKILL.md) — Test gNMI client in CI
+- [containerlab-topologies](../containerlab-topologies/SKILL.md) — Lab devices with gNMI enabled
+- [network-config-drift-detection](../network-config-drift-detection/SKILL.md) — Drift detection via gNMI Get

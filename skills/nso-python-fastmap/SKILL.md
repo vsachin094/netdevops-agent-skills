@@ -34,7 +34,7 @@ diffs, and reconciliation.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Identify the service YANG model, keypath, input leaves, device or service dependencies, and the exact create/update/delete behavior. Separate transaction-time mapping from operational side effects.
 

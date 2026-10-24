@@ -247,6 +247,10 @@ def generate_remediation(diff_result: DiffResult, desired: NormalizedConfig) -> 
     )
 ```
 
+The schedule, job timeout, and artifact retention in this workflow are
+illustrative configuration values. Set them from collection duration,
+operational objectives, and organizational retention policy.
+
 ```yaml
 # .github/workflows/drift-detection.yml
 name: Network Config Drift Detection
@@ -363,9 +367,9 @@ Scheduled Trigger
 
 **Related Skills:**
 
-- [config-diff-audit](config-diff-audit.md) — Diff engine and normalization patterns
-- [config-scrubber](config-scrubber.md) — Secret redaction before diff storage
-- [network-change-runbooks](network-change-runbooks.md) — Remediation workflow integration
-- [gitops-network-automation](gitops-network-automation.md) — Desired state in Git
-- [network-testing-framework](network-testing-framework.md) — Test drift detection in CI
-- [cli-tool-packaging](cli-tool-packaging.md) — Package detector as CLI tool
+- [config-diff-audit](../config-diff-audit/SKILL.md) — Diff engine and normalization patterns
+- [config-sanitizer](../config-sanitizer/SKILL.md) — Secret redaction before diff storage
+- [network-change-runbooks](../network-change-runbooks/SKILL.md) — Remediation workflow integration
+- [gitops-network-automation](../gitops-network-automation/SKILL.md) — Desired state in Git
+- [network-testing-framework](../network-testing-framework/SKILL.md) — Test drift detection in CI
+- [cli-tool-packaging](../cli-tool-packaging/SKILL.md) — Package detector as CLI tool

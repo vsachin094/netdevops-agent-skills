@@ -2,7 +2,7 @@
 name: netmiko-core
 description: "[Tier: Intermediate] Build inventory-driven Netmiko automation with per-device result aggregation, --check/--diff support, config_mode handling per platform, and prompt derivation from base_prompt. Use this skill when a production script must operate safely across heterogeneous fleets with explicit credentials, timeouts, and machine-readable output."
 license: MIT
-compatibility: Python 3.10+; netmiko 4.3+; optional python-dotenv, typer, rich, pyyaml; SSH reachability to target devices
+compatibility: Python and Netmiko versions supported by the selected dependency set; SSH reachability to target devices
 ---
 
 # Netmiko Core (Intermediate)
@@ -26,7 +26,7 @@ Write a fleet-capable runner that is safe to review, easy to remove, and produce
 - **Never hardcode passwords, tokens, enable secrets, or private keys.** Read from env vars (`NETOPS_PASSWORD`, `NETOPS_ENABLE`), vaulted YAML, or `getpass` with TTY check.
 - **Use `with ConnectHandler(**device) as conn:`** so sessions close on every path including exceptions.
 - **Keep `send_command()` for operational reads and `send_config_set()` for intended changes.** Never pass untrusted input directly into a config command list.
-- **Set all timeouts deliberately:** `conn_timeout=10`, `banner_timeout=10`, `auth_timeout=10`, `read_timeout=30` (config), `read_timeout=15` (show). A timeout is a device result, not a retry trigger.
+- **Set all timeouts deliberately:** choose connection, authentication, and command read timeouts to match device response behavior and the operation's deadline. Values in snippets are examples, not universal recommendations. A timeout is a device result, not an automatic retry trigger.
 - **Derive `expect_string` from `conn.base_prompt`** — never hardcode `>` or `#`. Pagination and vendor prompts vary.
 - **Make changes opt-in:** default `--check`, require `--apply` to mutate. Show rendered command set in `--check` mode.
 - **Record per-device result schema:** `{device, host, status, started, finished, duration_ms, commands, output, diff, error_class, error_message}`. Exit code: 0=all ok, 1=usage, 2=partial failure, 3=all failed, 130=SIGINT.
@@ -311,28 +311,21 @@ CLI behavior tested locally with mocked `ConnectHandler` fixtures. Without Netmi
 
 **Concurrency:** ThreadPoolExecutor with `max_workers`. Semaphore for rate limiting if needed. Per-device timeout enforced by `read_timeout` + wrapper timeout.
 
-## Vendor Version Compatibility
+## Platform and Release Support
 
-| Platform | Netmiko Type | Tested Version | config_mode | Prompt Pattern | Notes |
-|----------|--------------|----------------|-------------|----------------|-------|
-| Cisco IOS | cisco_ios | 15.x, 16.x, 17.x | config terminal | `^{base_prompt}[#>]` | SSH only |
-| Cisco NX-OS | cisco_nxos | 7.x, 9.x, 10.x | configure terminal | `^{base_prompt}[#>]` | NX-API alternative |
-| Arista EOS | arista_eos | 4.25+, 4.30+ | configure | `^{base_prompt}[#>]` | eAPI preferred |
-| Juniper Junos | juniper_junos | 18.x, 20.x, 21.x | configure private | `^{base_prompt}[#>]` | NETCONF preferred |
-| Cisco IOS-XR | cisco_xr | 6.x, 7.x | configure | `^{base_prompt}[#>]` | gRPC alternative |
-| Nokia SR Linux | nokia_sros | 21.x, 22.x, 23.x | enter candidate | `^{base_prompt}[#>]` | gNMI preferred |
-
-**Notes:**
-- Netmiko 4.3+ required for SR Linux support
-- Junos `configure private` requires Junos 15.1+
-- IOS-XE 17.x prompt changes require updated `base_prompt` derivation
-- EOS `configure` (no "terminal") since 4.15+
+Netmiko device types, prompt handling, and configuration-mode behavior vary by
+library release and device OS. Confirm the device type against the installed
+Netmiko documentation, and verify commands and configuration modes against
+the official documentation for the target platform and release. Test
+connection, prompt detection, read commands, and configuration entry in a
+lab before enabling changes. Record versions actually exercised; do not label
+an untested platform/release combination as supported.
 
 ## Related Skills
 
-- [scrapli-netmiko-threaded](scrapli-netmiko-threaded.md) — Fleet-scale concurrency with same inventory
-- [async-netops](async-netops.md) — AsyncIO alternative for high-concurrency fleets
-- [ansible-netcli-playbooks](ansible-netcli-playbooks.md) — Ansible-native alternative using network_cli
-- [network-change-runbooks](network-change-runbooks.md) — Pre/post checks for changes pushed via Netmiko
-- [containerlab-topologies](containerlab-topologies.md) — Lab fixtures for integration testing
-- [ntc-textfsm](ntc-textfsm.md) — Structured parsing for Netmiko `use_textfsm=True`
+- [scrapli-netmiko-threaded](../scrapli-netmiko-threaded/SKILL.md) — Fleet-scale concurrency with same inventory
+- [async-network-automation](../async-network-automation/SKILL.md) — AsyncIO alternative for high-concurrency fleets
+- [ansible-netcli-playbooks](../ansible-netcli-playbooks/SKILL.md) — Ansible-native alternative using network_cli
+- [network-change-runbooks](../network-change-runbooks/SKILL.md) — Pre/post checks for changes pushed via Netmiko
+- [containerlab-topologies](../containerlab-topologies/SKILL.md) — Lab fixtures for integration testing
+- [ntc-textfsm](../ntc-textfsm/SKILL.md) — Structured parsing for Netmiko `use_textfsm=True`

@@ -2,7 +2,7 @@
 name: network-observability-stack
 description: "Deploy a production-grade network observability stack with Prometheus, Grafana, Alertmanager, Loki, and Tempo for metrics, logs, traces, and flow data. Use this skill when network telemetry must be collected, correlated, and alerted on with consistent labels, cardinality control, and runbook integration."
 license: MIT
-compatibility: Kubernetes 1.27+ or Docker Compose; Prometheus 2.45+; Grafana 10+; Loki 2.9+; Tempo 2.3+; Alertmanager 0.26+; snmp_exporter; gnmic; Telegraf
+compatibility: Compatible Prometheus, Grafana, Loki, Tempo, Alertmanager, snmp_exporter, gnmic, and Telegraf releases; Kubernetes or Docker Compose deployment environment
 ---
 
 # Network Observability Stack (Advanced)
@@ -22,13 +22,13 @@ Treat observability as a platform, not a collection of tools. Standardize labels
 ## Strict Engineering Guardrails (Anti-Hallucination & Best Practices)
 
 - Control label cardinality: never use raw descriptions, user IDs, or unbounded route prefixes as labels.
-- Use 64-bit counters (`ifHCInOctets`/`ifHCOutOctets`) and calculate utilization with `rate()` over 5m window.
-- Account for interface speed and counter resets; clamp utilization at 100%.
-- Design alert `for` duration (5m+) to avoid paging on scrape gaps or transient samples.
+- Use 64-bit counters (`ifHCInOctets`/`ifHCOutOctets`) and calculate utilization with `rate()` over a window selected for the scrape interval and alerting objective; any sample window is illustrative, not universal.
+- Account for interface speed and counter resets. Preserve and flag calculated utilization above 100% rather than silently clamping it; investigate counter, speed, and measurement assumptions.
+- Choose alert `for` duration based on the signal, scrape/evaluation cadence, and response objective. Do not treat a fixed duration as a universal threshold.
 - Include runbook URLs and inhibition rules in every alert; group related alerts.
 - Keep SNMP communities, gNMI tokens, and TLS certs in secrets; never in config maps.
 - Use recording rules for expensive queries (e.g., `instance:interface_utilization:ratio`).
-- Retention: metrics 14d (hot), 1y (cold); logs 30d; traces 7d (sampled 10%).
+- Set metrics, logs, and trace retention from query needs, storage capacity, privacy requirements, and organizational policy. Treat retention examples as deployment decisions, not product or standards defaults.
 
 ## Step-by-Step Agent Execution Workflow
 
@@ -53,7 +53,7 @@ Validate: scrape targets UP, metric cardinality within budget, alerts fire/recov
 1. `promtool check rules rules/*.yml`
 2. `snmp_exporter --config.file=generator.yml` — validate generator
 3. `gnmic --config config.yml subscribe` — test subscription
-4. Load test: `hey -n 10000 -c 50 http://prometheus/-/ready`
+4. Load test the intended service and workload using a documented request rate and concurrency; any command-line sample counts should be treated as test parameters, not capacity guidance.
 5. Alert test: `amtool alert add alertname=InterfaceDown severity=critical`
 
 ## Production Code / Template Example
@@ -65,6 +65,11 @@ Provide device inventory, telemetry capabilities, label schema, SLO definitions,
 ### Output / Generated Code
 
 Return Prometheus config, snmp_exporter generator, gnmic config, Loki/Promtail config, Grafana dashboards, Alertmanager config, and validation scripts.
+
+The following intervals, thresholds, addresses, and load-test parameters are
+illustrative only. Select scrape/evaluation intervals and alert thresholds
+from the device scale, telemetry cadence, SLOs, and measured system capacity.
+They are not Prometheus, protocol, or vendor defaults.
 
 ```yaml
 # prometheus/prometheus.yml
@@ -309,8 +314,8 @@ groups:
 
 **Related Skills:**
 
-- [gnmi-snmp-telemetry](gnmi-snmp-telemetry.md) — Telemetry collection config for this stack
-- [network-testing-framework](network-testing-framework.md) — Validate observability in CI
-- [network-change-runbooks](network-change-runbooks.md) — Alerts link to runbooks
-- [gitops-network-automation](gitops-network-automation.md) — Deploy stack via GitOps
-- [cli-tool-packaging](cli-tool-packaging.md) — Package observability CLI tools
+- [gnmi-snmp-telemetry](../gnmi-snmp-telemetry/SKILL.md) — Telemetry collection config for this stack
+- [network-testing-framework](../network-testing-framework/SKILL.md) — Validate observability in CI
+- [network-change-runbooks](../network-change-runbooks/SKILL.md) — Alerts link to runbooks
+- [gitops-network-automation](../gitops-network-automation/SKILL.md) — Deploy stack via GitOps
+- [cli-tool-packaging](../cli-tool-packaging/SKILL.md) — Package observability CLI tools

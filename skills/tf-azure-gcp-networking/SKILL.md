@@ -30,7 +30,7 @@ consistent module interfaces for CIDRs, regions, tags, logging, and ownership.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Separate Azure and GCP requirements: subscriptions/projects, regions, hub and spoke CIDRs, routing, NAT, DNS, identity, and firewall ownership. Record provider versions and cross-cloud connectivity assumptions.
 

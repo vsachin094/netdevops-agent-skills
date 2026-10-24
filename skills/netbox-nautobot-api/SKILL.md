@@ -32,7 +32,7 @@ ownership, not on catching duplicate errors after the fact.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Identify the object type, unique key, tenancy and site scope, custom fields, relationship requirements, API version, pagination behavior, and dry-run expectation. Use recorded responses when the source of truth is unavailable.
 

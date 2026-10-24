@@ -35,7 +35,7 @@ clients and devices consume them.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Define the namespace, module name, revision, imports, feature set, namespace ownership, data tree, constraints, and compatibility target before writing YANG. Identify whether the model is standard, vendor, or local.
 

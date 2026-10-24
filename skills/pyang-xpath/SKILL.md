@@ -32,7 +32,7 @@ config/state status, or XPath predicates from a device CLI name alone.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Collect the exact YANG modules, revisions, import path, namespace map, target node, and device capability advertisement. Inspect augments, deviations, list keys, and config/state status before selecting a path.
 

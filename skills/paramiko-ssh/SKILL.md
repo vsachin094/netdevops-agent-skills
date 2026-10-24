@@ -83,7 +83,7 @@ parsing, config mode, or paging belongs in Netmiko or Scrapli.
 
 ## Step-by-Step Agent Execution Workflow
 
-### Phase 1 (Intake ### Phase 1 (Ingestion & Validation) Scope)
+### Phase 1 (Intake & Scope)
 
 Confirm the target host, port, username source, authentication method,
 known_hosts policy, command or file operation, timeout budget, output limit,

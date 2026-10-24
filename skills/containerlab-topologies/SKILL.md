@@ -2,7 +2,7 @@
 name: containerlab-topologies
 description: "[Tier: Intermediate] Generate validated Containerlab topology YAML for FRRouting, Arista cEOS, Nokia SR Linux, Cisco images, and Linux containers with pinned images, startup configs, CI integration, and test inventories. Use this skill when building a repeatable local digital twin for network automation, CI tests, or pre-change validation."
 license: MIT
-compatibility: containerlab 0.50+; Docker 24+ or Podman 4+; node images and licenses supplied by user; Python 3.10+ for tooling; optional Ansible, pytest, Batfish
+compatibility: Containerlab with a supported Docker or Podman runtime; node images and licenses supplied by user; Python for optional tooling; optional Ansible, pytest, Batfish
 ---
 
 # Containerlab Topologies (Intermediate)
@@ -19,13 +19,13 @@ Make the lab a deterministic test fixture. Topology names, node identities, imag
 
 ## Strict Engineering Guardrails (Anti-Hallucination & Best Practices)
 
-- **Use unique lab/node names and deterministic management IPs;** avoid conflicts with host or existing lab networks. Management subnet must be `/24` or larger, non-overlapping with corporate/VPN ranges.
+- **Use unique lab/node names and deterministic management IPs;** select a management prefix sized for the topology and ensure it does not overlap host, VPN, corporate, or other lab routes. There is no universally safe management prefix size or address range.
 - **Every link has exactly two valid `node:interface` endpoints** and every node references a known kind/image. Validate with `containerlab validate` before deploy.
 - **Pin image versions with digests** (`frrouting/frr@sha256:...`, `ghcr.io/nokia/srlinux@sha256:...`). Do not use `latest` or unpinned tags. Do not download proprietary images without license authorization.
 - **Keep credentials and private configs out of topology files and CI logs.** Startup configs reference external secret paths or use runtime env vars.
 - **Validate startup config syntax before deploy.** FRR: `vtysh -C -f startup.cfg`; SR Linux: `sr_cli -c "tools validate candidate"`; cEOS: `Cli -c "show running-config"` (in container).
 - **Destroy only the named lab and preserve artifacts** required for troubleshooting (logs, inspect output, configs).
-- **Resource limits:** Set `cpu`, `memory`, `cpuset` per node for CI runner stability. Default: 1 CPU, 1GB RAM per network node.
+- **Resource limits:** Set `cpu`, `memory`, and `cpuset` based on the selected image's requirements and measured CI runner capacity; do not assume a universal per-node default.
 - **Kernel parameters:** Nodes requiring `sysctl` (FRR, SR Linux) must have `privileged: true` and `sysctls` in topology.
 
 ## Step-by-Step Agent Execution Workflow
@@ -63,6 +63,11 @@ Provide the topology diagram, node images (with digests), link map, management r
 ### Output / Generated Code
 
 Return the topology YAML, inventory or addressing data, validation command output, startup config validator, CI pipeline snippet, and a short list of checks that require the actual images.
+
+This example is illustrative: the management subnet must be checked against
+the host and VPN routes, and the image digests, resource limits, and
+addresses below are placeholders rather than verified image references or
+recommended sizing.
 
 ### Topology Model (source of truth)
 
@@ -382,7 +387,7 @@ topology:
 
 **Image pinning:** Always use `image@sha256:<digest>`. Store digests in `topology-model.yml`. CI loads images from tarballs or private registry — never pulls public `latest`.
 
-**Management network:** Use `172.20.0.0/16` range for labs, allocate `/24` per concurrent CI job. `containerlab` assigns IPs sequentially; generator predicts them for inventory.
+**Management network:** Choose a prefix that is free in the host routing table and large enough for the lab and any required concurrent jobs. Avoid hardcoded private ranges because they may overlap the host, VPN, or another lab. Verify address allocation behavior against the installed Containerlab version.
 
 **Startup config per kind:**
 - FRR: `/etc/frr/frr.conf` bind, validate with `vtysh -C -f`
@@ -390,35 +395,26 @@ topology:
 - cEOS: `/mnt/flash/startup-config` bind, `privileged: true`, env vars for licensing
 - IOS-XRv9k: `/mnt/flash/startup-config`, `privileged: true`, KVM required
 
-**Resource limits for CI:** Default 1 CPU / 1GB per node. SR Linux needs 2 CPU / 2GB. Set `cpuset` for deterministic scheduling on shared runners.
+**Resource limits for CI:** Size each node using the exact image documentation and measurements from the CI runner. Resource values in topology examples are placeholders, not minimum requirements or performance guarantees.
 
 **Link validation:** Every endpoint `node:interface` must exist in node's interface list (containerlab validates this). For multi-homed links, use distinct interface names per endpoint.
 
-**CI artifact hygiene:** Upload `inspect.json`, logs, configs, test results. Retention 7 days. Never upload images or license files.
+**CI artifact hygiene:** Upload only approved diagnostic artifacts and set retention according to organizational security, audit, and legal policy. Do not upload images, license files, credentials, or unredacted configs.
 
-## Vendor Version Compatibility
+## Image and Resource Compatibility
 
-| Kind | Image Source | Tested Versions | Architecture | Resources | Licensing |
-|------|--------------|-----------------|--------------|-----------|-----------|
-| FRR | frrouting/frr | 8.5, 9.0, 9.1 | amd64/arm64 | 1 CPU, 512MB | Open source |
-| SR Linux | ghcr.io/nokia/srlinux | 22.10, 23.3, 23.7 | amd64 | 2 CPU, 2GB | Requires license key |
-| cEOS | arista/ceosimage | 4.32.1F, 4.33.0F | amd64 | 1 CPU, 1GB | Arista account |
-| IOS-XRv9k | Cisco | 7.3, 7.8 | amd64 | 2 CPU, 4GB | Cisco contract |
-| NX-OSv | Cisco | 9.3, 10.1 | amd64 | 2 CPU, 2GB | Cisco contract |
-| Linux | ubuntu | 22.04, 24.04 | amd64/arm64 | 0.5 CPU, 256MB | Open source |
-
-**Notes:**
-- Always pin images with `@sha256:<digest>` in topology-model.yml
-- SR Linux requires `sysctls` for IPv4/IPv6 forwarding
-- cEOS requires `privileged: true` and specific env vars
-- IOS-XRv9k requires KVM (`/dev/kvm` access)
-- Proprietary images loaded from secure storage, never public registry
+Container image availability, licensing, architecture, resource requirements,
+and startup procedures vary by image build. Verify each image against its
+maintainer's documentation and pin the exact digest used in the lab. Size CPU
+and memory from the image documentation and measured runner capacity; do not
+assume a universal per-node minimum. Record the exact image, platform,
+architecture, and tested host configuration with lab results.
 
 ## Related Skills
 
-- [netmiko-core](netmiko-core.md) — SSH transport for lab device interaction
-- [nornir-napalm](nornir-napalm.md) — Fleet automation against lab devices
-- [batfish-validation](batfish-validation.md) — Snapshot-based validation of lab configs
-- [network-change-runbooks](network-change-runbooks.md) — Lab pre-change validation
-- [network-protocols-as-code](network-protocols-as-code.md) — Render configs for lab deployment
-- [nac-cicd-pipelines](nac-cicd-pipelines.md) — CI pipeline integration for lab tests
+- [netmiko-core](../netmiko-core/SKILL.md) — SSH transport for lab device interaction
+- [nornir-napalm](../nornir-napalm/SKILL.md) — Fleet automation against lab devices
+- [batfish-validation](../batfish-validation/SKILL.md) — Snapshot-based validation of lab configs
+- [network-change-runbooks](../network-change-runbooks/SKILL.md) — Lab pre-change validation
+- [network-protocols-as-code](../network-protocols-as-code/SKILL.md) — Render configs for lab deployment
+- [network-testing-framework](../network-testing-framework/SKILL.md) — CI pipeline integration for lab tests

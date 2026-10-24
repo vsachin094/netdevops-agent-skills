@@ -57,7 +57,7 @@ Return collector configuration, sample metrics, PromQL alerts, dashboard JSON wh
 # BGP peer state
 bgp_peer_state{state="established"} == 1
 
-# Alert: interface utilization > 80% for 5m
+# Illustrative alert only: derive threshold and duration from the service objective and observed baseline.
 - alert: InterfaceHighUtilization
   expr: |
     (100 * rate(ifHCInOctets[5m]) * 8 / interface_speed_bits_per_second) > 80
@@ -68,6 +68,10 @@ bgp_peer_state{state="established"} == 1
     summary: "Interface {{ $labels.interface }} on {{ $labels.device }} > 80% utilization"
     runbook_url: "https://runbooks.netops.io/interface-utilization"
 ```
+
+The intervals and thresholds in these config snippets are examples only.
+Choose values using the device's supported telemetry cadence, scrape
+interval, interface speed, monitoring objective, and tested load.
 
 ```yaml
 # snmp_exporter generator.yml
@@ -93,7 +97,7 @@ inputs:
     subscription:
       - path: /interfaces/interface/state/counters
         mode: SAMPLE
-        sample_interval: 10s
+        sample_interval: 10s  # example only; confirm device support and telemetry capacity
         encoding: PROTO
     authentication:
       username: "${GNMI_USER}"
