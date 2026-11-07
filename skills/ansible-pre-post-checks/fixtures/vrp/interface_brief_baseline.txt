@@ -1,0 +1,18 @@
+PHY: Physical
+*down: administratively down
+#down: LBDT down
+(l): loopback
+(s): spoofing
+(E): E-Trunk down
+(b): BFD down
+(e): ETHOAM down
+(dl): DLDP down
+(lb): LBDT block
+(ms): MACsec down
+InUti/OutUti: input utility/output utility
+Interface                   PHY   Protocol InUti OutUti   inErrors  outErrors
+GigabitEthernet0/0/1        up    up       0.06%  2.10%          0          0
+GigabitEthernet0/0/2        up    up       1.20%  0.80%          0          0
+GigabitEthernet0/0/3        *down down        0%     0%          0          0
+LoopBack0                   up    up(s)       0%     0%          0          0
+NULL0                       up    up(s)       0%     0%          0          0

@@ -1,0 +1,9 @@
+
+         OSPF Process 1 with Router ID 192.0.2.254
+                  Peer Statistic Information
+ -------------------------------------------------------------------
+ Area Id         Interface                  Neighbor id      State
+ 0.0.0.0         GigabitEthernet0/0/1       192.0.2.1        Full
+ 0.0.0.0         GigabitEthernet0/0/2       192.0.2.2        ExStart
+ -------------------------------------------------------------------
+ Total Peer(s):     2
