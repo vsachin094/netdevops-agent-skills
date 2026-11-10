@@ -1,0 +1,10 @@
+
+ BGP local router ID : 192.0.2.254
+ Local AS number : 65001
+ Total number of peers : 3                 Peers in established state : 3
+
+  Peer            V          AS  MsgRcvd  MsgSent  OutQ  Up/Down       State  PrefRcv
+
+  192.0.2.1       4       65010     1204     1311     0 2d03h       Established       12
+  192.0.2.2       4       65010     1198     1307     0 2d03h       Established       12
+  198.51.100.9    4       65020      873      902     0 18:42:07    Established        4
