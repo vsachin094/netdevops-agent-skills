@@ -93,7 +93,7 @@ graph TD
         TF8[tf-to-ansible-inventory]
     end
 
-    subgraph TESTING["Testing & Validation (7)"]
+    subgraph TESTING["Testing & Validation (8)"]
         V1[containerlab-topologies]
         V2[batfish-validation]
         V3[network-testing-framework]
@@ -101,16 +101,18 @@ graph TD
         V5[config-sanitizer]
         V6[network-config-drift-detection]
         V7[forwardnetworks-nqe]
+        V8[terraform-opa-policy]
     end
 
     subgraph OBSERVABILITY["Observability (1)"]
         O1[network-observability-stack]
     end
 
-    subgraph OPERATIONS["Operations (3)"]
+    subgraph OPERATIONS["Operations (4)"]
         OP1[gitops-network-automation]
         OP2[network-device-onboarding]
         OP3[network-change-runbooks]
+        OP4[asa-config-backup-restore]
     end
 
     subgraph NSO["Cisco NSO (5)"]
@@ -121,7 +123,7 @@ graph TD
         N5[nso-xml-templates]
     end
 
-    subgraph UTILITIES["Utilities (10)"]
+    subgraph UTILITIES["Utilities (11)"]
         U1[ipam-subnetting]
         U2[jinja2-network-templates]
         U3[cli-tool-packaging]
@@ -132,6 +134,7 @@ graph TD
         U8[netconf-restconf-payloads]
         U9[pysnmp-automation]
         U10[pyats-genie]
+        U11[k8s-network-policy]
     end
 
     %% Key cross-category relationships
@@ -158,11 +161,11 @@ graph TD
     class P1,P2,P3,P4,P5,P6 parsing;
     class A1,A2,A3,A4,A5,A6,A7,A8,A9 ansible;
     class TF1,TF2,TF3,TF4,TF5,TF6,TF7,TF8 terraform;
-    class V1,V2,V3,V4,V5,V6,V7 testing;
+    class V1,V2,V3,V4,V5,V6,V7,V8 testing;
     class O1 observability;
-    class OP1,OP2,OP3 operations;
+    class OP1,OP2,OP3,OP4 operations;
     class N1,N2,N3,N4,N5 nso;
-    class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10 utilities;
+    class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11 utilities;
 ```
 
 ---
@@ -216,7 +219,7 @@ graph TD
 | `tf-aci-sdwan-meraki` | Controller-based — hierarchy, stable for_each, async readiness |
 | `tf-to-ansible-inventory` | TF outputs → Ansible inventory — structured outputs, readiness checks |
 
-### Testing & Validation (7)
+### Testing & Validation (8)
 | Skill | Purpose |
 |-------|---------|
 | `containerlab-topologies` | Lab topologies as code — pinned images, startup config validation |
@@ -226,18 +229,20 @@ graph TD
 | `config-sanitizer` | Config/log redaction — deterministic placeholders, topology preservation |
 | `network-config-drift-detection` | Scheduled drift detection — collect → normalize → diff → alert → remediate |
 | `forwardnetworks-nqe` | Forward Networks NQE — query modeled network state and preserve snapshot-aware evidence |
+| `terraform-opa-policy` | OPA/Conftest policy-as-code for Terraform network resources — deny non-compliant plans before apply |
 
 ### Observability (1)
 | Skill | Purpose |
 |-------|---------|
 | `network-observability-stack` | Prometheus/Grafana/Loki/Tempo — snmp_exporter, gnmic, PromQL alerts |
 
-### Operations (3)
+### Operations (4)
 | Skill | Purpose |
 |-------|---------|
 | `gitops-network-automation` | ArgoCD/Flux for network config — Kustomize overlays, pre/post sync hooks |
 | `network-device-onboarding` | Day-0: ZTP, creds, host-keys, verify — idempotent, rollback per stage |
 | `network-change-runbooks` | Auditable change execution — pre-checks, approval gates, rollback, evidence |
+| `asa-config-backup-restore` | Firewall config backup, verify, restore with rollback for Cisco ASA |
 
 ### Cisco NSO (5)
 | Skill | Purpose |
@@ -248,7 +253,7 @@ graph TD
 | `nso-service-package-development` | Cisco NSO service package design, implementation, and validation |
 | `nso-xml-templates` | YANG-backed NSO services using XML templates |
 
-### Utilities (10)
+### Utilities (11)
 | Skill | Purpose |
 |-------|---------|
 | `ipam-subnetting` | Hierarchical CIDR allocation — VLSM, overlap detection, NetBox/TF seed data |
@@ -261,6 +266,7 @@ graph TD
 | `netconf-restconf-payloads` | XML/JSON payload construction — schema validation, Pydantic models |
 | `pysnmp-automation` | SNMP v1/v2c/v3 async — GET/BULK/SET, traps, MIB resolution |
 | `pyats-genie` | Cisco Genie parsers + AEtest — MetaParser, differential pre/post |
+| `k8s-network-policy` | K8s CNI NetworkPolicy as code — namespace isolation, ingress/egress, deny-by-default, postcheck verification |
 
 ---
 
