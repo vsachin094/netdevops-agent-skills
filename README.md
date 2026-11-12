@@ -94,7 +94,7 @@ graph TD
         TF8[tf-to-ansible-inventory]
     end
 
-    subgraph TESTING["Testing & Validation (11)"]
+    subgraph TESTING["Testing & Validation (12)"]
         V1[containerlab-topologies]
         V2[batfish-validation]
         V3[network-testing-framework]
@@ -106,6 +106,7 @@ graph TD
         V9[gh-actions-network-ci]
         V10[cis-network-compliance]
         V11[robot-network-test-automation]
+        V12[networking-concepts]
     end
 
     subgraph OBSERVABILITY["Observability (1)"]
@@ -166,7 +167,7 @@ graph TD
     class P1,P2,P3,P4,P5,P6 parsing;
     class A1,A2,A3,A4,A5,A6,A7,A8,A9,A10 ansible;
     class TF1,TF2,TF3,TF4,TF5,TF6,TF7,TF8 terraform;
-    class V1,V2,V3,V4,V5,V6,V7,V8,V9,V10,V11 testing;
+    class V1,V2,V3,V4,V5,V6,V7,V8,V9,V10,V11,V12 testing;
     class O1 observability;
     class OP1,OP2,OP3,OP4 operations;
     class N1,N2,N3,N4,N5 nso;
@@ -239,6 +240,7 @@ graph TD
 | `gh-actions-network-ci` | GitHub Actions CI for network config — lint, dry-run, unit/integration tests, policy gate |
 | `cis-network-compliance` | CIS benchmark compliance scanning — pass/fail findings, remediation commands, drift tracking |
 | `robot-network-test-automation` | Keyword-driven network test automation — SSH/config validation, connectivity checks, CI reports |
+| `networking-concepts` | Foundational networking concepts reference — OSI/TCP-IP, IP addressing, routing, switching, devices, security fundamentals |
 
 ### Observability (1)
 | Skill | Purpose |
