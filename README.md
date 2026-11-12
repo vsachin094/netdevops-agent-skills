@@ -93,7 +93,7 @@ graph TD
         TF8[tf-to-ansible-inventory]
     end
 
-    subgraph TESTING["Testing & Validation (8)"]
+    subgraph TESTING["Testing & Validation (10)"]
         V1[containerlab-topologies]
         V2[batfish-validation]
         V3[network-testing-framework]
@@ -102,6 +102,8 @@ graph TD
         V6[network-config-drift-detection]
         V7[forwardnetworks-nqe]
         V8[terraform-opa-policy]
+        V9[gh-actions-network-ci]
+        V10[cis-network-compliance]
     end
 
     subgraph OBSERVABILITY["Observability (1)"]
@@ -123,7 +125,7 @@ graph TD
         N5[nso-xml-templates]
     end
 
-    subgraph UTILITIES["Utilities (11)"]
+    subgraph UTILITIES["Utilities (14)"]
         U1[ipam-subnetting]
         U2[jinja2-network-templates]
         U3[cli-tool-packaging]
@@ -135,6 +137,7 @@ graph TD
         U9[pysnmp-automation]
         U10[pyats-genie]
         U11[k8s-network-policy]
+        U12[vault-network-secrets]
     end
 
     %% Key cross-category relationships
@@ -161,11 +164,11 @@ graph TD
     class P1,P2,P3,P4,P5,P6 parsing;
     class A1,A2,A3,A4,A5,A6,A7,A8,A9 ansible;
     class TF1,TF2,TF3,TF4,TF5,TF6,TF7,TF8 terraform;
-    class V1,V2,V3,V4,V5,V6,V7,V8 testing;
+    class V1,V2,V3,V4,V5,V6,V7,V8,V9,V10 testing;
     class O1 observability;
     class OP1,OP2,OP3,OP4 operations;
     class N1,N2,N3,N4,N5 nso;
-    class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11 utilities;
+    class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12 utilities;
 ```
 
 ---
@@ -230,6 +233,8 @@ graph TD
 | `network-config-drift-detection` | Scheduled drift detection — collect → normalize → diff → alert → remediate |
 | `forwardnetworks-nqe` | Forward Networks NQE — query modeled network state and preserve snapshot-aware evidence |
 | `terraform-opa-policy` | OPA/Conftest policy-as-code for Terraform network resources — deny non-compliant plans before apply |
+| `gh-actions-network-ci` | GitHub Actions CI for network config — lint, dry-run, unit/integration tests, policy gate |
+| `cis-network-compliance` | CIS benchmark compliance scanning — pass/fail findings, remediation commands, drift tracking |
 
 ### Observability (1)
 | Skill | Purpose |
@@ -267,6 +272,7 @@ graph TD
 | `pysnmp-automation` | SNMP v1/v2c/v3 async — GET/BULK/SET, traps, MIB resolution |
 | `pyats-genie` | Cisco Genie parsers + AEtest — MetaParser, differential pre/post |
 | `k8s-network-policy` | K8s CNI NetworkPolicy as code — namespace isolation, ingress/egress, deny-by-default, postcheck verification |
+| `vault-network-secrets` | HashiCorp Vault for network credentials — KV v2, AppRole, transit encryption, audit logging |
 
 ---
 
