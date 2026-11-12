@@ -332,3 +332,23 @@ requests.
 ## License
 
 MIT. Vendor names and product marks remain property of their respective owners.
+
+## 📦 Repository Topics
+
+Common topics for this repository:
+- `network-automation`
+- `infra-automation`
+- `ansible`
+- `terraform`
+- `robot-framework`
+- `textfsm`
+- `vault`
+- `cisco`
+- `network-programmability`
+- `network-operations`
+- `infrastructure-as-code`
+- `devops`
+
+---
+
+*Feel free to add this repository to your interests to receive updates!*
