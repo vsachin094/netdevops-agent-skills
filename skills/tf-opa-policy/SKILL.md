@@ -1,5 +1,5 @@
 ---
-name: terraform-opa-policy
+name: tf-opa-policy
 description: "[Tier: Intermediate] Enforce OPA/Conftest policy-as-code over Terraform plans for network resources — deny non-compliant VPC, security group, subnet, ACL, and peering configurations before apply, with scoped rules, explainable denial messages, and CI integration. Use this skill when infrastructure-as-code changes must pass governance checks before they reach a cloud or on-prem network."
 license: MIT
 compatibility: Terraform 1.3+; OPA 0.50+ or Conftest; terraform plan -json output; Rego; CI pipeline; AWS/Azure/GCP or on-prem Terraform providers; lab or non-production environment for plan testing

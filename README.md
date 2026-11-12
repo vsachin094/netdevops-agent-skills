@@ -101,7 +101,7 @@ graph TD
         V5[config-sanitizer]
         V6[network-config-drift-detection]
         V7[forwardnetworks-nqe]
-        V8[terraform-opa-policy]
+        V8[tf-opa-policy]
         V9[gh-actions-network-ci]
         V10[cis-network-compliance]
     end
@@ -232,7 +232,7 @@ graph TD
 | `config-sanitizer` | Config/log redaction — deterministic placeholders, topology preservation |
 | `network-config-drift-detection` | Scheduled drift detection — collect → normalize → diff → alert → remediate |
 | `forwardnetworks-nqe` | Forward Networks NQE — query modeled network state and preserve snapshot-aware evidence |
-| `terraform-opa-policy` | OPA/Conftest policy-as-code for Terraform network resources — deny non-compliant plans before apply |
+| `tf-opa-policy` | OPA/Conftest policy-as-code for Terraform network resources — deny non-compliant plans before apply |
 | `gh-actions-network-ci` | GitHub Actions CI for network config — lint, dry-run, unit/integration tests, policy gate |
 | `cis-network-compliance` | CIS benchmark compliance scanning — pass/fail findings, remediation commands, drift tracking |
 
