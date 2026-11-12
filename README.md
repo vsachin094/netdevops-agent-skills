@@ -70,7 +70,7 @@ graph TD
         P6[network-protocols-as-code]
     end
 
-    subgraph ANSIBLE["Ansible (9)"]
+    subgraph ANSIBLE["Ansible (10)"]
         A1[ansible-role-creation]
         A2[ansible-custom-plugins]
         A3[ansible-ee-build]
@@ -80,6 +80,7 @@ graph TD
         A7[ansible-linux-networking]
         A8[ansible-netcli-playbooks]
         A9[ansible-pre-post-checks]
+        A10[ansible-awx-api]
     end
 
     subgraph TERRAFORM["Terraform (8)"]
@@ -162,7 +163,7 @@ graph TD
 
     class T1,T2,T3,T4,T5,T6,T7,T8 transport;
     class P1,P2,P3,P4,P5,P6 parsing;
-    class A1,A2,A3,A4,A5,A6,A7,A8,A9 ansible;
+    class A1,A2,A3,A4,A5,A6,A7,A8,A9,A10 ansible;
     class TF1,TF2,TF3,TF4,TF5,TF6,TF7,TF8 terraform;
     class V1,V2,V3,V4,V5,V6,V7,V8,V9,V10 testing;
     class O1 observability;
@@ -209,6 +210,7 @@ graph TD
 | `ansible-linux-networking` | Linux host networking — Netplan/NM, FRR, nftables, WireGuard |
 | `ansible-netcli-playbooks` | Foundational network playbooks — FQCNs, network_cli, backup |
 | `ansible-pre-post-checks` | Change safety wrapper — baseline → change → verify → rollback |
+| `ansible-awx-api` | AWX REST API automation — job template launch, inventory/credential mgmt, job polling |
 
 ### Terraform (8)
 | Skill | Purpose |
