@@ -169,21 +169,28 @@ Start
   ^${INTERFACE} is ${STATUS} -> Record
   ^\s+Internet address is ${ADDRESS}
 ```
+```python
+# Parse CLI output with TextFSM and validate expected records.
+# Values are illustrative; replace template path, raw output, and expected keys.
+import textfsm
+import yaml
+from pathlib import Path
 
-**State transitions must consume the line that causes them.** For wrapped records, transition from a header to a record state, collect continuation lines there, and transition back only at the next record/header boundary. Use `-> Record` after the final mandatory field, not on a generic catch-all line. An explicit empty `EOF` state suppresses accidental partial records; otherwise TextFSM records the current row at EOF.
+def parse_with_textfsm(template_path: Path, raw_output: str) -> list[dict]:
+    with template_path.open() as f:
+        fsm = textfsm.TextFSM(f)
+    raw_records = fsm.ParseText(raw_output)
+    headers = [h.lower() for h in fsm.header]
+    return [dict(zip(headers, record)) for record in raw_records]
 
-**Version handling:** When vendor output changes across major versions (IOS 15→17, NX-OS 7→9, Junos 18→21), create separate templates with version in filename. Use a dispatcher in the consumer (Netmiko/Scrapli) that selects template by `device.version`.
+# Example usage (illustrative; requires textfsm 1.1+ and a valid .textfsm file)
+# template = Path("templates/cisco_ios_show_ip_int_brief.textfsm")
+# raw = Path("fixtures/show_ip_int_brief.txt").read_text()
+# records = parse_with_textfsm(template, raw)
+# for rec in records:
+#     assert rec["status"] in ("up", "down"), f"Unexpected status: {rec}"
+```
 
-**NTC-style contribution:** Name templates as `vendor_os_command_with_underscores.textfsm`, keep capture names uppercase, output keys lowercase, and store raw text plus expected YAML beside the template. Test at least two versions and an incomplete record.
-
-**Migration to TTP/Genie triggers:**
-- Template > 80 lines
-- > 5 states
-- Need to capture nested configuration blocks (not operational output)
-- Vendor adds structured API (NETCONF/RESTCONF/gNMI) for the same data
-- Template requires context that spans non-adjacent lines (TextFSM is line-oriented)
-
-## Output Version Compatibility
 
 CLI output can change across device releases, even when the command is
 unchanged. Do not assume a template is compatible across a vendor's versions:

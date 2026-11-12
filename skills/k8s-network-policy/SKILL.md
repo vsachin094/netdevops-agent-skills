@@ -73,6 +73,29 @@ A cluster with a NetworkPolicy-enabled CNI; namespaces, pod selectors, service d
 
 Versioned NetworkPolicy YAML files, a verification command list, and a rollback plan that references the previous Git revision.
 
+```python
+# Create a deny-by-default NetworkPolicy using the Kubernetes Python client.
+# Values are illustrative; replace namespace, labels, and ports before use.
+from kubernetes import client, config
+
+def create_deny_by_default(namespace: str, name: str = "deny-all-default") -> client.V1NetworkPolicy:
+    body = client.V1NetworkPolicy(
+        api_version="networking.k8s.io/v1",
+        kind="NetworkPolicy",
+        metadata=client.V1ObjectMeta(name=name, namespace=namespace),
+        spec=client.V1NetworkPolicySpec(
+            pod_selector=client.V1LabelSelector(match_labels={}),
+            policy_types=["Ingress", "Egress"],
+        ),
+    )
+    return body
+
+# Example usage (illustrative; requires kubeconfig or in-cluster config)
+# config.load_kube_config()
+# netapi = client.NetworkingV1Api()
+# policy = create_deny_by_default("production")
+# netapi.create_namespaced_network_policy(namespace="production", body=policy)
+```
 ## Production Code / Template Example
 
 ```yaml

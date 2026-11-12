@@ -63,6 +63,57 @@ Provide the parent prefixes, site/environment hierarchy, required hosts, reserve
 ### Output / Generated Code
 
 Return the allocation table, machine-readable seed data, utilization summary, and clear errors for overlaps, exhaustion, or invalid prefix boundaries.
+```python
+# Allocate VLSM subnets from a parent aggregate using Python ipaddress.
+# Values are illustrative; replace parent prefix, required hosts, and names.
+import ipaddress
+import json
+
+def allocate_subnets(parent_cidr: str, allocations: list[dict]) -> list[dict]:
+    parent = ipaddress.ip_network(parent_cidr, strict=True)
+    results: list[dict] = []
+    remaining = [parent]
+
+    sorted_allocs = sorted(allocations, key=lambda a: a["required_hosts"], reverse=True)
+
+    for alloc in sorted_allocs:
+        hosts_needed = alloc["required_hosts"] + 2
+        prefixlen = max(parent.prefixlen, parent.max_prefixlen - (hosts_needed - 1).bit_length())
+
+        placed = False
+        for i, candidate in enumerate(remaining):
+            if candidate.prefixlen <= prefixlen:
+                subnets = list(candidate.subnets(new_prefix=prefixlen))
+                chosen = subnets[0]
+                results.append({
+                    "name": alloc["name"],
+                    "prefix": str(chosen),
+                    "parent": str(parent),
+                    "required_hosts": alloc["required_hosts"],
+                    "usable_hosts": chosen.num_addresses - 2,
+                    "purpose": alloc.get("purpose", ""),
+                    "site": alloc.get("site", ""),
+                })
+                remaining.pop(i)
+                if candidate.prefixlen < prefixlen:
+                    remaining.append(subnets[1])
+                remaining.sort(key=lambda n: n.prefixlen)
+                placed = True
+                break
+
+        if not placed:
+            raise ValueError(f"Insufficient capacity for {alloc['name']} ({alloc['required_hosts']} hosts)")
+
+    return results
+
+# Example usage
+plan = allocate_subnets("192.0.2.0/24", [
+    {"name": "web-a", "required_hosts": 50, "purpose": "web", "site": "blr-1"},
+    {"name": "transit-a", "required_hosts": 2, "purpose": "transit", "site": "blr-1"},
+])
+
+print(json.dumps(plan, indent=2))
+```
 
 ```json
 {
